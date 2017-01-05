@@ -1,2 +1,2 @@
 # Kitura-JWT
-An implementation of Jason Web Token
+An implementation of JSON Web Token
