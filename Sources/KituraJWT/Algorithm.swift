@@ -23,6 +23,13 @@ public enum Algorithm {
     case rs384(Data, RSAKeyType)
     case rs512(Data, RSAKeyType)
     
+    
+    public enum Supported {
+        case unsupported
+        case supportedWithKey
+        case supportedWithSecret
+    }
+    
     public var name: String {
         switch self {
         case .rs256:
@@ -64,5 +71,18 @@ public enum Algorithm {
             return .rs512(key, keyType)
         }
         return nil
+    }
+    
+    public static func from(name: String, secret: String) -> Algorithm? {
+        return nil
+    }
+    
+    public static func isSupported(name: String) -> Supported {
+        if name == "RS256" || name == "rs256"
+            || name == "RS384" || name == "rs384"
+            ||  name == "RS512" || name == "rs512" {
+            return .supportedWithKey
+        }
+        return .unsupported
     }
 }
