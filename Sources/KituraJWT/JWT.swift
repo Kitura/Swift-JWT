@@ -71,23 +71,117 @@ public struct JWT {
         return JWT(header: header, claims: claims)
     }
     
-    public func verify(accessToken: String) -> Bool {
-        guard let algorithm = header[.alg] as? String,
-            let atHashValue = claims[.at_hash] as? String else {
-            return false
-        }
-        guard let hash = Hash.hash(accessToken, using: algorithm) else {
-            return false
+    public func validateClaims(issuer: String?=nil, audience: String?=nil, authorizedParty: String?=nil, accessToken: String?=nil) -> ValidateClaimsResult {
+        
+        if let issuer = issuer,
+            let jwtIssuer = claims[.iss] as? String,
+            jwtIssuer != issuer {
+            return .mismatchedIssuer
         }
         
-        let midpoint = hash.count / 2
-        let firstHalf = Array(hash.prefix(upTo: midpoint))
-        let data = Data(bytes: firstHalf, count: firstHalf.count)
-        guard let hashed = Base64URL.encode(data) else {
-            return false
+        if let audience = audience,
+            let jwtAudience = claims[.aud] {
+            switch jwtAudience {
+            case let value as [String]:
+                if value.count == 0 {
+                    return .emptyAudience
+                }
+                if value.count > 1 {
+                    return .multipleAudiences
+                }
+                if value[0] != audience {
+                    return .mismatchedAudience
+                }
+            case let value as String:
+                if value != audience {
+                    return .mismatchedAudience
+                }
+            default:
+                return .invalidAudience
+            }
         }
         
-        return hashed == atHashValue
+        if let authorizedParty = authorizedParty,
+            let jwtAuthorizedParty = claims[.azp] as? String,
+            jwtAuthorizedParty != authorizedParty {
+            return .mismatchedAuthorizedParty
+        }
+        
+        
+        if let accessToken = accessToken,
+            let atHashValue = claims[.at_hash] as? String {
+            guard let algorithm = header[.alg] as? String,
+                let hash = Hash.hash(accessToken, using: algorithm) else {
+                    return .invalidAlgorithm
+            }
+            
+            let midpoint = hash.count / 2
+            let firstHalf = Array(hash.prefix(upTo: midpoint))
+            let data = Data(bytes: firstHalf, count: firstHalf.count)
+            guard let hashed = Base64URL.encode(data) else {
+                return .hashFailure
+            }
+            
+            if hashed != atHashValue {
+                return .mismatchedAccessTokenHash
+            }
+        }
+        
+        if let _ = claims[.exp] {
+            if let expirationDate = getDateFromClaim(ClaimKeys.exp.rawValue) {
+                if expirationDate < Date() {
+                    return .expired
+                }
+            }
+            else {
+                return .invalidExpiration
+            }
+        }
+        
+        if let _ = claims[.nbf] {
+            if let notBeforeDate = getDateFromClaim(ClaimKeys.nbf.rawValue) {
+                if notBeforeDate > Date() {
+                    return .notBefore
+                }
+            }
+            else {
+                return .invalidNotBefore
+            }
+        }
+        
+        if let _ = claims[.iat] {
+            if let issuedAtDate = getDateFromClaim(ClaimKeys.iat.rawValue) {
+                if issuedAtDate > Date() {
+                    return .issuedAt
+                }
+            }
+            else {
+                return .invalidIssuedAt
+            }
+        }
+        
+        return .success
+    }
+    
+    private func getDateFromClaim(_ claim: String) -> Date? {
+        if let jwtDate = claims[claim] {
+            var date: Date?
+            switch jwtDate {
+            case let value as TimeInterval:
+                date = Date(timeIntervalSince1970: value)
+            case let value as Int:
+                date = Date(timeIntervalSince1970: Double(value))
+            case let value as String:
+                guard let doubleValue = Double(value) else {
+                    return nil
+                }
+                date = Date(timeIntervalSince1970: doubleValue)
+            default:
+                return nil
+            }
+            return date
+        }
+        return nil
     }
 }
 
