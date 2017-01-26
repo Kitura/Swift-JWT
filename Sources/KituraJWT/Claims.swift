@@ -16,9 +16,16 @@
 
 import Foundation
 
+// MARK Claims
+
+/// A representation of JSON Web Token claims.
 public struct Claims {
     var claims: [String:Any]
     
+    /// Initialize a `Claims` instance.
+    ///
+    /// - Parameter claims: A dictionary containing the claims with `ClaimsKeys` as keys.
+    /// - Returns: A new instance of `Claims`.
     public init(_ claims: [ClaimKeys:Any]) {
         self.claims = [String:Any]()
         for (key, value) in claims {
@@ -26,10 +33,18 @@ public struct Claims {
         }
     }
     
+    /// Initialize a `Claims` instance.
+    ///
+    /// - Parameter claims: A dictionary containing the claims with String as keys type.
+    /// - Returns: A new instance of `Claims`.
     public init(_ claims: [String:Any]) {
         self.claims = claims
     }
     
+    /// Return a claim for the key of type ClaimKeys.
+    ///
+    /// - Parameter key: The key.
+    /// - Returns: The claim for the key.
     public subscript(key: ClaimKeys) -> Any? {
         get {
             return claims[key.rawValue]
@@ -40,6 +55,10 @@ public struct Claims {
         }
     }
     
+    /// Return a claim for the key of type String.
+    ///
+    /// - Parameter key: The key.
+    /// - Returns: The claim for the key.
     public subscript(key: String) -> Any? {
         get {
             return claims[key]
@@ -50,6 +69,7 @@ public struct Claims {
         }
     }
     
+    /// Representation of the claims as a dictionary.
     public var asDictionary: [String:Any] {
         return claims
     }
@@ -60,6 +80,8 @@ public struct Claims {
     }
 }
 
+/// A list of the [claims names](https://www.iana.org/assignments/jwt/jwt.xhtml).
+/// Other claims are supported using String.
 public enum ClaimKeys: String {
     case acr
     case address

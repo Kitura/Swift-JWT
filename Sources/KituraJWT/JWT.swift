@@ -17,15 +17,32 @@
 import Cryptor
 import Foundation
 
+// MARK JWT
+
+/// JSON Web Token with its header and claims.
 public struct JWT {
+    
+    /// The JWT header.
     public var header: Header
+    
+    /// The JWT claims
     public var claims: Claims
     
+    /// Initialize a `JWT` instance.
+    ///
+    /// - Parameter hedaer: A dictionary containing the header with `HeaderKeys` as keys.
+    /// - Parameter claims: A dictionary containing the claims with `ClaimsKeys` as keys.
+    /// - Returns: A new instance of `JWT`.
     public init(header: [HeaderKeys:Any], claims: [ClaimKeys:Any]) {
         self.header = Header(header)
         self.claims = Claims(claims)
     }
     
+    /// Initialize a `JWT` instance.
+    ///
+    /// - Parameter hedaer: A dictionary containing the header with `HeaderKeys` as keys.
+    /// - Parameter claims: A dictionary containing the claims with String as keys.
+    /// - Returns: A new instance of `JWT`.
     public init(header: [HeaderKeys:Any], claims: [String:Any]) {
         self.header = Header(header)
         self.claims = Claims(claims)
@@ -36,6 +53,11 @@ public struct JWT {
         self.claims = Claims(claims)
     }
     
+    /// Sign the JWT using the given algorithm.
+    ///
+    /// - Parameter using algorithm: The algorithm to sign with.
+    /// - Returns: A String with the encoded and signed JWT.
+    /// - Throws: An error thrown during the encoding or signing.
     public mutating func sign(using algorithm: Algorithm) throws -> String? {
         header[.alg] = algorithm.name
         guard let encodedHeader = try header.encode(),
@@ -50,6 +72,12 @@ public struct JWT {
         return encodedInput + "." + encodedSignature
     }
     
+    /// Verify the signature of the encoded JWT using the given algorithm.
+    ///
+    /// - Parameter jwt: A String with the encoded and signed JWT.
+    /// - Parameter using algorithm: The algorithm to verify with.
+    /// - Returns: A Bool indicating whether the verification was successful.
+    /// - Throws: An error thrown during the verification.
     public static func verify(_ jwt: String, using algorithm: Algorithm) throws -> Bool {
         let components = jwt.components(separatedBy: ".")
         guard components.count == 3,
@@ -59,6 +87,11 @@ public struct JWT {
         return algorithm.verify(signature: signature, for: components[0] + "." + components[1])
     }
     
+    /// Decode the encoded JWT.
+    ///
+    /// - Parameter jwt: A String with the encoded and signed JWT.
+    /// - Returns: An instance of `JWT` if the decoding succeeds.
+    /// - Throws: An error thrown during the decoding.
     public static func decode(_ jwt: String) throws -> JWT? {
         let components = jwt.components(separatedBy: ".")
         guard components.count == 3,
@@ -70,7 +103,16 @@ public struct JWT {
         }
         return JWT(header: header, claims: claims)
     }
-    
+
+    /// Validate the JWT claims. The claims are validated in case they are present in `Claims`, and
+    /// if the validation requiers an input, the input is provided. For example, if iss claim exists and
+    /// issuer argument is provided, it is validated. Otherwise, the validation of iss is skipped.
+    ///
+    /// - Parameter issuer: An optional String to compare with the iss claim.
+    /// - Parameter audience: An optional String to compare with the aud claim.
+    /// - Parameter authorizedParty: An optional String to compare with the azp claim.
+    /// - Parameter accessToken: An optional String to check its hash value with the at_hash claim.
+    /// - Returns: A value of `ValidateClaimsResult`. 
     public func validateClaims(issuer: String?=nil, audience: String?=nil, authorizedParty: String?=nil, accessToken: String?=nil) -> ValidateClaimsResult {
         
         if let issuer = issuer,

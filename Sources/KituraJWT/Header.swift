@@ -16,9 +16,16 @@
 
 import Foundation
 
+// MARK Header
+
+/// A representation of JSON Web Token header.
 public struct Header {
     var headers: [String:Any]
-    
+
+    /// Initialize a `Header` instance.
+    ///
+    /// - Parameter header: A dictionary containing the claims with `HeaderKeys` as keys.
+    /// - Returns: A new instance of `Header`.
     public init(_ header: [HeaderKeys:Any]) {
         self.headers = [String:Any]()
         for (key, value) in header {
@@ -30,6 +37,10 @@ public struct Header {
         headers = header
     }
     
+    /// Return a header value for the key of type HeaderKeys.
+    ///
+    /// - Parameter key: The key.
+    /// - Returns: The header value for the key.
     public subscript(key: HeaderKeys) -> Any? {
         get {
             return headers[key.rawValue]
@@ -46,6 +57,7 @@ public struct Header {
     }
 }
 
+/// A list of the header keys.
 public enum HeaderKeys: String {
     case alg
     case jku

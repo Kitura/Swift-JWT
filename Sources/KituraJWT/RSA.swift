@@ -20,12 +20,6 @@ import OpenSSL
 import Foundation
 
 
-public enum RSAKeyType {
-    case certificate
-    case publicKey
-    case privateKey
-}
-
 ///
 /// RSA Handling: Implements a series of Class Level RSA Helper Functions.
 ///
@@ -95,10 +89,6 @@ class RSA: EncryptionAlgorithm {
         }
     }
     
-    /// Initializes a new `RSA` instance for signing.
-    ///
-    /// - parameter key:       The RSA private key, in PEM format.
-    /// - parameter algorithm: The digest algorithm to use for signing.
     init(key: Data, keyType: RSAKeyType?=nil, algorithm: Algorithm) {
         self.algorithm = algorithm
         self.key = UnsafeMutablePointer<UInt8>.allocate(capacity: key.count)
@@ -112,11 +102,6 @@ class RSA: EncryptionAlgorithm {
         key.deallocate(capacity: Int(keySize))
     }
 
-    /// Signs the given data using the receiver's kay and digest algorithm.
-    ///
-    /// - parameter data: The data to sign.
-    ///
-    /// - returns: The signed data.
     func sign(_ data: Data) -> Data? {
          // Generate hash
         let ptr = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
@@ -143,12 +128,6 @@ class RSA: EncryptionAlgorithm {
         return Data(bytes: buffer, count: rsaSize)
     }
     
-    /// Signs the given string using the receiver's private key and digest algorithm.
-    ///
-    /// - parameter string:   The string to sign.
-    /// - parameter encoding: The string's encoding.
-    ///
-    /// - returns: The signed data.
     func sign(_ string: String, encoding: String.Encoding) -> Data? {
         guard let data: Data = string.data(using: encoding) else {
             return nil
@@ -156,11 +135,6 @@ class RSA: EncryptionAlgorithm {
         return sign(data)
     }
     
-    /// Signs the given data using the receiver's kay and digest algorithm.
-    ///
-    /// - parameter data: The data to sign.
-    ///
-    /// - returns: The signed data.
     func verify(signature: Data, for data: Data) -> Bool {
         // Generate hash
         let ptr = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
@@ -205,12 +179,6 @@ class RSA: EncryptionAlgorithm {
         }
     }
     
-    /// Signs the given string using the receiver's private key and digest algorithm.
-    ///
-    /// - parameter string:   The string to sign.
-    /// - parameter encoding: The string's encoding.
-    ///
-    /// - returns: The signed data.
     func verify(signature: Data, for string: String, encoding: String.Encoding) -> Bool {
         guard let data: Data = string.data(using: encoding) else {
             return false

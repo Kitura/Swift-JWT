@@ -14,24 +14,61 @@
  * limitations under the License.
  **/
 
+// MARK ValidateClaimsResult
+
+/// ValidateClaimsResult list the possible results of a call to JWT.validateClaims method.
+/// In case of successful validation, .success is returned, all other cases list various
+/// problems that may occur during claims validation and indicate that the validation failed.
 public enum ValidateClaimsResult: CustomStringConvertible {
+    /// Successful validation.
     case success
+    
+    /// The Audience claim exists but is empty.
     case emptyAudience
+    
+    /// The Audience claim contains more than one value.
     case multipleAudiences
+    
+    /// Mismatched Audience claim.
     case mismatchedAudience
+    
+    /// Invalid Audience claim.
     case invalidAudience
+
+    /// Mismatched Issuer.
     case mismatchedIssuer
+    
+    /// Mismatched AuthorizedParty claim.
     case mismatchedAuthorizedParty
+    
+    /// Invalid algorithm in the header prevents access token hash claim validation.
     case invalidAlgorithm
+    
+    /// Hashing algorithm failure prevents access token hash claim validation.
     case hashFailure
+    
+    /// Mismatched AuthorizedParty claim.
     case mismatchedAccessTokenHash
+    
+    /// Invalid Expiration claim.
     case invalidExpiration
+    
+    /// Expired token: expiration time claim is in the past.
     case expired
+    
+    /// Invalid Not Before claim.
     case invalidNotBefore
+    
+    /// Not Before claim is in the future.
     case notBefore
+    
+    /// Invalid Issued At claim.
     case invalidIssuedAt
+    
+    /// Issued At claim is in the future.
     case issuedAt
     
+    /// A textual respersentation of the validation result.
     public var description: String {
         switch self {
         case .success:

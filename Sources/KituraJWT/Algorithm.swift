@@ -17,19 +17,33 @@
 import Cryptor
 import Foundation
 
+// MARK Algorithm
 
+/// The algorithm used to encode the token.
 public enum Algorithm {
+    /// RSA 256 bits with its key and key type.
     case rs256(Data, RSAKeyType)
+
+    /// RSA 384 bits with its key and key type.
     case rs384(Data, RSAKeyType)
+
+    /// RSA 512 bits with its key and key type.
     case rs512(Data, RSAKeyType)
     
     
+    /// A list of possible results of call to isSupported method.
     public enum Supported {
+        /// The algorithm is not supported
         case unsupported
+        
+        /// The algorithm is supported and requires a key or a certifcate.
         case supportedWithKey
+        
+        /// The algorithm is supported and requires a secret.
         case supportedWithSecret
     }
     
+    /// The name of the algorithm.
     public var name: String {
         switch self {
         case .rs256:
@@ -60,6 +74,12 @@ public enum Algorithm {
         }
     }
     
+    /// Return an algorithm for its name and key.
+    ///
+    /// - Parameter name: The name of the algorithm.
+    /// - Parameter key: A Data containing the key.
+    /// - Parameter keyType: The type of the key argument: public/private key or certificate.
+    /// - Returns: An instance of Algorithm if the input arguments correspond to a supported algorithm.
     public static func from(name: String, key: Data, keyType: RSAKeyType = .publicKey) -> Algorithm? {
         if name == "RS256" || name == "rs256" {
             return .rs256(key, keyType)
@@ -73,10 +93,19 @@ public enum Algorithm {
         return nil
     }
     
+    /// Return an algorithm for its name and secret.
+    ///
+    /// - Parameter name: The name of the algorithm.
+    /// - Parameter secret: A String containing the secret.
+    /// - Returns: An instance of Algorithm if the input arguments correspond to a supported algorithm.
     public static func from(name: String, secret: String) -> Algorithm? {
         return nil
     }
-    
+
+    /// Check if an algorithm specified by the name is supported and what input it requires (a key or a secret).
+    ///
+    /// - Parameter name: The name of the algorithm.
+    /// - Returns: A value of `Supported` enum indicating the result.
     public static func isSupported(name: String) -> Supported {
         if name == "RS256" || name == "rs256"
             || name == "RS384" || name == "rs384"
