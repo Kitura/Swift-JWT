@@ -18,7 +18,7 @@ import Foundation
 
 // MARK Header
 
-/// A representation of JSON Web Token header.
+/// A representation of a JSON Web Token header.
 public struct Header {
     var headers: [String:Any]
 

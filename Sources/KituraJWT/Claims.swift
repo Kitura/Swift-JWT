@@ -81,7 +81,7 @@ public struct Claims {
 }
 
 /// A list of the [claims names](https://www.iana.org/assignments/jwt/jwt.xhtml).
-/// Other claims are supported using String.
+/// Other claims are supported using a String as the key.
 public enum ClaimKeys: String {
     case acr
     case address

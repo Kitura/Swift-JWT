@@ -115,7 +115,6 @@ class RSA: EncryptionAlgorithm {
         let keyBuf = BIO_new_mem_buf(key, keySize)
         // This can fail for invalid private keys, so we check here
         guard let rsa = PEM_read_bio_RSAPrivateKey(keyBuf, nil, nil, nil) else {
-            print("invalid RSA private key")
             return nil
         }
         let rsaSize = Int(RSA_size(rsa))
@@ -168,7 +167,6 @@ class RSA: EncryptionAlgorithm {
             var rsa = RSA_new()
             let ok = PEM_read_bio_RSA_PUBKEY(keybuf, &rsa, nil, nil)
             guard ok != nil else {
-                print("invalid RSA public key")
                 return false
             }
             let result = RSA_verify(algorithm.nid, &digestBytes, UInt32(digestBytes.count), signPtr, UInt32(signature.count), rsa)

@@ -19,7 +19,7 @@ import Foundation
 
 // MARK Algorithm
 
-/// The algorithm used to encode the token.
+/// The algorithm used to sign the token.
 public enum Algorithm {
     /// RSA 256 bits with its key and key type.
     case rs256(Data, RSAKeyType)
@@ -33,7 +33,7 @@ public enum Algorithm {
     
     /// A list of possible results of call to isSupported method.
     public enum Supported {
-        /// The algorithm is not supported
+        /// The algorithm is not supported.
         case unsupported
         
         /// The algorithm is supported and requires a key or a certifcate.
@@ -74,13 +74,13 @@ public enum Algorithm {
         }
     }
     
-    /// Return an algorithm for its name and key.
+    /// Get an algorithm by name and key.
     ///
     /// - Parameter name: The name of the algorithm.
-    /// - Parameter key: A Data containing the key.
+    /// - Parameter key: A Data struct containing the key.
     /// - Parameter keyType: The type of the key argument: public/private key or certificate.
-    /// - Returns: An instance of Algorithm if the input arguments correspond to a supported algorithm.
-    public static func from(name: String, key: Data, keyType: RSAKeyType = .publicKey) -> Algorithm? {
+    /// - Returns: An instance of `Algorithm` if the input arguments correspond to a supported algorithm.
+    public static func `for`(name: String, key: Data, keyType: RSAKeyType = .publicKey) -> Algorithm? {
         if name == "RS256" || name == "rs256" {
             return .rs256(key, keyType)
         }
@@ -93,16 +93,16 @@ public enum Algorithm {
         return nil
     }
     
-    /// Return an algorithm for its name and secret.
+    /// Get an algorithm by name and secret.
     ///
     /// - Parameter name: The name of the algorithm.
     /// - Parameter secret: A String containing the secret.
-    /// - Returns: An instance of Algorithm if the input arguments correspond to a supported algorithm.
-    public static func from(name: String, secret: String) -> Algorithm? {
+    /// - Returns: An instance of `Algorithm` if the input arguments correspond to a supported algorithm.
+    public static func `for`(name: String, secret: String) -> Algorithm? {
         return nil
     }
 
-    /// Check if an algorithm specified by the name is supported and what input it requires (a key or a secret).
+    /// Check if the algorithm specified by the name is supported and what input it requires (a key or a secret).
     ///
     /// - Parameter name: The name of the algorithm.
     /// - Returns: A value of `Supported` enum indicating the result.

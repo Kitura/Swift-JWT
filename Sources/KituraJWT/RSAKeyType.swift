@@ -16,14 +16,14 @@
 
 // MARK RSAKeyType
 
-/// The type of the key used in RSA algorithm
+/// The type of the key used in the RSA algorithm.
 public enum RSAKeyType {
-    /// The key is a certificate containig both the private and the public keys.
+    /// The key is a certificate containing both the private and the public keys.
     case certificate
     
-    /// The RSA public key.
+    /// The key is an RSA public key.
     case publicKey
     
-    /// The RSA private key.
+    /// The key is an RSA private key.
     case privateKey
 }

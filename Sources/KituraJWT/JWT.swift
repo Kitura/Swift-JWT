@@ -30,22 +30,12 @@ public struct JWT {
     
     /// Initialize a `JWT` instance.
     ///
-    /// - Parameter hedaer: A dictionary containing the header with `HeaderKeys` as keys.
-    /// - Parameter claims: A dictionary containing the claims with `ClaimsKeys` as keys.
+    /// - Parameter header: A JSON Web Token header object.
+    /// - Parameter claims: A JSON Web Token claims object.
     /// - Returns: A new instance of `JWT`.
-    public init(header: [HeaderKeys:Any], claims: [ClaimKeys:Any]) {
-        self.header = Header(header)
-        self.claims = Claims(claims)
-    }
-    
-    /// Initialize a `JWT` instance.
-    ///
-    /// - Parameter hedaer: A dictionary containing the header with `HeaderKeys` as keys.
-    /// - Parameter claims: A dictionary containing the claims with String as keys.
-    /// - Returns: A new instance of `JWT`.
-    public init(header: [HeaderKeys:Any], claims: [String:Any]) {
-        self.header = Header(header)
-        self.claims = Claims(claims)
+    public init(header: Header, claims: Claims) {
+        self.header = header
+        self.claims = claims
     }
     
     init(header: [String:Any], claims: [String:Any]) {
@@ -53,7 +43,9 @@ public struct JWT {
         self.claims = Claims(claims)
     }
     
-    /// Sign the JWT using the given algorithm.
+    /// Sign the JWT using the given algorithm. 
+    ///
+    /// - Note: Sets header.alg with the name of the signing algorithm.
     ///
     /// - Parameter using algorithm: The algorithm to sign with.
     /// - Returns: A String with the encoded and signed JWT.
@@ -104,9 +96,11 @@ public struct JWT {
         return JWT(header: header, claims: claims)
     }
 
-    /// Validate the JWT claims. The claims are validated in case they are present in `Claims`, and
-    /// if the validation requiers an input, the input is provided. For example, if iss claim exists and
-    /// issuer argument is provided, it is validated. Otherwise, the validation of iss is skipped.
+    /// Validate the JWT claims. Various claims are validated if they are present in the `Claims` object.
+    /// Various validations require an input. In these cases, if the claim in question exists and the input
+    /// is provided the validation will be performed. Otherwise, the validation is skipped.
+    ///
+    /// The following claims are validated: iss, aud, azp, at_hash, exp, nbf, iat.
     ///
     /// - Parameter issuer: An optional String to compare with the iss claim.
     /// - Parameter audience: An optional String to compare with the aud claim.
@@ -149,7 +143,6 @@ public struct JWT {
             return .mismatchedAuthorizedParty
         }
         
-        
         if let accessToken = accessToken,
             let atHashValue = claims[.at_hash] as? String {
             guard let algorithm = header[.alg] as? String,
@@ -170,7 +163,7 @@ public struct JWT {
         }
         
         if let _ = claims[.exp] {
-            if let expirationDate = getDateFromClaim(ClaimKeys.exp.rawValue) {
+            if let expirationDate = getDateFromClaim(.exp) {
                 if expirationDate < Date() {
                     return .expired
                 }
@@ -181,7 +174,7 @@ public struct JWT {
         }
         
         if let _ = claims[.nbf] {
-            if let notBeforeDate = getDateFromClaim(ClaimKeys.nbf.rawValue) {
+            if let notBeforeDate = getDateFromClaim(.nbf) {
                 if notBeforeDate > Date() {
                     return .notBefore
                 }
@@ -192,7 +185,7 @@ public struct JWT {
         }
         
         if let _ = claims[.iat] {
-            if let issuedAtDate = getDateFromClaim(ClaimKeys.iat.rawValue) {
+            if let issuedAtDate = getDateFromClaim(.iat) {
                 if issuedAtDate > Date() {
                     return .issuedAt
                 }
@@ -205,7 +198,7 @@ public struct JWT {
         return .success
     }
     
-    private func getDateFromClaim(_ claim: String) -> Date? {
+    private func getDateFromClaim(_ claim: ClaimKeys) -> Date? {
         if let jwtDate = claims[claim] {
             var date: Date?
             switch jwtDate {

@@ -68,7 +68,7 @@ public enum ValidateClaimsResult: CustomStringConvertible {
     /// Issued At claim is in the future.
     case issuedAt
     
-    /// A textual respersentation of the validation result.
+    /// A textual respresentation of the validation result.
     public var description: String {
         switch self {
         case .success:
