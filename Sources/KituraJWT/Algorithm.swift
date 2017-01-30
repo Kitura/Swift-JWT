@@ -81,13 +81,14 @@ public enum Algorithm {
     /// - Parameter keyType: The type of the key argument: public/private key or certificate.
     /// - Returns: An instance of `Algorithm` if the input arguments correspond to a supported algorithm.
     public static func `for`(name: String, key: Data, keyType: RSAKeyType = .publicKey) -> Algorithm? {
-        if name == "RS256" || name == "rs256" {
+        let algorithmName = name.lowercased()
+        if algorithmName == "rs256" {
             return .rs256(key, keyType)
         }
-        if name == "RS384" || name == "rs384" {
+        if algorithmName == "rs384" {
             return .rs384(key, keyType)
         }
-        if name == "RS512" || name == "rs512" {
+        if algorithmName == "rs512" {
             return .rs512(key, keyType)
         }
         return nil
@@ -107,9 +108,8 @@ public enum Algorithm {
     /// - Parameter name: The name of the algorithm.
     /// - Returns: A value of `Supported` enum indicating the result.
     public static func isSupported(name: String) -> Supported {
-        if name == "RS256" || name == "rs256"
-            || name == "RS384" || name == "rs384"
-            ||  name == "RS512" || name == "rs512" {
+        let algorithmName = name.lowercased()
+        if algorithmName == "rs256" || algorithmName == "rs384" ||  algorithmName == "rs512" {
             return .supportedWithKey
         }
         return .unsupported
