@@ -50,7 +50,6 @@ public struct JWT {
     /// - Parameter using algorithm: The algorithm to sign with.
     /// - Returns: A String with the encoded and signed JWT.
     /// - Throws: An error thrown during the encoding or signing.
-    @available(macOS 10.12, iOS 10.0, *)
     public mutating func sign(using algorithm: Algorithm) throws -> String? {
         header[.alg] = algorithm.name
         guard let encodedHeader = try header.encode(),
@@ -71,7 +70,6 @@ public struct JWT {
     /// - Parameter using algorithm: The algorithm to verify with.
     /// - Returns: A Bool indicating whether the verification was successful.
     /// - Throws: An error thrown during the verification.
-    @available(macOS 10.12, iOS 10.0, *)
     public static func verify(_ jwt: String, using algorithm: Algorithm) throws -> Bool {
         let components = jwt.components(separatedBy: ".")
         guard components.count == 3,

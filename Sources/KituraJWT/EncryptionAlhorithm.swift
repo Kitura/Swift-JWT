@@ -17,26 +17,20 @@
 import Foundation
 
 protocol EncryptionAlgorithm {
-    @available(macOS 10.12, iOS 10.0, *)
     func sign(_ data: Data) -> Data?
     
-    @available(macOS 10.12, iOS 10.0, *)
     func sign(_ string: String, encoding: String.Encoding) -> Data?
     
-    @available(macOS 10.12, iOS 10.0, *)
     func verify(signature: Data, for data: Data) -> Bool
     
-    @available(macOS 10.12, iOS 10.0, *)
     func verify(signature: Data, for string: String, encoding: String.Encoding) -> Bool
 }
 
 extension EncryptionAlgorithm {
-    @available(macOS 10.12, iOS 10.0, *)
     func sign(_ string: String, encoding: String.Encoding = .utf8) -> Data? {
         return sign(string, encoding: encoding)
     }
     
-    @available(macOS 10.12, iOS 10.0, *)
     func verify(signature: Data, for string: String, encoding: String.Encoding = .utf8) -> Bool {
         return verify(signature: signature, for: string, encoding: encoding)
     }   

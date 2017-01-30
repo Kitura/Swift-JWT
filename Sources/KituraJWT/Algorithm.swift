@@ -56,12 +56,10 @@ public enum Algorithm {
         }
     }
 
-    @available(macOS 10.12, iOS 10.0, *)
     func sign(_ input: String) -> Data? {
         return encryptionAlgortihm.sign(input)
     }
     
-    @available(macOS 10.12, iOS 10.0, *)
     func verify(signature: Data, for input: String) -> Bool {
         return encryptionAlgortihm.verify(signature: signature, for: input)
     }

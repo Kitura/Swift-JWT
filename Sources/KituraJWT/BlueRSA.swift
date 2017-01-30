@@ -15,6 +15,7 @@
  **/
 
 import CryptorRSA
+import LoggerAPI
 
 import Foundation
 
@@ -30,8 +31,11 @@ class BlueRSA: EncryptionAlgorithm {
         self.algorithm = algorithm
     }
     
-    @available(macOS 10.12, iOS 10.0, *)
     func sign(_ data: Data) -> Data? {
+        guard #available(macOS 10.12, iOS 10.0, *) else {
+            Log.error("macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA")
+            return nil
+        }
         do {
             let privateKey = try CryptorRSA.createPrivateKey(with: key)
             let myPlaintext = CryptorRSA.createPlaintext(with: data)
@@ -45,16 +49,18 @@ class BlueRSA: EncryptionAlgorithm {
         }
     }
 
-    @available(macOS 10.12, iOS 10.0, *)
     func sign(_ string: String, encoding: String.Encoding) -> Data? {
         guard let data: Data = string.data(using: encoding) else {
+            Log.error("macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA")
             return nil
         }
         return sign(data)
     }
     
-    @available(macOS 10.12, iOS 10.0, *)
     func verify(signature: Data, for data: Data) -> Bool {
+        guard #available(macOS 10.12, iOS 10.0, *) else {
+            return false
+        }
         do {
             var publicKey: CryptorRSA.PublicKey
             switch keyType {
@@ -73,7 +79,6 @@ class BlueRSA: EncryptionAlgorithm {
         }
     }
     
-    @available(macOS 10.12, iOS 10.0, *)
     func verify(signature: Data, for string: String, encoding: String.Encoding) -> Bool {
         guard let data: Data = string.data(using: encoding) else {
             return false
