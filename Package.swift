@@ -20,12 +20,7 @@ let package = Package(
     name: "Kitura-JWT",
     dependencies: [
         .Package(url: "https://github.com/IBM-Swift/BlueCryptor.git", majorVersion: 0, minor: 8),
+        .Package(url: "https://github.com/IBM-Swift/BlueRSA.git", majorVersion: 0, minor: 1),
     ],
     exclude: []
 )
-
-#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-    package.dependencies.append(
-        .Package(url: "https://github.com/IBM-Swift/OpenSSL-OSX.git", majorVersion: 0, minor: 4)
-    )
-#endif

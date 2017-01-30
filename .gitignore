@@ -3,5 +3,5 @@ build
 .vagrant
 Packages
 *.pkg
-KituraJWT.xcodeproj
+Kitura-JWT.xcodeproj
 *.DS_Store

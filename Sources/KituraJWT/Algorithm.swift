@@ -15,6 +15,7 @@
  **/
 
 import Cryptor
+import CryptorRSA
 import Foundation
 
 // MARK Algorithm
@@ -23,10 +24,10 @@ import Foundation
 public enum Algorithm {
     /// RSA 256 bits with its key and key type.
     case rs256(Data, RSAKeyType)
-
+    
     /// RSA 384 bits with its key and key type.
     case rs384(Data, RSAKeyType)
-
+    
     /// RSA 512 bits with its key and key type.
     case rs512(Data, RSAKeyType)
     
@@ -54,24 +55,37 @@ public enum Algorithm {
             return "RS512"
         }
     }
-    
+
+    @available(macOS 10.12, iOS 10.0, *)
     func sign(_ input: String) -> Data? {
         return encryptionAlgortihm.sign(input)
     }
     
+    @available(macOS 10.12, iOS 10.0, *)
     func verify(signature: Data, for input: String) -> Bool {
         return encryptionAlgortihm.verify(signature: signature, for: input)
     }
     
     var encryptionAlgortihm: EncryptionAlgorithm {
-        switch self {
-        case .rs256(let key, let type):
-            return RSA(key: key, keyType: type, algorithm: .sha256)
-        case .rs384(let key, let type):
-            return RSA(key: key, keyType: type, algorithm: .sha384)
-        case .rs512(let key, let type):
-            return RSA(key: key, keyType: type, algorithm: .sha512)
-        }
+        #if os(Linux)
+            switch self {
+            case .rs256(let key, let type):
+                return RSA(key: key, keyType: type, algorithm: .sha256)
+            case .rs384(let key, let type):
+                return RSA(key: key, keyType: type, algorithm: .sha384)
+            case .rs512(let key, let type):
+                return RSA(key: key, keyType: type, algorithm: .sha512)
+            }
+        #else
+            switch self {
+            case .rs256(let key, let type):
+                return BlueRSA(key: key, keyType: type, algorithm: .sha256)
+            case .rs384(let key, let type):
+                return BlueRSA(key: key, keyType: type, algorithm: .sha384)
+            case .rs512(let key, let type):
+                return BlueRSA(key: key, keyType: type, algorithm: .sha512)
+            }
+        #endif
     }
     
     /// Get an algorithm by name and key.
@@ -102,7 +116,7 @@ public enum Algorithm {
     public static func `for`(name: String, secret: String) -> Algorithm? {
         return nil
     }
-
+    
     /// Check if the algorithm specified by the name is supported and what input it requires (a key or a secret).
     ///
     /// - Parameter name: The name of the algorithm.

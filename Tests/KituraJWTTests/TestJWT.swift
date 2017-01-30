@@ -30,12 +30,14 @@ let rsaPublicKey = read(fileName: "rsa_public_key")
 
 class TestJWT: XCTestCase {
     
+    @available(macOS 10.12, iOS 10.0, *)
     static var allTests: [(String, (TestJWT) -> () throws -> Void)] {
         return [
             ("testSign", testSign),
         ]
     }
     
+    @available(macOS 10.12, iOS 10.0, *)
     func testSign() {
         
         var jwt = JWT(header: Header([.alg:"rs256"]), claims: Claims([.name:"Kitura"]))

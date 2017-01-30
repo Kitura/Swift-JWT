@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-
+#if os(Linux)
 import Cryptor
 import OpenSSL
-
 import Foundation
 
 
@@ -29,8 +28,8 @@ class RSA: EncryptionAlgorithm {
     private let key: UnsafeMutablePointer<UInt8>
     private let keySize: Int32
     private let keyType: RSAKeyType?
-	
-	// MARK: Enums
+    
+    // MARK: Enums
     
     /// The RSA algorithm to use.
     enum Algorithm {
@@ -101,9 +100,9 @@ class RSA: EncryptionAlgorithm {
         key.deinitialize(count: Int(keySize))
         key.deallocate(capacity: Int(keySize))
     }
-
+    
     func sign(_ data: Data) -> Data? {
-         // Generate hash
+        // Generate hash
         let ptr = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
         defer { ptr.deallocate(capacity: data.count) }
         data.copyBytes(to: ptr, count: data.count)
@@ -143,7 +142,7 @@ class RSA: EncryptionAlgorithm {
             return false
         }
         var digestBytes = digest.final()
- 
+        
         let signPtr = UnsafeMutablePointer<UInt8>.allocate(capacity: signature.count)
         defer { signPtr.deallocate(capacity: data.count) }
         signature.copyBytes(to: signPtr, count: signature.count)
@@ -162,7 +161,7 @@ class RSA: EncryptionAlgorithm {
             EVP_PKEY_free(pkey)
             let result = RSA_verify(algorithm.nid, &digestBytes, UInt32(digestBytes.count), signPtr, UInt32(signature.count), rsa)
             return result != 0
-        
+            
         case .publicKey:
             var rsa = RSA_new()
             let ok = PEM_read_bio_RSA_PUBKEY(keybuf, &rsa, nil, nil)
@@ -184,3 +183,5 @@ class RSA: EncryptionAlgorithm {
         return verify(signature: signature, for: data)
     }
 }
+#endif
+
