@@ -9,26 +9,9 @@ An implementation of JSON Web Token
 An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519)
 
 ## Table of Contents
-* [Getting started](#getting-started)
 * [Supported algorithms](#supported-algorithms)
 * [Usage](#usage)
 * [License](#license)
-
-## Getting started
-
-### macOS
-
-Install OpenSSl:
-
-```
-$ brew install openssl
-```
-
-Set `PKG_CONFIG_PATH`:
-
-```
-$ export PKG_CONFIG_PATH=/usr/local/opt/openssl/ib/pkgconfig/
-```
 
 ## Supported algorithms
 At the moment the supported algorithms are:
