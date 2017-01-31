@@ -9,16 +9,17 @@ An implementation of JSON Web Token
 An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519)
 
 ## Table of Contents
+* [Prerequisites](#prerequisites)
 * [Supported algorithms](#supported-algorithms)
 * [Usage](#usage)
 * [License](#license)
 
-## Supported algorithms
-At the moment the supported algorithms are:
 
-RS256 - RSASSA-PKCS1-v1_5 using SHA-256
-RS384 - RSASSA-PKCS1-v1_5 using SHA-384
-RS512 - RSASSA-PKCS1-v1_5 using SHA-512
+## Prerequisites
+
+### macOS
+
+* macOS 10.12.0 (*Sierra*) or higher
 
 ## Usage
 
