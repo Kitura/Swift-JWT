@@ -15,7 +15,6 @@
  **/
 
 import Cryptor
-import CryptorRSA
 import Foundation
 
 // MARK Algorithm

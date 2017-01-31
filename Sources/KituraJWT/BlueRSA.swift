@@ -14,6 +14,7 @@
  * limitations under the License.
  **/
 
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import CryptorRSA
 import LoggerAPI
 
@@ -96,5 +97,4 @@ class BlueRSA: EncryptionAlgorithm {
     }
     
 }
-
-
+#endif
