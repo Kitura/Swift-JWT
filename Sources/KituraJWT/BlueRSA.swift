@@ -37,7 +37,10 @@ class BlueRSA: EncryptionAlgorithm {
             return nil
         }
         do {
-            let privateKey = try CryptorRSA.createPrivateKey(with: key)
+            guard let keyString = String(data: key, encoding: .utf8) else {
+                return nil
+            }
+            let privateKey = try CryptorRSA.createPrivateKey(withPEM: keyString)
             let myPlaintext = CryptorRSA.createPlaintext(with: data)
             if let signedData = try myPlaintext.signed(with: privateKey, algorithm: algorithm) {
                 return signedData.data
@@ -45,6 +48,7 @@ class BlueRSA: EncryptionAlgorithm {
             return nil
         }
         catch {
+            Log.error("Signing failed: \(error)")
             return nil
         }
     }
@@ -67,14 +71,19 @@ class BlueRSA: EncryptionAlgorithm {
             case .privateKey:
                 return false
             case .publicKey:
-                publicKey = try CryptorRSA.createPublicKey(with: key)
+                guard let keyString = String(data: key, encoding: .utf8) else {
+                    return false
+                }
+                publicKey = try CryptorRSA.createPublicKey(withPEM: keyString)
             case .certificate:
                 publicKey = try CryptorRSA.createPublicKey(extractingFrom: key)
             }
-            let signedData = CryptorRSA.createSigned(with: data)
-            return try signedData.verify(with: publicKey, signature: signedData, algorithm: algorithm)
+            let myPlaintext = CryptorRSA.createPlaintext(with: data)
+            let signedData = CryptorRSA.createSigned(with: signature)
+            return try myPlaintext.verify(with: publicKey, signature: signedData, algorithm: algorithm)
         }
         catch {
+            Log.error("Verification failed: \(error)")
             return false
         }
     }
