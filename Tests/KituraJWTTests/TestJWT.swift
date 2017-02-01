@@ -27,22 +27,33 @@ import Foundation
 let rsaPrivateKey = read(fileName: "rsa_private_key")
 let rsaPublicKey = read(fileName: "rsa_public_key")
 
+let certPrivateKey = read(fileName: "cert_private_key")
+let certificate = read(fileName: "certificate")
+
 @available(macOS 10.12, iOS 10.0, *)
 class TestJWT: XCTestCase {
     
     static var allTests: [(String, (TestJWT) -> () throws -> Void)] {
         return [
-            ("testSign", testSign),
+            ("testSignAndVerify", testSignAndVerify),
+            ("testJWT", testJWT),
+            ("testSupported", testSupported),
         ]
     }
     
-    func testSign() {
-        
+    func testSignAndVerify() {
         var jwt = JWT(header: Header([.alg:"rs256"]), claims: Claims([.name:"Kitura"]))
         jwt.claims[.name] = "Kitura-JWT"
         XCTAssertEqual(jwt.claims[.name] as! String, "Kitura-JWT")
+        jwt.claims[.iss] = "issuer"
+        jwt.claims[.aud] = ["clientID"]
+        jwt.claims[.azp] = "clientID"
+        jwt.claims[.iat] = "1485949565.58463"
+        jwt.claims[.exp] = "2485949565.58463"
+        jwt.claims[.nbf] = "1485949565.58463"
         
         do {
+            // public key
             if let signed = try jwt.sign(using: .rs256(rsaPrivateKey, .privateKey)) {
                 let ok = try JWT.verify(signed, using: .rs256(rsaPublicKey, .publicKey))
                 XCTAssertTrue(ok, "Verification failed")
@@ -50,20 +61,88 @@ class TestJWT: XCTestCase {
                 if let decoded = try JWT.decode(signed) {
                     XCTAssertEqual(decoded.header[.alg] as! String, "RS256", "Wrong .alg in decoded")
                     XCTAssertEqual(decoded.claims[.name] as! String, "Kitura-JWT", "Wrong .name in decoded")
+                    
+                    XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID", authorizedParty: "clientID"), .success, "Validation failed")
+                }
+                else {
+                    XCTFail("Failed to decode")
                 }
             }
             else {
                 XCTFail("Failed to sign")
+            }
+            
+            // certificate
+            if let signed = try jwt.sign(using: .rs256(certPrivateKey, .privateKey)) {
+                let ok = try JWT.verify(signed, using: .rs256(certificate, .certificate))
+                XCTAssertTrue(ok, "Verification failed")
+                
+                if let decoded = try JWT.decode(signed) {
+                    XCTAssertEqual(decoded.header[.alg] as! String, "RS256", "Wrong .alg in decoded")
+                    XCTAssertEqual(decoded.claims[.name] as! String, "Kitura-JWT", "Wrong .name in decoded")
+                    
+                    XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID", authorizedParty: "clientID"), .success, "Validation failed")
+                }
+                else {
+                    XCTFail("Failed to decode")
+                }
+            }
+            else {
+                XCTFail("Failed to sign")
+            }
+
+        }
+        catch {
+            XCTFail("Failed to sign, verify or decode")
+        }
+    }
+    
+    // From jwt.io
+    func testJWT() {
+        let encoded = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.EkN-DOsnsuRjRO6BxXemmJDm3HbxrbRzXglbN2S4sOkopdU4IsDxTI8jO19W_A4K8ZPJijNLis4EZsHeY559a4DFOd50_OqgHGuERTqYZyuhtF39yxJPAjUESwxk2J5k_4zM3O-vtd1Ghyo4IbqKKSy6J9mTniYJPenn5-HIirE"
+        let publicKey = read(fileName: "jwt_public")
+        
+        do {
+            let ok = try JWT.verify(encoded, using: .rs256(publicKey, .publicKey))
+            XCTAssertTrue(ok, "Verification failed")
+            
+            if let decoded = try JWT.decode(encoded) {
+                XCTAssertEqual(decoded.header[.alg] as! String, "RS256", "Wrong .alg in decoded")
+                XCTAssertEqual(decoded.header[.typ] as! String, "JWT", "Wrong .typ in decoded")
+                XCTAssertEqual(decoded.header.headers.count, 2, "wrong number of header fields")
+                
+                XCTAssertEqual(decoded.claims[.sub] as! String, "1234567890", "Wrong .sub in decoded")
+                XCTAssertEqual(decoded.claims[.name] as! String, "John Doe", "Wrong .name in decoded")
+                XCTAssertEqual(decoded.claims["admin"] as! Bool, true, "Wrong .admin in decoded")
+                
+                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+            }
+            else {
+                XCTFail("Failed to decode")
             }
         }
         catch {
             XCTFail("Failed to sign, verify or decode")
         }
     }
+    
+    func testSupported() {
+        var supported = Algorithm.isSupported(name: "rS512")
+        XCTAssertEqual(supported, .supportedWithKey, "isSupported failed for supported algorithm")
+        
+        supported = Algorithm.isSupported(name: "kitura")
+        XCTAssertEqual(supported, .unsupported, "isSupported failed for unsupported algorithm")
+        
+        var algorithm = Algorithm.for(name: "Rs256", key: rsaPublicKey, keyType: .certificate)
+        XCTAssertNotNil(algorithm, "Failed to create Algorithm")
+        
+        algorithm = Algorithm.for(name: "HMAC512", key: rsaPrivateKey, keyType: .privateKey)
+        XCTAssertNil(algorithm, "Create Algorithm for unsupported")
+    }
+
 }
 
 func read(fileName: String) -> Data {
-    // Read in a configuration file into an NSData
     do {
         var pathToTests = #file
         if pathToTests.hasSuffix("TestJWT.swift") {
