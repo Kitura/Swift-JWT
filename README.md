@@ -21,6 +21,13 @@ An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519)
 
 * macOS 10.12.0 (*Sierra*) or higher
 
+## Supported algorithms
+At the moment the supported algorithms are:
+
+RS256 - RSASSA-PKCS1-v1_5 using SHA-256                  
+RS384 - RSASSA-PKCS1-v1_5 using SHA-384                     
+RS512 - RSASSA-PKCS1-v1_5 using SHA-512
+
 ## Usage
 
 Add
@@ -31,7 +38,9 @@ import KituraJWT
 to your application.
 
 ### Check whether an algorithm is supported
-The supported algorithms are listed in `Algorithm`. In order to check if an algorithm is supported and whether it requires a key or a secret, call:
+The supported algorithms are listed above. 
+
+In order to check at run time if an algorithm is supported and whether it requires a key or a secret, call:
 
 ``` swift
 public static func isSupported(name: String) -> Supported
@@ -40,6 +49,21 @@ where `name` is a textual representation of an algorithm, e.g., "RS256" (case in
 
 `Supported` is an enum with the following cases: unsupported, supportedWithKey (RSA falls into this category), and supportedWithSecret (HMAC, which is currently unsupported).
 
+### The modeling of JSON Web Tokens
+
+The JWT class models JSON Web Tokens by using a pair of structs, `Header` for the JSON Web Token header and
+`Claims` for the JSON Web Token claims. 
+
+#### Header API
+
+The Header struct contains the various fields of the JSON Web Token header. These fields can be accessed and modified using the
+subscript operator. The subscript is of the type `HeaderKeys`.
+
+#### Claims API
+
+The Claims struct contains the various fields of the JSON Web Token claims. These fields can be accessed and modified using the
+subscript operator. The subscript can be of the type `ClaimKeys` for the standard claims and can be of the type `String` for
+any non-standard claims.
 
 ### Sign a JWT
 
@@ -56,7 +80,7 @@ let signedJWT = jwt.sign(using: .rs256(key, .privateKey))
 ```
 <encoded header>.<encoded claims>.<signature>
 ```
-Note, that the `sign` function sets the alg (algorithm) field of the header.
+**Note:** The `sign` function sets the alg (algorithm) field of the header.
 
 ### Decode a JSON Web Token
 
@@ -67,7 +91,7 @@ For example:
 ``` swift
 let jwt = JWT.decode(encodedAndSignedJWT)
 ```
-Note, that this function doesn't verify the signature of the token.
+**Note:** This function doesn't verify the signature of the token.
 
 ### Verify the signature of a JSON Web Token
 
