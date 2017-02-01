@@ -24,12 +24,14 @@ public struct Claims {
     
     /// Initialize a `Claims` instance.
     ///
-    /// - Parameter claims: A dictionary containing the claims with `ClaimsKeys` as keys.
+    /// - Parameter claims: An optional dictionary containing the claims with `ClaimsKeys` as keys.
     /// - Returns: A new instance of `Claims`.
-    public init(_ claims: [ClaimKeys:Any]) {
+    public init(_ claims: [ClaimKeys:Any]?=nil) {
         self.claims = [String:Any]()
-        for (key, value) in claims {
-            self.claims[key.rawValue] = value
+        if let claims = claims {
+            for (key, value) in claims {
+                self.claims[key.rawValue] = value
+            }
         }
     }
     

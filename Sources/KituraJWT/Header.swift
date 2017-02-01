@@ -24,12 +24,14 @@ public struct Header {
 
     /// Initialize a `Header` instance.
     ///
-    /// - Parameter header: A dictionary containing the claims with `HeaderKeys` as keys.
+    /// - Parameter header: An optional dictionary containing the claims with `HeaderKeys` as keys.
     /// - Returns: A new instance of `Header`.
-    public init(_ header: [HeaderKeys:Any]) {
+    public init(_ header: [HeaderKeys:Any]?=nil) {
         self.headers = [String:Any]()
-        for (key, value) in header {
-            self.headers[key.rawValue] = value
+        if let header = header {
+            for (key, value) in header {
+                self.headers[key.rawValue] = value
+            }
         }
     }
     
