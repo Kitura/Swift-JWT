@@ -59,8 +59,7 @@ class TestJWT: XCTestCase {
                 XCTAssertTrue(ok, "Verification failed")
                 
                 if let decoded = try JWT.decode(signed) {
-                    XCTAssertEqual(decoded.header[.alg] as! String, "RS256", "Wrong .alg in decoded")
-                    XCTAssertEqual(decoded.claims[.name] as! String, "Kitura-JWT", "Wrong .name in decoded")
+                    check(jwt: decoded)
                     
                     XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID", authorizedParty: "clientID"), .success, "Validation failed")
                 }
@@ -78,8 +77,7 @@ class TestJWT: XCTestCase {
                 XCTAssertTrue(ok, "Verification failed")
                 
                 if let decoded = try JWT.decode(signed) {
-                    XCTAssertEqual(decoded.header[.alg] as! String, "RS256", "Wrong .alg in decoded")
-                    XCTAssertEqual(decoded.claims[.name] as! String, "Kitura-JWT", "Wrong .name in decoded")
+                    check(jwt: decoded)
                     
                     XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID", authorizedParty: "clientID"), .success, "Validation failed")
                 }
@@ -97,6 +95,19 @@ class TestJWT: XCTestCase {
         }
     }
     
+    func check(jwt: JWT) {
+        XCTAssertEqual(jwt.header.headers.count, 1, "Wrong number of header fields")
+        XCTAssertEqual(jwt.claims.claims.count, 7, "Wrong number of claims")
+
+        XCTAssertEqual(jwt.header[.alg] as! String, "RS256", "Wrong .alg in decoded")
+        XCTAssertEqual(jwt.claims[.iss] as! String, "issuer", "Wrong .iss in decoded")
+        XCTAssertEqual(jwt.claims[.aud] as! [String], ["clientID"], "Wrong .aud in decoded")
+        XCTAssertEqual(jwt.claims[.azp] as! String, "clientID", "Wrong .azp in decoded")
+        XCTAssertEqual(jwt.claims[.exp] as! String, "2485949565.58463", "Wrong .exp in decoded")
+        XCTAssertEqual(jwt.claims[.iat] as! String, "1485949565.58463", "Wrong .iat in decoded")
+        XCTAssertEqual(jwt.claims[.nbf] as! String, "1485949565.58463", "Wrong .nbf in decoded")
+    }
+    
     // From jwt.io
     func testJWT() {
         let encoded = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.EkN-DOsnsuRjRO6BxXemmJDm3HbxrbRzXglbN2S4sOkopdU4IsDxTI8jO19W_A4K8ZPJijNLis4EZsHeY559a4DFOd50_OqgHGuERTqYZyuhtF39yxJPAjUESwxk2J5k_4zM3O-vtd1Ghyo4IbqKKSy6J9mTniYJPenn5-HIirE"
@@ -109,11 +120,12 @@ class TestJWT: XCTestCase {
             if let decoded = try JWT.decode(encoded) {
                 XCTAssertEqual(decoded.header[.alg] as! String, "RS256", "Wrong .alg in decoded")
                 XCTAssertEqual(decoded.header[.typ] as! String, "JWT", "Wrong .typ in decoded")
-                XCTAssertEqual(decoded.header.headers.count, 2, "wrong number of header fields")
+                XCTAssertEqual(decoded.header.headers.count, 2, "Wrong number of header fields")
                 
                 XCTAssertEqual(decoded.claims[.sub] as! String, "1234567890", "Wrong .sub in decoded")
                 XCTAssertEqual(decoded.claims[.name] as! String, "John Doe", "Wrong .name in decoded")
                 XCTAssertEqual(decoded.claims["admin"] as! Bool, true, "Wrong .admin in decoded")
+                XCTAssertEqual(decoded.claims.claims.count, 3, "Wrong number of claims")
                 
                 XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
             }
