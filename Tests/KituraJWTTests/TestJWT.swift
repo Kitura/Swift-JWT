@@ -53,13 +53,28 @@ class TestJWT: XCTestCase {
         jwt.claims[.nbf] = "1485949565.58463"
         
         do {
+            // encode
+            if let encoded = try jwt.encode() {
+                if let decoded = try JWT.decode(encoded) {
+                    check(jwt: decoded, algorithm: "none")
+                    
+                    XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID", authorizedParty: "clientID"), .success, "Validation failed")
+                }
+                else {
+                    XCTFail("Failed to decode")
+                }
+            }
+            else {
+                XCTFail("Failed to encode")
+            }
+           
             // public key
             if let signed = try jwt.sign(using: .rs256(rsaPrivateKey, .privateKey)) {
                 let ok = try JWT.verify(signed, using: .rs256(rsaPublicKey, .publicKey))
                 XCTAssertTrue(ok, "Verification failed")
                 
                 if let decoded = try JWT.decode(signed) {
-                    check(jwt: decoded)
+                    check(jwt: decoded, algorithm: "RS256")
                     
                     XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID", authorizedParty: "clientID"), .success, "Validation failed")
                 }
@@ -77,7 +92,7 @@ class TestJWT: XCTestCase {
                 XCTAssertTrue(ok, "Verification failed")
                 
                 if let decoded = try JWT.decode(signed) {
-                    check(jwt: decoded)
+                    check(jwt: decoded, algorithm: "RS256")
                     
                     XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID", authorizedParty: "clientID"), .success, "Validation failed")
                 }
@@ -95,11 +110,11 @@ class TestJWT: XCTestCase {
         }
     }
     
-    func check(jwt: JWT) {
+    func check(jwt: JWT, algorithm: String) {
         XCTAssertEqual(jwt.header.headers.count, 1, "Wrong number of header fields")
         XCTAssertEqual(jwt.claims.claims.count, 7, "Wrong number of claims")
 
-        XCTAssertEqual(jwt.header[.alg] as! String, "RS256", "Wrong .alg in decoded")
+        XCTAssertEqual(jwt.header[.alg] as! String, algorithm, "Wrong .alg in decoded")
         XCTAssertEqual(jwt.claims[.iss] as! String, "issuer", "Wrong .iss in decoded")
         XCTAssertEqual(jwt.claims[.aud] as! [String], ["clientID"], "Wrong .aud in decoded")
         XCTAssertEqual(jwt.claims[.azp] as! String, "clientID", "Wrong .azp in decoded")

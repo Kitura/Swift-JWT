@@ -52,18 +52,36 @@ public struct JWT {
     /// - Throws: An error thrown during the encoding or signing.
     public mutating func sign(using algorithm: Algorithm) throws -> String? {
         header[.alg] = algorithm.name
+        guard let encodedJwt = try encodeHeaderAndClaims() else {
+            return nil
+        }
+        guard let signature = algorithm.sign(encodedJwt),
+            let encodedSignature = Base64URL.encode(signature) else {
+                return nil
+        }
+        return encodedJwt + "." + encodedSignature
+    }
+    
+    /// Encode the JWT.
+    ///
+    /// - Note: Sets header.alg with 'none'.
+    ///
+    /// - Returns: A String with the encoded.
+    /// - Throws: An error thrown during the encoding.
+    public mutating func encode() throws -> String? {
+        header[.alg] = "none"
+        return try encodeHeaderAndClaims()
+    }
+
+    private func encodeHeaderAndClaims() throws -> String? {
         guard let encodedHeader = try header.encode(),
             let encodedClaims = try claims.encode() else {
                 return nil
         }
         let encodedInput = encodedHeader + "." + encodedClaims
-        guard let signature = algorithm.sign(encodedInput),
-            let encodedSignature = Base64URL.encode(signature) else {
-                return nil
-        }
-        return encodedInput + "." + encodedSignature
+        return encodedInput
     }
-    
+
     /// Verify the signature of the encoded JWT using the given algorithm.
     ///
     /// - Parameter jwt: A String with the encoded and signed JWT.
@@ -86,7 +104,7 @@ public struct JWT {
     /// - Throws: An error thrown during the decoding.
     public static func decode(_ jwt: String) throws -> JWT? {
         let components = jwt.components(separatedBy: ".")
-        guard components.count == 3,
+        guard components.count == 2 || components.count == 3,
             let headerData = Base64URL.decode(components[0]),
             let claimsData = Base64URL.decode(components[1]),
             let header = (try JSONSerialization.jsonObject(with: headerData)) as? [String:Any],
