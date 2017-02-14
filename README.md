@@ -52,7 +52,7 @@ where `name` is a textual representation of an algorithm, e.g., "RS256" (case in
 ### The modeling of JSON Web Tokens
 
 The JWT class models JSON Web Tokens by using a pair of structs, `Header` for the JSON Web Token header and
-`Claims` for the JSON Web Token claims. 
+`Claims` for the JSON Web Token claims.
 
 #### Header API
 
@@ -62,8 +62,7 @@ subscript operator. The subscript is of the type `HeaderKeys`.
 #### Claims API
 
 The Claims struct contains the various fields of the JSON Web Token claims. These fields can be accessed and modified using the
-subscript operator. The subscript can be of the type `ClaimKeys` for the standard claims and can be of the type `String` for
-any non-standard claims.
+subscript operator. The subscript can be either of the type `ClaimKeys` for the standard claims or of the type `String` for any non-standard claims.
 
 ### Sign a JWT
 
@@ -92,6 +91,13 @@ For example:
 let jwt = JWT.decode(encodedAndSignedJWT)
 ```
 **Note:** This function doesn't verify the signature of the token.
+
+### Encode a JSON Web Token
+To encode a token without signing it, call encode.
+
+``` swift
+let encoded = jwt.encode()
+```
 
 ### Verify the signature of a JSON Web Token
 
