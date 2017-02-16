@@ -16,19 +16,27 @@
 
 import Cryptor
 
-struct Hash {
-    static func hash(_ input: String, using algorithmName: String) -> [UInt8]? {
+// MARK Hash
+
+/// A utility struct to perform SHA256/384/512 hash.
+public struct Hash {
+    
+    /// Generate hash for the input string.
+    ///
+    /// - Parameter input: A String containg the input for the hash.
+    /// - Parameter using algorithmName: A String containing the name of the JWT encryption algorithm.
+    /// - Returns: The hashed data. Returns nil if something goes wrong.
+    public static func hash(_ input: String, using algorithmName: String) -> [UInt8]? {
         var algorithm: Digest.Algorithm?
-        if algorithmName == "RS256" || algorithmName == "rs256" {
+        let name = algorithmName.lowercased()
+        switch algorithmName.lowercased() {
+        case "rs256":
             algorithm = Digest.Algorithm.sha256
-        }
-        else if algorithmName == "RS384" || algorithmName == "rs384" {
+        case "rs384":
             algorithm = Digest.Algorithm.sha384
-        }
-        else if algorithmName == "RS512" || algorithmName == "rs512" {
+        case "rs512":
             algorithm = Digest.Algorithm.sha512
-        }
-        else {
+        default:
             return nil
         }
         

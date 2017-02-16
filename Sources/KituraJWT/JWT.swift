@@ -122,10 +122,8 @@ public struct JWT {
     ///
     /// - Parameter issuer: An optional String to compare with the iss claim.
     /// - Parameter audience: An optional String to compare with the aud claim.
-    /// - Parameter authorizedParty: An optional String to compare with the azp claim.
-    /// - Parameter accessToken: An optional String to check its hash value with the at_hash claim.
-    /// - Returns: A value of `ValidateClaimsResult`. 
-    public func validateClaims(issuer: String?=nil, audience: String?=nil, authorizedParty: String?=nil, accessToken: String?=nil) -> ValidateClaimsResult {
+    /// - Returns: A value of `ValidateClaimsResult`.
+    public func validateClaims(issuer: String?=nil, audience: String?=nil) -> ValidateClaimsResult {
         
         if let issuer = issuer,
             let jwtIssuer = claims[.iss] as? String,
@@ -152,31 +150,6 @@ public struct JWT {
                 }
             default:
                 return .invalidAudience
-            }
-        }
-        
-        if let authorizedParty = authorizedParty,
-            let jwtAuthorizedParty = claims[.azp] as? String,
-            jwtAuthorizedParty != authorizedParty {
-            return .mismatchedAuthorizedParty
-        }
-        
-        if let accessToken = accessToken,
-            let atHashValue = claims[.at_hash] as? String {
-            guard let algorithm = header[.alg] as? String,
-                let hash = Hash.hash(accessToken, using: algorithm) else {
-                    return .invalidAlgorithm
-            }
-            
-            let midpoint = hash.count / 2
-            let firstHalf = Array(hash.prefix(upTo: midpoint))
-            let data = Data(bytes: firstHalf, count: firstHalf.count)
-            guard let hashed = Base64URL.encode(data) else {
-                return .hashFailure
-            }
-            
-            if hashed != atHashValue {
-                return .mismatchedAccessTokenHash
             }
         }
         

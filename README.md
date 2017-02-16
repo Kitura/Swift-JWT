@@ -38,7 +38,7 @@ import KituraJWT
 to your application.
 
 ### Check whether an algorithm is supported
-The supported algorithms are listed above. 
+The supported algorithms are listed above.
 
 In order to check at run time if an algorithm is supported and whether it requires a key or a secret, call:
 
@@ -117,8 +117,6 @@ The `validateClaims` function validates the claims of a JWT instance.
 The following claims are validated if they are present in the `Claims` object:
   - iss (issuer)
   - aud (audience)
-  - azp (authorized party)
-  - at_hash (access token hash value)
   - exp (expiration date)
   - nbf (not before date)
   - iat (issued at date)
@@ -130,7 +128,7 @@ The method returns `ValidateClaimsResult` - an enum that list the various reason
 If the validation succeeds `ValidateClaimsResult.success` is returned.
 
 ```swift
-let validationResult = validateClaims(issuer: issuer, audience: clientID, accessToken: accessToken)
+let validationResult = validateClaims(issuer: issuer, audience: clientID)
 if validationResult != .success {
   print("Claims validation failed: ", validationResult)
 }

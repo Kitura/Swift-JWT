@@ -92,17 +92,16 @@ public enum Algorithm {
     /// - Parameter keyType: The type of the key argument: public/private key or certificate.
     /// - Returns: An instance of `Algorithm` if the input arguments correspond to a supported algorithm.
     public static func `for`(name: String, key: Data, keyType: RSAKeyType = .publicKey) -> Algorithm? {
-        let algorithmName = name.lowercased()
-        if algorithmName == "rs256" {
+        switch name.lowercased() {
+        case "rs256":
             return .rs256(key, keyType)
-        }
-        if algorithmName == "rs384" {
+        case "rs384":
             return .rs384(key, keyType)
-        }
-        if algorithmName == "rs512" {
+        case "rs512":
             return .rs512(key, keyType)
+        default:
+            return nil
         }
-        return nil
     }
     
     /// Get an algorithm by name and secret.

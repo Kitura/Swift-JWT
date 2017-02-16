@@ -38,18 +38,6 @@ public enum ValidateClaimsResult: CustomStringConvertible {
     /// Mismatched Issuer.
     case mismatchedIssuer
     
-    /// Mismatched AuthorizedParty claim.
-    case mismatchedAuthorizedParty
-    
-    /// Invalid algorithm in the header prevents access token hash claim validation.
-    case invalidAlgorithm
-    
-    /// Hashing algorithm failure prevents access token hash claim validation.
-    case hashFailure
-    
-    /// Mismatched AuthorizedParty claim.
-    case mismatchedAccessTokenHash
-    
     /// Invalid Expiration claim.
     case invalidExpiration
     
@@ -83,14 +71,6 @@ public enum ValidateClaimsResult: CustomStringConvertible {
             return "Invalid Audience claim"
         case .mismatchedIssuer:
             return "Mismatched Issuer claim"
-        case .mismatchedAuthorizedParty:
-            return "Mismatched Authorized Party claim"
-        case .invalidAlgorithm:
-            return "Invalid algorithm"
-        case .hashFailure:
-            return "Failed to hash access token"
-        case .mismatchedAccessTokenHash:
-            return "Mismatched Access Token Hash claim"
         case .invalidExpiration:
             return "Invalid Expiration claim"
         case .expired:

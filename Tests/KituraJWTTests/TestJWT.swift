@@ -47,7 +47,6 @@ class TestJWT: XCTestCase {
         XCTAssertEqual(jwt.claims[.name] as! String, "Kitura-JWT")
         jwt.claims[.iss] = "issuer"
         jwt.claims[.aud] = ["clientID"]
-        jwt.claims[.azp] = "clientID"
         jwt.claims[.iat] = "1485949565.58463"
         jwt.claims[.exp] = "2485949565.58463"
         jwt.claims[.nbf] = "1485949565.58463"
@@ -58,7 +57,7 @@ class TestJWT: XCTestCase {
                 if let decoded = try JWT.decode(encoded) {
                     check(jwt: decoded, algorithm: "none")
                     
-                    XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID", authorizedParty: "clientID"), .success, "Validation failed")
+                    XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID"), .success, "Validation failed")
                 }
                 else {
                     XCTFail("Failed to decode")
@@ -76,7 +75,7 @@ class TestJWT: XCTestCase {
                 if let decoded = try JWT.decode(signed) {
                     check(jwt: decoded, algorithm: "RS256")
                     
-                    XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID", authorizedParty: "clientID"), .success, "Validation failed")
+                    XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID"), .success, "Validation failed")
                 }
                 else {
                     XCTFail("Failed to decode")
@@ -94,7 +93,7 @@ class TestJWT: XCTestCase {
                 if let decoded = try JWT.decode(signed) {
                     check(jwt: decoded, algorithm: "RS256")
                     
-                    XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID", authorizedParty: "clientID"), .success, "Validation failed")
+                    XCTAssertEqual(decoded.validateClaims(issuer: "issuer", audience: "clientID"), .success, "Validation failed")
                 }
                 else {
                     XCTFail("Failed to decode")
@@ -112,12 +111,11 @@ class TestJWT: XCTestCase {
     
     func check(jwt: JWT, algorithm: String) {
         XCTAssertEqual(jwt.header.headers.count, 1, "Wrong number of header fields")
-        XCTAssertEqual(jwt.claims.claims.count, 7, "Wrong number of claims")
+        XCTAssertEqual(jwt.claims.claims.count, 6, "Wrong number of claims")
 
         XCTAssertEqual(jwt.header[.alg] as! String, algorithm, "Wrong .alg in decoded")
         XCTAssertEqual(jwt.claims[.iss] as! String, "issuer", "Wrong .iss in decoded")
         XCTAssertEqual(jwt.claims[.aud] as! [String], ["clientID"], "Wrong .aud in decoded")
-        XCTAssertEqual(jwt.claims[.azp] as! String, "clientID", "Wrong .azp in decoded")
         XCTAssertEqual(jwt.claims[.exp] as! String, "2485949565.58463", "Wrong .exp in decoded")
         XCTAssertEqual(jwt.claims[.iat] as! String, "1485949565.58463", "Wrong .iat in decoded")
         XCTAssertEqual(jwt.claims[.nbf] as! String, "1485949565.58463", "Wrong .nbf in decoded")
