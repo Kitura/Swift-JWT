@@ -1,4 +1,4 @@
-# Kitura-JWT
+# KituraJWT
 An implementation of JSON Web Token
 
 ![Mac OS X](https://img.shields.io/badge/os-Mac%20OS%20X-green.svg?style=flat)
