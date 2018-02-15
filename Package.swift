@@ -48,10 +48,8 @@ let package = Package(
     ],
     dependencies: listDependencies,
     targets: [
-        .target(name: "SwiftJWT",
-        dependencies: listTargets),
-        .testTarget(name: "SwiftJWTTests",
-        dependencies: ["SwiftJWT"])
-    ]
+        .target(name: "SwiftJWT", dependencies: listTargets),
+        .testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
+	]
 )
 

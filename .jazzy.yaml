@@ -1,0 +1,14 @@
+module: SwiftJWT
+author: IBM
+github_url: https://github.com/IBM-Swift/Swift-JWT/
+
+theme: fullwidth
+clean: true
+exclude: [Packages]
+
+readme: README.md
+
+skip_undocumented: false
+hide_documentation_coverage: false
+
+xcodebuild_arguments: [-project, SwiftJWT.xcodeproj, -target, SwiftJWT, LIBRARY_SEARCH_PATHS=.build/debug]
