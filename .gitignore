@@ -5,3 +5,4 @@ Packages
 *.pkg
 KituraJWT.xcodeproj
 *.DS_Store
+Package.resolved

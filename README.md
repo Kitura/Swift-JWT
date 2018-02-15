@@ -1,4 +1,4 @@
-# KituraJWT
+# SwiftJWT
 An implementation of JSON Web Token
 
 ![Mac OS X](https://img.shields.io/badge/os-Mac%20OS%20X-green.svg?style=flat)
@@ -33,7 +33,7 @@ RS512 - RSASSA-PKCS1-v1_5 using SHA-512
 Add
 
 ```swift
-import KituraJWT
+import SwiftJWT
 ```
 to your application.
 
