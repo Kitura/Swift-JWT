@@ -15,6 +15,9 @@ matrix:
     - os: osx
       osx_image: xcode9.2
       sudo: required
+    - os: osx
+      osx_image: xcode8.3
+      sudo: required
 
 before_install:
   - git clone https://github.com/IBM-Swift/Package-Builder.git

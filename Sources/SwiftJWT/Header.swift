@@ -59,17 +59,28 @@ public struct Header {
     }
 }
 
-/// A list of the header keys.
+/// A list of the available header keys. Can be used to create a Header, which would then be attached to a payload to form a JWT.
 public enum HeaderKeys: String {
+    /// Algorithm Header Parameter
     case alg
+    /// JSON Web Token Set URL Header Parameter
     case jku
+    /// JSON Web Key Header Parameter
     case jwk
+    /// Key ID Header Parameter
     case kid
+    /// X.509 URL Header Parameter
     case x5u
+    /// X.509 Certificate Chain Header Parameter
     case x5c
+    /// X.509 Certificate SHA-1 Thumbprint Header Parameter
     case x5t
+    /// X.509 Certificate SHA-256 Thumbprint Header Parameter
     case x5tS256 = "x5t#S256"
+    /// Type Header Parameter
     case typ
+    /// Content Type Header Parameter
     case cty
+    /// Critical Header Parameter
     case crit
 }

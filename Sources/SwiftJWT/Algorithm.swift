@@ -19,7 +19,19 @@ import Foundation
 
 // MARK Algorithm
 
-/// The algorithm used to sign the token.
+/**
+ 
+ The algorithm used to sign the token. Case insensitive. To be used when signing and verifying a JWT.
+ 
+ ### Usage Example: ###
+ ````swift
+ //It is used to create the signedJWT constant below, as part of the using: parameter.
+ 
+ let jwt = JWT(header: Header([.typ:"JWT"]), claims: Claims([.name:"Kitura"]))
+ let signedJWT = jwt.sign(using: .rs256(key, .privateKey))
+ ````
+ */
+
 public enum Algorithm {
     /// RSA 256 bits with its key and key type.
     case rs256(Data, RSAKeyType)

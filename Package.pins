@@ -1,0 +1,36 @@
+{
+  "autoPin": false,
+  "pins": [
+    {
+      "package": "CommonCrypto",
+      "reason": null,
+      "repositoryURL": "https://github.com/IBM-Swift/CommonCrypto.git",
+      "version": "0.1.5"
+    },
+    {
+      "package": "Cryptor",
+      "reason": null,
+      "repositoryURL": "https://github.com/IBM-Swift/BlueCryptor.git",
+      "version": "0.8.27"
+    },
+    {
+      "package": "CryptorRSA",
+      "reason": null,
+      "repositoryURL": "https://github.com/IBM-Swift/BlueRSA.git",
+      "version": "0.1.13"
+    },
+    {
+      "package": "HeliumLogger",
+      "reason": null,
+      "repositoryURL": "https://github.com/IBM-Swift/HeliumLogger.git",
+      "version": "1.6.1"
+    },
+    {
+      "package": "LoggerAPI",
+      "reason": null,
+      "repositoryURL": "https://github.com/IBM-Swift/LoggerAPI.git",
+      "version": "1.6.0"
+    }
+  ],
+  "version": 1
+}
