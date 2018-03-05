@@ -1,5 +1,5 @@
 {
-  "autoPin": false,
+  "autoPin": true,
   "pins": [
     {
       "package": "CommonCrypto",
@@ -23,13 +23,13 @@
       "package": "HeliumLogger",
       "reason": null,
       "repositoryURL": "https://github.com/IBM-Swift/HeliumLogger.git",
-      "version": "1.6.1"
+      "version": "1.7.1"
     },
     {
       "package": "LoggerAPI",
       "reason": null,
       "repositoryURL": "https://github.com/IBM-Swift/LoggerAPI.git",
-      "version": "1.6.0"
+      "version": "1.7.2"
     }
   ],
   "version": 1
