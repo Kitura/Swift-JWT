@@ -22,7 +22,7 @@ import Foundation
     import Darwin
 #endif
 
-@testable import KituraJWT
+@testable import SwiftJWT
 
 let rsaPrivateKey = read(fileName: "rsa_private_key")
 let rsaPublicKey = read(fileName: "rsa_public_key")

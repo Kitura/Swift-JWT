@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SwiftJWT  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+
+    <a title="SwiftJWT  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+          SwiftJWT Docs
+        </a>
+         (100% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/IBM-Swift/Swift-JWT/">
+            <img class="header-icon" src="img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html">SwiftJWT Reference</a>
+      <img class="carat" src="img/carat.png" />
+      SwiftJWT  Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Algorithm.html">Algorithm</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Algorithm/Supported.html">– Supported</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ClaimKeys.html">ClaimKeys</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/HeaderKeys.html">HeaderKeys</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/RSAKeyType.html">RSAKeyType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ValidateClaimsResult.html">ValidateClaimsResult</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Base64URL.html">Base64URL</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Claims.html">Claims</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Hash.html">Hash</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Header.html">Header</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/JWT.html">JWT</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            
+            <h1 id='swiftjwt' class='heading'>SwiftJWT</h1>
+
+<p>An implementation of JSON Web Token</p>
+
+<p><img src="https://img.shields.io/badge/os-Mac%20OS%20X-green.svg?style=flat" alt="Mac OS X">
+<img src="https://img.shields.io/badge/os-linux-green.svg?style=flat" alt="Linux">
+<img src="https://img.shields.io/badge/license-Apache2-blue.svg?style=flat" alt="Apache 2"></p>
+<h2 id='summary' class='heading'>Summary</h2>
+
+<p>An implementation of <a href="https://tools.ietf.org/html/rfc7519">JSON Web Token</a></p>
+<h2 id='table-of-contents' class='heading'>Table of Contents</h2>
+
+<ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#supported-algorithms">Supported algorithms</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<h2 id='prerequisites' class='heading'>Prerequisites</h2>
+<h3 id='macos' class='heading'>macOS</h3>
+
+<ul>
+<li>macOS 10.12.0 (<em>Sierra</em>) or higher</li>
+</ul>
+<h2 id='supported-algorithms' class='heading'>Supported algorithms</h2>
+
+<p>At the moment the supported algorithms are:</p>
+
+<p>RS256 - RSASSA-PKCS1-v1_5 using SHA-256<br>
+RS384 - RSASSA-PKCS1-v1_5 using SHA-384<br>
+RS512 - RSASSA-PKCS1-v1_5 using SHA-512</p>
+<h2 id='usage' class='heading'>Usage</h2>
+
+<p>Add</p>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">SwiftJWT</span>
+</code></pre>
+
+<p>to your application.</p>
+<h3 id='check-whether-an-algorithm-is-supported' class='heading'>Check whether an algorithm is supported</h3>
+
+<p>The supported algorithms are listed above.</p>
+
+<p>In order to check at run time if an algorithm is supported and whether it requires a key or a secret, call:</p>
+<pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isSupported</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Supported</span>
+</code></pre>
+
+<p>where <code>name</code> is a textual representation of an algorithm, e.g., <q>RS256</q> (case insensitive).</p>
+
+<p><code>Supported</code> is an enum with the following cases: unsupported, supportedWithKey (RSA falls into this category), and supportedWithSecret (HMAC, which is currently unsupported).</p>
+<h3 id='the-modeling-of-json-web-tokens' class='heading'>The modeling of JSON Web Tokens</h3>
+
+<p>The JWT class models JSON Web Tokens by using a pair of structs, <code><a href="Structs/Header.html">Header</a></code> for the JSON Web Token header and
+<code><a href="Structs/Claims.html">Claims</a></code> for the JSON Web Token claims.</p>
+<h4 id='header-api' class='heading'>Header API</h4>
+
+<p>The Header struct contains the various fields of the JSON Web Token header. These fields can be accessed and modified using the
+subscript operator. The subscript is of the type <code><a href="Enums/HeaderKeys.html">HeaderKeys</a></code>.</p>
+<h4 id='claims-api' class='heading'>Claims API</h4>
+
+<p>The Claims struct contains the various fields of the JSON Web Token claims. These fields can be accessed and modified using the
+subscript operator. The subscript can be either of the type <code><a href="Enums/ClaimKeys.html">ClaimKeys</a></code> for the standard claims or of the type <code>String</code> for any non-standard claims.</p>
+<h3 id='sign-a-jwt' class='heading'>Sign a JWT</h3>
+
+<p>The <code>sign</code> function encodes the header and claims of a JWT instance, creates a signature, and returns a String containing the signed JSON Web Token of the JWT instance.</p>
+
+<p>For example:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="kt">JWT</span><span class="p">(</span><span class="nv">header</span><span class="p">:</span> <span class="kt">Header</span><span class="p">([</span><span class="o">.</span><span class="nv">typ</span><span class="p">:</span><span class="s">"JWT"</span><span class="p">]),</span> <span class="nv">claims</span><span class="p">:</span> <span class="kt">Claims</span><span class="p">([</span><span class="o">.</span><span class="nv">name</span><span class="p">:</span><span class="s">"Kitura"</span><span class="p">]))</span>
+<span class="k">let</span> <span class="nv">signedJWT</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="nf">sign</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="nf">rs256</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">.</span><span class="n">privateKey</span><span class="p">))</span>
+</code></pre>
+
+<p><code>signedJWT</code> will be of the form:</p>
+<pre class="highlight plaintext"><code>&lt;encoded header&gt;.&lt;encoded claims&gt;.&lt;signature&gt;
+</code></pre>
+
+<p><strong>Note:</strong> The <code>sign</code> function sets the alg (algorithm) field of the header.</p>
+<h3 id='decode-a-json-web-token' class='heading'>Decode a JSON Web Token</h3>
+
+<p>The static function <code>JWT.decode</code> creates an instance of <code><a href="Structs/JWT.html">JWT</a></code> for a String containing a JSON Web Token.</p>
+
+<p>For example:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="kt">JWT</span><span class="o">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">encodedAndSignedJWT</span><span class="p">)</span>
+</code></pre>
+
+<p><strong>Note:</strong> This function doesn&rsquo;t verify the signature of the token.</p>
+<h3 id='encode-a-json-web-token' class='heading'>Encode a JSON Web Token</h3>
+
+<p>To encode a token without signing it, call encode.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">encoded</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="nf">encode</span><span class="p">()</span>
+</code></pre>
+<h3 id='verify-the-signature-of-a-json-web-token' class='heading'>Verify the signature of a JSON Web Token</h3>
+
+<p>The static function <code>JWT.verify</code> verifies the signature of a JSON Web Token given in String form.</p>
+
+<p>For example:</p>
+<pre class="highlight swift"><code><span class="k">if</span> <span class="o">!</span><span class="kt">JWT</span><span class="o">.</span><span class="nf">verify</span><span class="p">(</span><span class="n">encodedAndSignedJWT</span><span class="p">,</span> <span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="nf">rs512</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">.</span><span class="n">publicKey</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Verification failed"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+<h3 id='validate-claims' class='heading'>Validate claims</h3>
+
+<p>The <code>validateClaims</code> function validates the claims of a JWT instance.
+The following claims are validated if they are present in the <code><a href="Structs/Claims.html">Claims</a></code> object:</p>
+
+<ul>
+<li>iss (issuer)</li>
+<li>aud (audience)</li>
+<li>exp (expiration date)</li>
+<li>nbf (not before date)</li>
+<li>iat (issued at date)</li>
+</ul>
+
+<p>Various validations require an input. In these cases, if the claim in question exists and the input
+is provided, the validation will be performed. Otherwise, the validation is skipped.</p>
+
+<p>The method returns <code><a href="Enums/ValidateClaimsResult.html">ValidateClaimsResult</a></code> - an enum that list the various reasons for validation failure.
+If the validation succeeds <code><a href="Enums/ValidateClaimsResult.html#/s:8SwiftJWT20ValidateClaimsResultO7successA2CmF">ValidateClaimsResult.success</a></code> is returned.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">validationResult</span> <span class="o">=</span> <span class="nf">validateClaims</span><span class="p">(</span><span class="nv">issuer</span><span class="p">:</span> <span class="n">issuer</span><span class="p">,</span> <span class="nv">audience</span><span class="p">:</span> <span class="n">clientID</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">validationResult</span> <span class="o">!=</span> <span class="o">.</span><span class="n">success</span> <span class="p">{</span>
+  <span class="nf">print</span><span class="p">(</span><span class="s">"Claims validation failed: "</span><span class="p">,</span> <span class="n">validationResult</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+<h2 id='license' class='heading'>License</h2>
+
+<p>This library is licensed under Apache 2.0. Full license text is available in <a href="LICENSE.txt">LICENSE</a>.</p>
+
+          </div>
+        </section>
+
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-03-01)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

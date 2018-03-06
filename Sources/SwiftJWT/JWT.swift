@@ -19,7 +19,17 @@ import Foundation
 
 // MARK JWT
 
-/// JSON Web Token with its header and claims.
+/**
+ 
+ JSON Web Token with its header and claims.
+ 
+ ### Usage Example: ###
+ ````swift
+ let jwt = JWT(header: Header([.typ:"JWT"]), claims: Claims([.name:"Kitura"]))
+ let signedJWT = jwt.sign(using: .rs256(key, .privateKey))
+ ````
+ */
+
 public struct JWT {
     
     /// The JWT header.

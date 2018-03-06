@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Enumerations  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+
+    <a title="Enumerations  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+          SwiftJWT Docs
+        </a>
+         (100% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/IBM-Swift/Swift-JWT/">
+            <img class="header-icon" src="img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html">SwiftJWT Reference</a>
+      <img class="carat" src="img/carat.png" />
+      Enumerations  Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Algorithm.html">Algorithm</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Algorithm/Supported.html">– Supported</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ClaimKeys.html">ClaimKeys</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/HeaderKeys.html">HeaderKeys</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/RSAKeyType.html">RSAKeyType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ValidateClaimsResult.html">ValidateClaimsResult</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Base64URL.html">Base64URL</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Claims.html">Claims</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Hash.html">Hash</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Header.html">Header</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/JWT.html">JWT</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>Enumerations</h1>
+            <p>The following enumerations are available globally.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT9AlgorithmO"></a>
+                    <a name="//apple_ref/swift/Enum/Algorithm" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT9AlgorithmO">Algorithm</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The algorithm used to sign the token. Case insensitive. To be used when signing and verifying a JWT.</p>
+<h3 id='usage-example' class='heading'>Usage Example:</h3>
+<pre class="highlight swift"><code><span class="c1">//It is used to create the signedJWT constant below, as part of the using: parameter.</span>
+
+<span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="kt">JWT</span><span class="p">(</span><span class="nv">header</span><span class="p">:</span> <span class="kt">Header</span><span class="p">([</span><span class="o">.</span><span class="nv">typ</span><span class="p">:</span><span class="s">"JWT"</span><span class="p">]),</span> <span class="nv">claims</span><span class="p">:</span> <span class="kt">Claims</span><span class="p">([</span><span class="o">.</span><span class="nv">name</span><span class="p">:</span><span class="s">"Kitura"</span><span class="p">]))</span>
+<span class="k">let</span> <span class="nv">signedJWT</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="nf">sign</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="nf">rs256</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">.</span><span class="n">privateKey</span><span class="p">))</span>
+</code></pre>
+
+                        <a href="Enums/Algorithm.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Algorithm</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT9ClaimKeysO"></a>
+                    <a name="//apple_ref/swift/Enum/ClaimKeys" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT9ClaimKeysO">ClaimKeys</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A list of the <a href="https://www.iana.org/assignments/jwt/jwt.xhtml">claims names</a>.
+Standard JWT claims are described in <a href="https://tools.ietf.org/html/rfc7519#section-4.1">RFC7519</a>.
+OpenID related claims are decsribed in <a href="http://openid.net/specs/openid-connect-core-1_0.html">OpenID specs</a>.
+SIP related claims are listed in <a href="https://tools.ietf.org/html/rfc3261">RFC3261</a>.
+Other claims are supported using a String as the key.</p>
+
+                        <a href="Enums/ClaimKeys.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ClaimKeys</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT10HeaderKeysO"></a>
+                    <a name="//apple_ref/swift/Enum/HeaderKeys" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT10HeaderKeysO">HeaderKeys</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A list of the available header keys. Can be used to create a Header, which would then be attached to a payload to form a JWT.</p>
+
+                        <a href="Enums/HeaderKeys.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">HeaderKeys</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT10RSAKeyTypeO"></a>
+                    <a name="//apple_ref/swift/Enum/RSAKeyType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT10RSAKeyTypeO">RSAKeyType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The type of the key used in the RSA algorithm.</p>
+
+                        <a href="Enums/RSAKeyType.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">RSAKeyType</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT20ValidateClaimsResultO"></a>
+                    <a name="//apple_ref/swift/Enum/ValidateClaimsResult" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT20ValidateClaimsResultO">ValidateClaimsResult</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>ValidateClaimsResult list the possible results of a call to JWT.validateClaims method.
+In case of successful validation, .success is returned, all other cases list various
+problems that may occur during claims validation and indicate that the validation failed.</p>
+
+                        <a href="Enums/ValidateClaimsResult.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ValidateClaimsResult</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-03-01)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

@@ -3,5 +3,6 @@ build
 .vagrant
 Packages
 *.pkg
-KituraJWT.xcodeproj
+SwiftJWT.xcodeproj
 *.DS_Store
+Package.resolved

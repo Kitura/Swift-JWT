@@ -16,7 +16,7 @@
 
 import XCTest
 
-@testable import KituraJWTTests
+@testable import SwiftJWTTests
 
 
 XCTMain([

@@ -42,7 +42,11 @@ public struct Base64URL {
     /// - Parameter base64URLEncodedString: The input String to decode. Returns nil if the decoding fails.
     /// - Returns: A Data instance containg the decoded input.
     public static func decode(_ base64URLEncodedString: String) -> Data? {
+        #if swift(>=4.0)
+        let paddingLength = 4 - base64URLEncodedString.count % 4
+        #else
         let paddingLength = 4 - base64URLEncodedString.characters.count % 4
+        #endif
         let padding = (paddingLength < 4) ? String(repeating: "=", count: paddingLength) : ""
         
         let base64EncodedString = base64URLEncodedString

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>JWT Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Struct/JWT" class="dashAnchor"></a>
+
+    <a title="JWT Structure Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          SwiftJWT Docs
+        </a>
+         (100% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/IBM-Swift/Swift-JWT/">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">SwiftJWT Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      JWT Structure Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/Algorithm.html">Algorithm</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/Algorithm/Supported.html">– Supported</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ClaimKeys.html">ClaimKeys</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/HeaderKeys.html">HeaderKeys</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/RSAKeyType.html">RSAKeyType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ValidateClaimsResult.html">ValidateClaimsResult</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Base64URL.html">Base64URL</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Claims.html">Claims</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Hash.html">Hash</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Header.html">Header</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/JWT.html">JWT</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>JWT</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">JWT</span></code></pre>
+
+                </div>
+              </div>
+            <p>JSON Web Token with its header and claims.</p>
+<h3 id='usage-example' class='heading'>Usage Example:</h3>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="kt">JWT</span><span class="p">(</span><span class="nv">header</span><span class="p">:</span> <span class="kt">Header</span><span class="p">([</span><span class="o">.</span><span class="nv">typ</span><span class="p">:</span><span class="s">"JWT"</span><span class="p">]),</span> <span class="nv">claims</span><span class="p">:</span> <span class="kt">Claims</span><span class="p">([</span><span class="o">.</span><span class="nv">name</span><span class="p">:</span><span class="s">"Kitura"</span><span class="p">]))</span>
+<span class="k">let</span> <span class="nv">signedJWT</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="nf">sign</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="nf">rs256</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">.</span><span class="n">privateKey</span><span class="p">))</span>
+</code></pre>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT0B0V6headerAA6HeaderVv"></a>
+                    <a name="//apple_ref/swift/Property/header" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V6headerAA6HeaderVv">header</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The JWT header.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">header</span><span class="p">:</span> <span class="kt"><a href="../Structs/Header.html">Header</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT0B0V6claimsAA6ClaimsVv"></a>
+                    <a name="//apple_ref/swift/Property/claims" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V6claimsAA6ClaimsVv">claims</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The JWT claims</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">claims</span><span class="p">:</span> <span class="kt"><a href="../Structs/Claims.html">Claims</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT0B0VAcA6HeaderV6header_AA6ClaimsV6claimstcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(header:claims:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT0B0VAcA6HeaderV6header_AA6ClaimsV6claimstcfc">init(header:claims:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize a <code>JWT</code> instance.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">header</span><span class="p">:</span> <span class="kt"><a href="../Structs/Header.html">Header</a></span><span class="p">,</span> <span class="nv">claims</span><span class="p">:</span> <span class="kt"><a href="../Structs/Claims.html">Claims</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>header</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A JSON Web Token header object.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>claims</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A JSON Web Token claims object.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new instance of <code>JWT</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT0B0V4signSSSgAA9AlgorithmO5using_tKF"></a>
+                    <a name="//apple_ref/swift/Method/sign(using:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V4signSSSgAA9AlgorithmO5using_tKF">sign(using:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sign the JWT using the given algorithm. </p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>Sets header.alg with the name of the signing algorithm.</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>An error thrown during the encoding or signing.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">sign</span><span class="p">(</span><span class="n">using</span> <span class="nv">algorithm</span><span class="p">:</span> <span class="kt"><a href="../Enums/Algorithm.html">Algorithm</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A String with the encoded and signed JWT.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT0B0V6encodeSSSgyKF"></a>
+                    <a name="//apple_ref/swift/Method/encode()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V6encodeSSSgyKF">encode()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Encode the JWT.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>Sets header.alg with &lsquo;none&rsquo;.</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>An error thrown during the encoding.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">encode</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A String with the encoded.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT0B0V6verifySbSS_AA9AlgorithmO5usingtKFZ"></a>
+                    <a name="//apple_ref/swift/Method/verify(_:using:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V6verifySbSS_AA9AlgorithmO5usingtKFZ">verify(_:using:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Verify the signature of the encoded JWT using the given algorithm.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    An error thrown during the verification.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">verify</span><span class="p">(</span><span class="n">_</span> <span class="nv">jwt</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">using</span> <span class="nv">algorithm</span><span class="p">:</span> <span class="kt"><a href="../Enums/Algorithm.html">Algorithm</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>jwt</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A String with the encoded and signed JWT.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A Bool indicating whether the verification was successful.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT0B0V6decodeACSgSSKFZ"></a>
+                    <a name="//apple_ref/swift/Method/decode(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V6decodeACSgSSKFZ">decode(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Decode the encoded JWT.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    An error thrown during the decoding.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">decode</span><span class="p">(</span><span class="n">_</span> <span class="nv">jwt</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">JWT</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>jwt</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A String with the encoded and signed JWT.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An instance of <code>JWT</code> if the decoding succeeds.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT0B0V14validateClaimsAA08ValidateD6ResultOSSSg6issuer_AG8audiencetF"></a>
+                    <a name="//apple_ref/swift/Method/validateClaims(issuer:audience:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V14validateClaimsAA08ValidateD6ResultOSSSg6issuer_AG8audiencetF">validateClaims(issuer:audience:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Validate the JWT claims. Various claims are validated if they are present in the <code><a href="../Structs/Claims.html">Claims</a></code> object.
+Various validations require an input. In these cases, if the claim in question exists and the input
+is provided the validation will be performed. Otherwise, the validation is skipped.</p>
+
+<p>The following claims are validated: iss, aud, azp, at_hash, exp, nbf, iat.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">validateClaims</span><span class="p">(</span><span class="nv">issuer</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span><span class="o">=</span><span class="kc">nil</span><span class="p">,</span> <span class="nv">audience</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span><span class="o">=</span><span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/ValidateClaimsResult.html">ValidateClaimsResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>issuer</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional String to compare with the iss claim.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>audience</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional String to compare with the aud claim.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A value of <code><a href="../Enums/ValidateClaimsResult.html">ValidateClaimsResult</a></code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-03-01)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>
