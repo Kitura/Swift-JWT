@@ -1,5 +1,7 @@
+// swift-tools-version:4.0
+
 /**
- * Copyright IBM Corporation 2017
+ * Copyright IBM Corporation 2018
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +18,39 @@
 
 import PackageDescription
 
+var listDependencies: [Package.Dependency] = [
+    .package(url: "https://github.com/IBM-Swift/BlueCryptor.git", from: "1.0.2"),
+    .package(url: "https://github.com/IBM-Swift/HeliumLogger.git", from: "1.7.1")
+]
+
+var listTargets: [Target.Dependency] = [
+    .byNameItem(name: "Cryptor"),
+    .byNameItem(name: "HeliumLogger")
+]
+
+#if os(OSX) || os(iOS) || os(tvOS) || os(watchOS)
+listDependencies.append(contentsOf: [
+    .package(url: "https://github.com/IBM-Swift/BlueRSA.git", from:"1.0.0")
+    ])
+    
+listTargets.append(contentsOf: [
+    .byNameItem(name: "CryptorRSA")
+    ])
+#endif
+
 let package = Package(
     name: "SwiftJWT",
-    dependencies: [
-        .Package(url: "https://github.com/IBM-Swift/BlueCryptor.git", majorVersion: 0, minor: 8),
-        .Package(url: "https://github.com/IBM-Swift/HeliumLogger.git", majorVersion: 1, minor: 7),
+    products: [
+        // Products define the executables and libraries produced by a package, and make them visible to other packages.
+        .library(
+            name: "SwiftJWT",
+            targets: ["SwiftJWT"]
+        )
     ],
-    exclude: []
+    dependencies: listDependencies,
+    targets: [
+        .target(name: "SwiftJWT", dependencies: listTargets),
+        .testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
+	]
 )
-
-#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-package.dependencies.append(
-    .Package(url: "https://github.com/IBM-Swift/BlueRSA.git", majorVersion: 0, minor: 1))
-#endif
 
