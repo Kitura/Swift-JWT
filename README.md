@@ -24,6 +24,12 @@ For more information on JSON Web Tokens, their use cases and how they work, we r
 ### macOS
 
 * macOS 10.12.0 (*Sierra*) or higher
+* Swift 4.1 and above installed
+
+### Linux
+
+- Ubuntu 14.04 or Ubuntu 16.04
+- Swift 4.1 and above installed 
 
 ## Supported Algorithms
 At the moment the supported algorithms are:
