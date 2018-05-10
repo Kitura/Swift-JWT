@@ -6,7 +6,11 @@ An implementation of JSON Web Token
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 
 ## Summary
-An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519)
+An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519) using Swift. JWTs offer a lightweight and compact format for transmitting information between parties, and the information can be verified and trusted due to JWTs being digitally signed.
+
+For more information on JSON Web Tokens, their use cases and how they work, we recommend visiting [jwt.io](https://jwt.io/introduction/). 
+
+**Reminder:** JWTs do **not** encrypt data, so never send anything sensitive or confidential in a JWT.
 
 ## Table of Contents
 * [Prerequisites](#prerequisites)
@@ -20,24 +24,28 @@ An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519)
 ### macOS
 
 * macOS 10.12.0 (*Sierra*) or higher
+* Swift 4.1 and above installed
 
-## Supported algorithms
+### Linux
+
+- Ubuntu 14.04 or Ubuntu 16.04
+- Swift 4.1 and above installed 
+
+## Supported Algorithms
 At the moment the supported algorithms are:
 
-RS256 - RSASSA-PKCS1-v1_5 using SHA-256                  
-RS384 - RSASSA-PKCS1-v1_5 using SHA-384                     
+RS256 - RSASSA-PKCS1-v1_5 using SHA-256
+RS384 - RSASSA-PKCS1-v1_5 using SHA-384
 RS512 - RSASSA-PKCS1-v1_5 using SHA-512
 
 ## Usage
 
-Add
+Start by importing the module:
 
 ```swift
 import SwiftJWT
 ```
-to your application.
-
-### Check whether an algorithm is supported
+### Algorithm Support
 The supported algorithms are listed above.
 
 In order to check at run time if an algorithm is supported and whether it requires a key or a secret, call:
@@ -47,22 +55,19 @@ public static func isSupported(name: String) -> Supported
 ```
 where `name` is a textual representation of an algorithm, e.g., "RS256" (case insensitive).
 
-`Supported` is an enum with the following cases: unsupported, supportedWithKey (RSA falls into this category), and supportedWithSecret (HMAC, which is currently unsupported).
+`Supported` is an enum with the following cases: `unsupported`, `supportedWithKey` (RSA falls into this category), and `supportedWithSecret` (HMAC, which is currently unsupported).
 
 ### The modeling of JSON Web Tokens
 
-The JWT class models JSON Web Tokens by using a pair of structs, `Header` for the JSON Web Token header and
-`Claims` for the JSON Web Token claims.
+The JWT class models JSON Web Tokens by using a pair of structs, `Header` for the JSON Web Token header and `Claims` for the JSON Web Token claims.
 
 #### Header API
 
-The Header struct contains the various fields of the JSON Web Token header. These fields can be accessed and modified using the
-subscript operator. The subscript is of the type `HeaderKeys`.
+The Header struct contains the various fields of the JSON Web Token header. These fields can be accessed and modified using the subscript operator. The subscript is of the type `HeaderKeys`.
 
 #### Claims API
 
-The Claims struct contains the various fields of the JSON Web Token claims. These fields can be accessed and modified using the
-subscript operator. The subscript can be either of the type `ClaimKeys` for the standard claims or of the type `String` for any non-standard claims.
+The Claims struct contains the various fields of the JSON Web Token claims. These fields can be accessed and modified using the subscript operator. The subscript can be either of the type `ClaimKeys` for the standard claims or of the type `String` for any non-standard claims.
 
 ### Sign a JWT
 
@@ -80,6 +85,25 @@ let signedJWT = jwt.sign(using: .rs256(key, .privateKey))
 <encoded header>.<encoded claims>.<signature>
 ```
 **Note:** The `sign` function sets the alg (algorithm) field of the header.
+
+### Creating a Key to Sign a JSON Web Token
+
+To use the `sign` function, you must pass in the `key` parameter. This could be the contents of a .key file generated via the following Terminal commands:
+
+```
+$ ssh-keygen -t rsa -b 4096 -f privateKey.key
+# Don't add a passphrase
+$ openssl rsa in privateKey.key -pubout -outform PEM -out privateKey.key.pub
+```
+
+This will create a public and private key pair on your system, and the contents of the private key can be passed into a Swift variable using the following code:
+
+```swift
+let keyPath = URL(fileURLWithPath: getAbsolutePath(relativePath: "/path/to/privateKey.key"))
+let key: Data = try Data(contentsOf: keyPath, options: alwaysMapped)
+```
+
+You can now sign the token using `jwt.sign()` function described above.
 
 ### Decode a JSON Web Token
 
@@ -121,8 +145,7 @@ The following claims are validated if they are present in the `Claims` object:
   - nbf (not before date)
   - iat (issued at date)
 
-Various validations require an input. In these cases, if the claim in question exists and the input
-is provided, the validation will be performed. Otherwise, the validation is skipped.
+Various validations require an input. In these cases, if the claim in question exists and the input is provided, the validation will be performed. Otherwise, the validation is skipped.
 
 The method returns `ValidateClaimsResult` - an enum that list the various reasons for validation failure.
 If the validation succeeds `ValidateClaimsResult.success` is returned.
