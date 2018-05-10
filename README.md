@@ -6,7 +6,11 @@ An implementation of JSON Web Token
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 
 ## Summary
-An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519) using Swift. For more information on JSON Web Tokens, their use cases and how they work, we recommend visiting [jwt.io](https://jwt.io/introduction/). For their IETF specification, see [RFC 7519](https://tools.ietf.org/html/rfc7519).
+An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519) using Swift. JWTs offer a lightweight and compact format for transmitting information between parties, and the information can be verified and trusted due to JWTs being digitally signed.
+
+For more information on JSON Web Tokens, their use cases and how they work, we recommend visiting [jwt.io](https://jwt.io/introduction/). 
+
+**Reminder:** JWTs do **not** encrypt data, so never send anything sensitive or confidential in a JWT.
 
 ## Table of Contents
 * [Prerequisites](#prerequisites)
@@ -21,7 +25,7 @@ An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519) using
 
 * macOS 10.12.0 (*Sierra*) or higher
 
-## Supported algorithms
+## Supported Algorithms
 At the moment the supported algorithms are:
 
 RS256 - RSASSA-PKCS1-v1_5 using SHA-256
@@ -35,7 +39,7 @@ Start by importing the module:
 ```swift
 import SwiftJWT
 ```
-### Alogithm Support
+### Algorithm Support
 The supported algorithms are listed above.
 
 In order to check at run time if an algorithm is supported and whether it requires a key or a secret, call:
@@ -93,7 +97,7 @@ let keyPath = URL(fileURLWithPath: getAbsolutePath(relativePath: "/path/to/priva
 let key: Data = try Data(contentsOf: keyPath, options: alwaysMapped)
 ```
 
-You then use the public key to read 
+You can now sign the token using `jwt.sign()` function described above.
 
 ### Decode a JSON Web Token
 
