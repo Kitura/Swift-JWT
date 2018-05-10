@@ -19,8 +19,8 @@
 import PackageDescription
 
 var listDependencies: [Package.Dependency] = [
-    .package(url: "https://github.com/IBM-Swift/BlueCryptor.git", .upToNextMinor(from: "1.0.2")),
-    .package(url: "https://github.com/IBM-Swift/HeliumLogger.git", .upToNextMinor(from: "1.7.1"))
+    .package(url: "https://github.com/IBM-Swift/BlueCryptor.git", from: "1.0.2"),
+    .package(url: "https://github.com/IBM-Swift/HeliumLogger.git", from: "1.7.1")
 ]
 
 var listTargets: [Target.Dependency] = [
@@ -30,7 +30,7 @@ var listTargets: [Target.Dependency] = [
 
 #if os(OSX) || os(iOS) || os(tvOS) || os(watchOS)
 listDependencies.append(contentsOf: [
-    .package(url: "https://github.com/IBM-Swift/BlueRSA.git", .upToNextMinor(from:"1.0.0"))
+    .package(url: "https://github.com/IBM-Swift/BlueRSA.git", from:"1.0.0")
     ])
     
 listTargets.append(contentsOf: [
