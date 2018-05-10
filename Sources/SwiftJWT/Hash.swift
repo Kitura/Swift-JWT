@@ -44,7 +44,7 @@ public struct Hash {
             return nil
         }
         let ptr = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
-        defer { ptr.deallocate(capacity: data.count) }
+        defer { ptr.deallocate() }
         data.copyBytes(to: ptr, count: data.count)
         return Digest(using: algorithm!).update(from: ptr, byteCount: data.count)?.final()
     }
