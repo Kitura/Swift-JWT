@@ -98,13 +98,13 @@ class RSA: EncryptionAlgorithm {
     
     deinit {
         key.deinitialize(count: Int(keySize))
-        key.deallocate(capacity: Int(keySize))
+        key.deallocate()
     }
     
     func sign(_ data: Data) -> Data? {
         // Generate hash
         let ptr = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
-        defer { ptr.deallocate(capacity: data.count) }
+        defer { ptr.deallocate() }
         data.copyBytes(to: ptr, count: data.count)
         guard let digest = Digest(using: algorithm.digest).update(from: ptr, byteCount: data.count) else {
             return nil
@@ -136,7 +136,7 @@ class RSA: EncryptionAlgorithm {
     func verify(signature: Data, for data: Data) -> Bool {
         // Generate hash
         let ptr = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
-        defer { ptr.deallocate(capacity: data.count) }
+        defer { ptr.deallocate() }
         data.copyBytes(to: ptr, count: data.count)
         guard let digest = Digest(using: algorithm.digest).update(from: ptr, byteCount: data.count) else {
             return false
@@ -144,7 +144,7 @@ class RSA: EncryptionAlgorithm {
         var digestBytes = digest.final()
         
         let signPtr = UnsafeMutablePointer<UInt8>.allocate(capacity: signature.count)
-        defer { signPtr.deallocate(capacity: data.count) }
+        defer { signPtr.deallocate() }
         signature.copyBytes(to: signPtr, count: signature.count)
         
         let keybuf = BIO_new_mem_buf(key, keySize)
