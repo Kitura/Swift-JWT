@@ -34,9 +34,9 @@ For more information on JSON Web Tokens, their use cases and how they work, we r
 ## Supported Algorithms
 At the moment the supported algorithms are:
 
-RS256 - RSASSA-PKCS1-v1_5 using SHA-256
-RS384 - RSASSA-PKCS1-v1_5 using SHA-384
-RS512 - RSASSA-PKCS1-v1_5 using SHA-512
+* RS256 - RSASSA-PKCS1-v1_5 using SHA-256
+* RS384 - RSASSA-PKCS1-v1_5 using SHA-384
+* RS512 - RSASSA-PKCS1-v1_5 using SHA-512
 
 ## Usage
 
