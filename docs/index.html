@@ -103,12 +103,16 @@
 
 <p>An implementation of JSON Web Token</p>
 
-<p><img src="https://img.shields.io/badge/os-Mac%20OS%20X-green.svg?style=flat" alt="Mac OS X">
+<p><img src="https://img.shields.io/badge/os-macOS-green.svg?style=flat" alt="Mac OS X">
 <img src="https://img.shields.io/badge/os-linux-green.svg?style=flat" alt="Linux">
 <img src="https://img.shields.io/badge/license-Apache2-blue.svg?style=flat" alt="Apache 2"></p>
 <h2 id='summary' class='heading'>Summary</h2>
 
-<p>An implementation of <a href="https://tools.ietf.org/html/rfc7519">JSON Web Token</a></p>
+<p>An implementation of <a href="https://tools.ietf.org/html/rfc7519">JSON Web Token</a> using Swift. JWTs offer a lightweight and compact format for transmitting information between parties, and the information can be verified and trusted due to JWTs being digitally signed.</p>
+
+<p>For more information on JSON Web Tokens, their use cases and how they work, we recommend visiting <a href="https://jwt.io/introduction/">jwt.io</a>. </p>
+
+<p><strong>Reminder:</strong> JWTs do <strong>not</strong> encrypt data, so never send anything sensitive or confidential in a JWT.</p>
 <h2 id='table-of-contents' class='heading'>Table of Contents</h2>
 
 <ul>
@@ -122,22 +126,29 @@
 
 <ul>
 <li>macOS 10.12.0 (<em>Sierra</em>) or higher</li>
+<li>Swift 4.1 and above installed</li>
 </ul>
-<h2 id='supported-algorithms' class='heading'>Supported algorithms</h2>
+<h3 id='linux' class='heading'>Linux</h3>
+
+<ul>
+<li>Ubuntu 14.04 or Ubuntu 16.04</li>
+<li>Swift 4.1 and above installed</li>
+</ul>
+<h2 id='supported-algorithms' class='heading'>Supported Algorithms</h2>
 
 <p>At the moment the supported algorithms are:</p>
 
-<p>RS256 - RSASSA-PKCS1-v1_5 using SHA-256<br>
-RS384 - RSASSA-PKCS1-v1_5 using SHA-384<br>
-RS512 - RSASSA-PKCS1-v1_5 using SHA-512</p>
+<ul>
+<li>RS256 - RSASSA-PKCS1-v1_5 using SHA-256</li>
+<li>RS384 - RSASSA-PKCS1-v1_5 using SHA-384</li>
+<li>RS512 - RSASSA-PKCS1-v1_5 using SHA-512</li>
+</ul>
 <h2 id='usage' class='heading'>Usage</h2>
 
-<p>Add</p>
+<p>Start by importing the module:</p>
 <pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">SwiftJWT</span>
 </code></pre>
-
-<p>to your application.</p>
-<h3 id='check-whether-an-algorithm-is-supported' class='heading'>Check whether an algorithm is supported</h3>
+<h3 id='algorithm-support' class='heading'>Algorithm Support</h3>
 
 <p>The supported algorithms are listed above.</p>
 
@@ -147,19 +158,16 @@ RS512 - RSASSA-PKCS1-v1_5 using SHA-512</p>
 
 <p>where <code>name</code> is a textual representation of an algorithm, e.g., <q>RS256</q> (case insensitive).</p>
 
-<p><code>Supported</code> is an enum with the following cases: unsupported, supportedWithKey (RSA falls into this category), and supportedWithSecret (HMAC, which is currently unsupported).</p>
+<p><code>Supported</code> is an enum with the following cases: <code>unsupported</code>, <code>supportedWithKey</code> (RSA falls into this category), and <code>supportedWithSecret</code> (HMAC, which is currently unsupported).</p>
 <h3 id='the-modeling-of-json-web-tokens' class='heading'>The modeling of JSON Web Tokens</h3>
 
-<p>The JWT class models JSON Web Tokens by using a pair of structs, <code><a href="Structs/Header.html">Header</a></code> for the JSON Web Token header and
-<code><a href="Structs/Claims.html">Claims</a></code> for the JSON Web Token claims.</p>
+<p>The JWT class models JSON Web Tokens by using a pair of structs, <code><a href="Structs/Header.html">Header</a></code> for the JSON Web Token header and <code><a href="Structs/Claims.html">Claims</a></code> for the JSON Web Token claims.</p>
 <h4 id='header-api' class='heading'>Header API</h4>
 
-<p>The Header struct contains the various fields of the JSON Web Token header. These fields can be accessed and modified using the
-subscript operator. The subscript is of the type <code><a href="Enums/HeaderKeys.html">HeaderKeys</a></code>.</p>
+<p>The Header struct contains the various fields of the JSON Web Token header. These fields can be accessed and modified using the subscript operator. The subscript is of the type <code><a href="Enums/HeaderKeys.html">HeaderKeys</a></code>.</p>
 <h4 id='claims-api' class='heading'>Claims API</h4>
 
-<p>The Claims struct contains the various fields of the JSON Web Token claims. These fields can be accessed and modified using the
-subscript operator. The subscript can be either of the type <code><a href="Enums/ClaimKeys.html">ClaimKeys</a></code> for the standard claims or of the type <code>String</code> for any non-standard claims.</p>
+<p>The Claims struct contains the various fields of the JSON Web Token claims. These fields can be accessed and modified using the subscript operator. The subscript can be either of the type <code><a href="Enums/ClaimKeys.html">ClaimKeys</a></code> for the standard claims or of the type <code>String</code> for any non-standard claims.</p>
 <h3 id='sign-a-jwt' class='heading'>Sign a JWT</h3>
 
 <p>The <code>sign</code> function encodes the header and claims of a JWT instance, creates a signature, and returns a String containing the signed JSON Web Token of the JWT instance.</p>
@@ -174,6 +182,20 @@ subscript operator. The subscript can be either of the type <code><a href="Enums
 </code></pre>
 
 <p><strong>Note:</strong> The <code>sign</code> function sets the alg (algorithm) field of the header.</p>
+<h3 id='creating-a-key-to-sign-a-json-web-token' class='heading'>Creating a Key to Sign a JSON Web Token</h3>
+
+<p>To use the <code>sign</code> function, you must pass in the <code>key</code> parameter. This could be the contents of a .key file generated via the following Terminal commands:</p>
+<pre class="highlight plaintext"><code>$ ssh-keygen -t rsa -b 4096 -f privateKey.key
+# Don't add a passphrase
+$ openssl rsa in privateKey.key -pubout -outform PEM -out privateKey.key.pub
+</code></pre>
+
+<p>This will create a public and private key pair on your system, and the contents of the private key can be passed into a Swift variable using the following code:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">keyPath</span> <span class="o">=</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">fileURLWithPath</span><span class="p">:</span> <span class="nf">getAbsolutePath</span><span class="p">(</span><span class="nv">relativePath</span><span class="p">:</span> <span class="s">"/path/to/privateKey.key"</span><span class="p">))</span>
+<span class="k">let</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">Data</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">keyPath</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="n">alwaysMapped</span><span class="p">)</span>
+</code></pre>
+
+<p>You can now sign the token using <code>jwt.sign()</code> function described above.</p>
 <h3 id='decode-a-json-web-token' class='heading'>Decode a JSON Web Token</h3>
 
 <p>The static function <code>JWT.decode</code> creates an instance of <code><a href="Structs/JWT.html">JWT</a></code> for a String containing a JSON Web Token.</p>
@@ -210,8 +232,7 @@ The following claims are validated if they are present in the <code><a href="Str
 <li>iat (issued at date)</li>
 </ul>
 
-<p>Various validations require an input. In these cases, if the claim in question exists and the input
-is provided, the validation will be performed. Otherwise, the validation is skipped.</p>
+<p>Various validations require an input. In these cases, if the claim in question exists and the input is provided, the validation will be performed. Otherwise, the validation is skipped.</p>
 
 <p>The method returns <code><a href="Enums/ValidateClaimsResult.html">ValidateClaimsResult</a></code> - an enum that list the various reasons for validation failure.
 If the validation succeeds <code><a href="Enums/ValidateClaimsResult.html#/s:8SwiftJWT20ValidateClaimsResultO7successA2CmF">ValidateClaimsResult.success</a></code> is returned.</p>
@@ -231,7 +252,7 @@ If the validation succeeds <code><a href="Enums/ValidateClaimsResult.html#/s:8Sw
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-03-01)</p>
+      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-05-11)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
