@@ -25,6 +25,7 @@ For more information on JSON Web Tokens, their use cases and how they work, we r
 
 * macOS 10.12.0 (*Sierra*) or higher
 * Swift 4.1 and above installed
+* Swift 4.1.2 **RECOMMENDED**
 
 ### Linux
 
