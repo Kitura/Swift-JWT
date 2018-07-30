@@ -38,6 +38,7 @@ class TestJWT: XCTestCase {
             ("testSignAndVerify", testSignAndVerify),
             ("testJWT", testJWT),
             ("testSupported", testSupported),
+            ("testMicroProfile", testMicroProfile)
         ]
     }
     
@@ -110,15 +111,43 @@ class TestJWT: XCTestCase {
     }
     
     func check(jwt: JWT, algorithm: String) {
-        XCTAssertEqual(jwt.header.headers.count, 1, "Wrong number of header fields")
-        XCTAssertEqual(jwt.claims.claims.count, 6, "Wrong number of claims")
+        
+        if jwt.header[.kid] != nil {
+            
+            XCTAssertEqual(jwt.header.headers.count, 3, "Wrong number of header fields")
+            XCTAssertEqual(jwt.claims.claims.count, 7, "Wrong number of claims")
+            
+            XCTAssertEqual(jwt.header[.alg] as! String, algorithm, "Wrong .alg in decoded")
+            XCTAssertEqual(jwt.header[.kid] as! String, "abc-1234567890", "Wrong .iat in decoded")
+            XCTAssertEqual(jwt.claims[.iss] as! String, "https://server.example.com", "Wrong .iss in decoded")
+            XCTAssertEqual(jwt.claims[.exp] as! String, "2485949565.58463", "Wrong .exp in decoded")
+            XCTAssertEqual(jwt.claims[.iat] as! String, "1485949565.58463", "Wrong .iat in decoded")
+            XCTAssertEqual(jwt.claims[.upn] as! String, "jdoe@server.example.com", "Wrong .upn in decoded")
+            let arrayString = """
+            ["red-group", "green-group", "admin-group", "admin"]
+            """
+            XCTAssertEqual(jwt.claims[.groups] as! String, arrayString, "Wrong .group in decoded")
 
-        XCTAssertEqual(jwt.header[.alg] as! String, algorithm, "Wrong .alg in decoded")
-        XCTAssertEqual(jwt.claims[.iss] as! String, "issuer", "Wrong .iss in decoded")
-        XCTAssertEqual(jwt.claims[.aud] as! [String], ["clientID"], "Wrong .aud in decoded")
-        XCTAssertEqual(jwt.claims[.exp] as! String, "2485949565.58463", "Wrong .exp in decoded")
-        XCTAssertEqual(jwt.claims[.iat] as! String, "1485949565.58463", "Wrong .iat in decoded")
-        XCTAssertEqual(jwt.claims[.nbf] as! String, "1485949565.58463", "Wrong .nbf in decoded")
+            
+        } else {
+        
+            XCTAssertEqual(jwt.header.headers.count, 1, "Wrong number of header fields")
+            XCTAssertEqual(jwt.claims.claims.count, 6, "Wrong number of claims")
+
+            XCTAssertEqual(jwt.header[.alg] as! String, algorithm, "Wrong .alg in decoded")
+            XCTAssertEqual(jwt.claims[.iss] as! String, "issuer", "Wrong .iss in decoded")
+            XCTAssertEqual(jwt.claims[.exp] as! String, "2485949565.58463", "Wrong .exp in decoded")
+            XCTAssertEqual(jwt.claims[.iat] as! String, "1485949565.58463", "Wrong .iat in decoded")
+            
+            if let optionalNBF = jwt.claims[.nbf] {
+                XCTAssertEqual(optionalNBF as! String, "1485949565.58463", "Wrong .nbf in decoded")
+            }
+            
+            if let optionalAudience = jwt.claims[.aud] {
+                XCTAssertEqual(optionalAudience as! [String], ["clientID"], "Wrong .aud in decoded")
+            }
+        }
+        
     }
     
     // From jwt.io
@@ -163,6 +192,79 @@ class TestJWT: XCTestCase {
         
         algorithm = Algorithm.for(name: "HMAC512", key: rsaPrivateKey, keyType: .privateKey)
         XCTAssertNil(algorithm, "Create Algorithm for unsupported")
+    }
+    
+    func testMicroProfile() {
+        
+        // Make a JWT according to http://microprofile.io/project/eclipse/microprofile-jwt-auth/spec/src/main/asciidoc/interoperability.asciidoc
+        var jwt = JWT(header: Header([.alg:"rs256", .typ:"JWT", .kid:"abc-1234567890"]), claims: Claims([.iss:"https://server.example.com", .jti:"a-123", .iat:"1485949565.58463", .exp:"2485949565.58463", .sub:"2400320", .upn:"jdoe@server.example.com", .groups:
+            """
+            ["red-group", "green-group", "admin-group", "admin"]
+            """
+            ]))
+        
+        
+        do {
+            // encode
+            if let encoded = try jwt.encode() {
+                if let decoded = try JWT.decode(encoded) {
+                    check(jwt: decoded, algorithm: "none")
+                    
+                    XCTAssertEqual(decoded.validateClaims(issuer: "https://server.example.com"), .success, "Validation failed")
+                }
+                else {
+                    XCTFail("Failed to decode")
+                }
+            }
+            else {
+                XCTFail("Failed to encode")
+            }
+            
+            // public key
+            if let signed = try jwt.sign(using: .rs256(rsaPrivateKey, .privateKey)) {
+                let ok = try JWT.verify(signed, using: .rs256(rsaPublicKey, .publicKey))
+                XCTAssertTrue(ok, "Verification failed")
+                
+                if let decoded = try JWT.decode(signed) {
+                    check(jwt: decoded, algorithm: "RS256")
+                    
+                    XCTAssertEqual(decoded.validateClaims(issuer: "https://server.example.com"), .success, "Validation failed")
+                }
+                else {
+                    XCTFail("Failed to decode")
+                }
+            }
+            else {
+                XCTFail("Failed to sign")
+            }
+            
+            // certificate
+            if let signed = try jwt.sign(using: .rs256(certPrivateKey, .privateKey)) {
+                let ok = try JWT.verify(signed, using: .rs256(certificate, .certificate))
+                XCTAssertTrue(ok, "Verification failed")
+                
+                if let decoded = try JWT.decode(signed) {
+                    check(jwt: decoded, algorithm: "RS256")
+                    
+                    XCTAssertEqual(decoded.validateClaims(issuer: "https://server.example.com"), .success, "Validation failed")
+                }
+                else {
+                    XCTFail("Failed to decode")
+                }
+            }
+            else {
+                XCTFail("Failed to sign")
+            }
+            
+        }
+        catch {
+            XCTFail("Failed to sign, verify or decode")
+        }
+        
+
+        
+        
+        
     }
 
 }

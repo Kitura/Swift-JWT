@@ -137,6 +137,9 @@ public enum ClaimKeys: String {
 
     /// Given name(s) or first name(s) (OpenID)
     case given_name
+    
+    /// The token subject’s group memberships that will be mapped to Java EE style application level roles in the MicroProfile service container
+    case groups
 
     /// Issued At - standard JWT claim
     case iat
@@ -146,6 +149,9 @@ public enum ClaimKeys: String {
 
     /// JWT ID - standard JWT claim
     case jti
+    
+    /// Hint at which key was used to secure the JWT
+    case kid
 
     /// Locale (OpenID)
     case locale
@@ -203,6 +209,9 @@ public enum ClaimKeys: String {
     
     /// Time the information was last updated (OpenID)
     case updated_at
+    
+    /// A human readable claim that uniquely identifies the subject or user principal of the token, across the MicroProfile services the token will be accessed with
+    case upn
     
     /// Web page or blog URL (OpenID)
     case website
