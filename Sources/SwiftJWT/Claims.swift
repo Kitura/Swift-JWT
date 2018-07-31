@@ -88,6 +88,7 @@ public struct Claims {
 /// Standard JWT claims are described in [RFC7519](https://tools.ietf.org/html/rfc7519#section-4.1).
 /// OpenID related claims are decsribed in [OpenID specs](http://openid.net/specs/openid-connect-core-1_0.html).
 /// SIP related claims are listed in [RFC3261](https://tools.ietf.org/html/rfc3261).
+/// MicroProfile claims are listed in [MicroProfile specs](http://microprofile.io/project/eclipse/microprofile-jwt-auth/spec/src/main/asciidoc/interoperability.asciidoc).
 /// Other claims are supported using a String as the key.
 public enum ClaimKeys: String {
     /// Authentication Context Class Reference (OpenID)
