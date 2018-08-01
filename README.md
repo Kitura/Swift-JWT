@@ -10,7 +10,9 @@ An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519) using
 
 For more information on JSON Web Tokens, their use cases and how they work, we recommend visiting [jwt.io](https://jwt.io/introduction/). 
 
-**Reminder:** JWTs do **not** encrypt data, so never send anything sensitive or confidential in a JWT.
+
+
+**Reminder:** JWTs sent as JWS do **not** encrypt data, so never send anything sensitive or confidential in a JWT. This library does not currently support JWE.
 
 ## Table of Contents
 * [Prerequisites](#prerequisites)
@@ -157,6 +159,11 @@ if validationResult != .success {
   print("Claims validation failed: ", validationResult)
 }
 ```
+
+## MicroProfile Support
+
+This library supports MicroProfile by allowing the creation of JWTs with specific claims needed by MicroProfile. These claims are found [here](http://microprofile.io/project/eclipse/microprofile-jwt-auth/spec/src/main/asciidoc/interoperability.asciidoc). For full compliance, ensure your application saves the JWT with the name `MP-JWT` and uses `.alg["rs256"]` for token signing.
+
 
 
 ## License

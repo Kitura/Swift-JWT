@@ -18,7 +18,7 @@ import XCTest
 import Foundation
 #if os(Linux)
     import Glibc
-#elseif os(OSX)
+#elseif os(macOS)
     import Darwin
 #endif
 
@@ -38,6 +38,7 @@ class TestJWT: XCTestCase {
             ("testSignAndVerify", testSignAndVerify),
             ("testJWT", testJWT),
             ("testSupported", testSupported),
+            ("testMicroProfile", testMicroProfile)
         ]
     }
     
@@ -110,15 +111,86 @@ class TestJWT: XCTestCase {
     }
     
     func check(jwt: JWT, algorithm: String) {
+        
         XCTAssertEqual(jwt.header.headers.count, 1, "Wrong number of header fields")
         XCTAssertEqual(jwt.claims.claims.count, 6, "Wrong number of claims")
 
         XCTAssertEqual(jwt.header[.alg] as! String, algorithm, "Wrong .alg in decoded")
         XCTAssertEqual(jwt.claims[.iss] as! String, "issuer", "Wrong .iss in decoded")
-        XCTAssertEqual(jwt.claims[.aud] as! [String], ["clientID"], "Wrong .aud in decoded")
         XCTAssertEqual(jwt.claims[.exp] as! String, "2485949565.58463", "Wrong .exp in decoded")
         XCTAssertEqual(jwt.claims[.iat] as! String, "1485949565.58463", "Wrong .iat in decoded")
         XCTAssertEqual(jwt.claims[.nbf] as! String, "1485949565.58463", "Wrong .nbf in decoded")
+        XCTAssertEqual(jwt.claims[.aud] as! [String], ["clientID"], "Wrong .aud in decoded")
+    }
+    
+    func checkMicroProfile(jwt: JWT, algorithm: String) {
+        XCTAssertEqual(jwt.header.headers.count, 3, "Wrong number of header fields")
+        XCTAssertEqual(jwt.claims.claims.count, 7, "Wrong number of claims")
+        
+        XCTAssertEqual(jwt.header[.alg] as! String, "RS256", "Wrong .alg in decoded. MicroProfile only supports RS256.")
+        XCTAssertEqual(jwt.claims[.iss] as! String, "https://server.example.com", "Wrong .iss in decoded")
+        XCTAssertEqual(jwt.claims[.exp] as! String, "2485949565.58463", "Wrong .exp in decoded")
+        XCTAssertEqual(jwt.claims[.iat] as! String, "1485949565.58463", "Wrong .iat in decoded")
+        XCTAssertEqual(jwt.claims[.aud] as! [String], ["clientID"], "Wrong .aud in decoded")
+        XCTAssertEqual(jwt.claims[.groups] as! [String], ["red-group", "green-group", "admin-group", "admin"], "Wrong .groups in decoded")
+
+    }
+    
+    
+    func testMicroProfile() {
+        var jwt = JWT(header: Header([.alg:"rs256"]), claims: Claims([.name:"MP-JWT"]))
+        jwt.header[.kid] = "abc-1234567890"
+        jwt.header[.typ] = "JWT"
+        XCTAssertEqual(jwt.claims[.name] as! String, "MP-JWT")
+        jwt.claims[.iss] = "https://server.example.com"
+        jwt.claims[.aud] = ["clientID"]
+        jwt.claims[.iat] = "1485949565.58463"
+        jwt.claims[.exp] = "2485949565.58463"
+        jwt.claims[.upn] = "jdoe@server.example.com"
+        jwt.claims[.groups] = ["red-group", "green-group", "admin-group", "admin"]
+        
+        do {
+            
+            // public key (MP-JWT needs to be signed)
+            if let signed = try jwt.sign(using: .rs256(rsaPrivateKey, .privateKey)) {
+                let ok = try JWT.verify(signed, using: .rs256(rsaPublicKey, .publicKey))
+                XCTAssertTrue(ok, "Verification failed")
+                
+                if let decoded = try JWT.decode(signed) {
+                    checkMicroProfile(jwt: decoded, algorithm: "RS256")
+                    
+                    XCTAssertEqual(decoded.validateClaims(issuer: "https://server.example.com"), .success, "Validation failed")
+                }
+                else {
+                    XCTFail("Failed to decode")
+                }
+            }
+            else {
+                XCTFail("Failed to sign")
+            }
+            
+            // certificate
+            if let signed = try jwt.sign(using: .rs256(certPrivateKey, .privateKey)) {
+                let ok = try JWT.verify(signed, using: .rs256(certificate, .certificate))
+                XCTAssertTrue(ok, "Verification failed")
+                
+                if let decoded = try JWT.decode(signed) {
+                    checkMicroProfile(jwt: decoded, algorithm: "RS256")
+                    
+                    XCTAssertEqual(decoded.validateClaims(issuer: "https://server.example.com"), .success, "Validation failed")
+                }
+                else {
+                    XCTFail("Failed to decode")
+                }
+            }
+            else {
+                XCTFail("Failed to sign")
+            }
+            
+        } catch {
+            XCTFail("Failed to sign, verify or decode")
+        }
+        
     }
     
     // From jwt.io
@@ -164,6 +236,7 @@ class TestJWT: XCTestCase {
         algorithm = Algorithm.for(name: "HMAC512", key: rsaPrivateKey, keyType: .privateKey)
         XCTAssertNil(algorithm, "Create Algorithm for unsupported")
     }
+    
 
 }
 

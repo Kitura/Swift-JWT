@@ -88,6 +88,7 @@ public struct Claims {
 /// Standard JWT claims are described in [RFC7519](https://tools.ietf.org/html/rfc7519#section-4.1).
 /// OpenID related claims are decsribed in [OpenID specs](http://openid.net/specs/openid-connect-core-1_0.html).
 /// SIP related claims are listed in [RFC3261](https://tools.ietf.org/html/rfc3261).
+/// MicroProfile claims are listed in [MicroProfile specs](http://microprofile.io/project/eclipse/microprofile-jwt-auth/spec/src/main/asciidoc/interoperability.asciidoc).
 /// Other claims are supported using a String as the key.
 public enum ClaimKeys: String {
     /// Authentication Context Class Reference (OpenID)
@@ -137,6 +138,9 @@ public enum ClaimKeys: String {
 
     /// Given name(s) or first name(s) (OpenID)
     case given_name
+    
+    /// The token subject’s group memberships that will be mapped to Java EE style application level roles in the MicroProfile service container (MicroProfile)
+    case groups
 
     /// Issued At - standard JWT claim
     case iat
@@ -146,7 +150,7 @@ public enum ClaimKeys: String {
 
     /// JWT ID - standard JWT claim
     case jti
-
+    
     /// Locale (OpenID)
     case locale
 
@@ -203,6 +207,9 @@ public enum ClaimKeys: String {
     
     /// Time the information was last updated (OpenID)
     case updated_at
+    
+    /// A human readable claim that uniquely identifies the subject or user principal of the token, across the MicroProfile services the token will be accessed with (MicroProfile)
+    case upn
     
     /// Web page or blog URL (OpenID)
     case website
