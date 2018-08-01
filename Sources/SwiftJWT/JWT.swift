@@ -123,10 +123,6 @@ public struct JWT {
         }
         return JWT(header: header, claims: claims)
     }
-    
-    public static func checkValidMicroProfile(_ jwt: JWT) throws -> Bool {
-        return true
-    }
 
     /// Validate the JWT claims. Various claims are validated if they are present in the `Claims` object.
     /// Various validations require an input. In these cases, if the claim in question exists and the input
