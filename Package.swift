@@ -30,7 +30,7 @@ var listTargets: [Target.Dependency] = [
 
 #if os(OSX) || os(iOS) || os(tvOS) || os(watchOS)
 listDependencies.append(contentsOf: [
-    .package(url: "https://github.com/IBM-Swift/BlueRSA.git", from:"1.0.0")
+    .package(url: "https://github.com/IBM-Swift/BlueRSA.git", from:"2.0.0")
     ])
     
 listTargets.append(contentsOf: [
