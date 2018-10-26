@@ -26,6 +26,8 @@ import Foundation
 
 let rsaPrivateKey = read(fileName: "rsa_private_key")
 let rsaPublicKey = read(fileName: "rsa_public_key")
+let rsaJWTEncoder = JWTEncoder(jwtSigner: .rs256(privateKey: rsaPrivateKey))
+let rsaJWTDecoder = JWTDecoder(jwtVerifier: .rs256(publicKey: rsaPublicKey))
 let certPrivateKey = read(fileName: "cert_private_key")
 let certificate = read(fileName: "certificate")
 let encodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.WJHaxAjhLu7wkw2J3B7ZpW-pnX-WEDJuy7l46nHZRWtZrH_4f8724v-4V48UlHtEgQpUXCHyGRyWPgPJCdGIfy2vD5GBoMJ1kdNWQa0UVOajTk0omUIloBPKgo-45m3w15ub-_4bihyZOI8dCK9zk5vjvUGnzdKartNi9AN5kNM"
@@ -67,6 +69,9 @@ class TestJWT: XCTestCase {
     static var allTests: [(String, (TestJWT) -> () throws -> Void)] {
         return [
             ("testSignAndVerify", testSignAndVerify),
+            ("testJWTEncoder", testJWTEncoder),
+            ("testJWTDecoder", testJWTDecoder),
+            ("testJWTCoderCycle", testJWTCoderCycle),
             ("testJWT", testJWT),
             ("testMicroProfile", testMicroProfile)
         ]
@@ -155,7 +160,7 @@ class TestJWT: XCTestCase {
     
     func testMicroProfile() {
         
-        var jwt = JWT(header: Header(), claims: MicroProfile(name: "MP-JWT"))
+        var jwt = JWT(claims: MicroProfile(name: "MP-JWT"))
         jwt.header.kid = "abc-1234567890"
         jwt.header.typ = "JWT"
         XCTAssertEqual(jwt.claims.name, "MP-JWT")
@@ -183,23 +188,58 @@ class TestJWT: XCTestCase {
         else {
             XCTFail("Failed to sign")
         }
-        
-        // certificate
-        if let signed = jwt.sign(using: .rs256(privateKey: certPrivateKey)) {
-            let ok = JWT<MicroProfile>.verify(signed, using: .rs256(certificate: certificate))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = JWT<MicroProfile>(jwtString: signed) {
-                checkMicroProfile(jwt: decoded, algorithm: "RS256")
-                
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
+    }
+    
+    func testJWTEncoder() {
+        var jwt = JWT(header: Header(), claims: TestClaims())
+        jwt.header.alg = "RS256"
+        jwt.header.typ = "JWT"
+        jwt.claims.sub = "1234567890"
+        jwt.claims.name = "John Doe"
+        jwt.claims.admin = true
+        do {
+            let jwtString = try rsaJWTEncoder.encodeToString(jwt)
+            let decodedJWTString = JWT<TestClaims>(jwtString: jwtString)
+            let decodedTestClaimJWT = JWT<TestClaims>(jwtString: encodedTestClaimJWT)
+            XCTAssertEqual(jwt.claims, decodedJWTString?.claims)
+            XCTAssertEqual(jwt.header, decodedJWTString?.header)
+            XCTAssertEqual(jwt.claims, decodedTestClaimJWT?.claims)
+            XCTAssertEqual(jwt.header, decodedTestClaimJWT?.header)
+        } catch {
+            XCTFail("Failed to encode JTW: \(error)")
         }
-        else {
-            XCTFail("Failed to sign")
+    }
+    
+    func testJWTDecoder() {
+        var jwt = JWT(header: Header(), claims: TestClaims())
+        jwt.header.alg = "RS256"
+        jwt.header.typ = "JWT"
+        jwt.claims.sub = "1234567890"
+        jwt.claims.name = "John Doe"
+        jwt.claims.admin = true
+        do {
+            let decodedJWT = try rsaJWTDecoder.decode(JWT<TestClaims>.self, fromString: encodedTestClaimJWT)
+            XCTAssertEqual(decodedJWT.claims, jwt.claims)
+            XCTAssertEqual(decodedJWT.header, jwt.header)
+        } catch {
+            XCTFail("Failed to encode JTW: \(error)")
+        }
+    }
+    
+    func testJWTCoderCycle() {
+        var jwt = JWT(header: Header(), claims: TestClaims())
+        jwt.header.alg = "RS256"
+        jwt.header.typ = "JWT"
+        jwt.claims.sub = "1234567890"
+        jwt.claims.name = "John Doe"
+        jwt.claims.admin = true
+        do {
+            let jwtData = try rsaJWTEncoder.encode(jwt)
+            let decodedJWT = try rsaJWTDecoder.decode(JWT<TestClaims>.self, from: jwtData)
+            XCTAssertEqual(decodedJWT.claims, jwt.claims)
+            XCTAssertEqual(decodedJWT.header, jwt.header)
+        } catch {
+            XCTFail("Failed to encode JTW: \(error)")
         }
     }
     
