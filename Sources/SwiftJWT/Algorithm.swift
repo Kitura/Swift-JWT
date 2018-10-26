@@ -21,119 +21,96 @@ import Foundation
 
 /**
  
- The algorithm used to sign the token. Case insensitive. To be used when signing and verifying a JWT.
+ The algorithm that will be used when signing and verifying a JWT.
  
  ### Usage Example: ###
- ````swift
- //It is used to create the signedJWT constant below, as part of the using: parameter.
- 
- let jwt = JWT(header: Header([.typ:"JWT"]), claims: Claims([.name:"Kitura"]))
- let signedJWT = jwt.sign(using: .rs256(key, .privateKey))
- ````
+ ```swift
+ let privateKey = "<PrivateKey>".data(using: .utf8)!
+ let publicKey = "<PublicKey>".data(using: .utf8)!
+ let signingAlgorithm = Algorithm.rs256(key: privateKey, keyType: .privateKey)
+ let verifyAlgorithm = Algorithm.rs256(key: publicKey, keyType: .publicKey)
+ struct MyClaims: Claims {
+    var name: String
+ }
+ let jwt = JWT(header: Header(), claims: MyClaims(name: "Kitura"))
+ let signedJWT: String = jwt.sign(using: signingAlgorithm)
+ let verified: Bool = jwt.verify(signedJWT, using: verifyAlgorithm)
+ ```
  */
 
-public enum Algorithm {
-    /// RSA 256 bits with its key and key type.
-    case rs256(Data, RSAKeyType)
-    
-    /// RSA 384 bits with its key and key type.
-    case rs384(Data, RSAKeyType)
-    
-    /// RSA 512 bits with its key and key type.
-    case rs512(Data, RSAKeyType)
-    
-    
-    /// A list of possible results of call to isSupported method.
-    public enum Supported {
-        /// The algorithm is not supported.
-        case unsupported
-        
-        /// The algorithm is supported and requires a key or a certifcate.
-        case supportedWithKey
-        
-        /// The algorithm is supported and requires a secret.
-        case supportedWithSecret
-    }
-    
+public struct Algorithm {
     /// The name of the algorithm.
-    public var name: String {
-        switch self {
-        case .rs256:
-            return "RS256"
-        case .rs384:
-            return "RS384"
-        case .rs512:
-            return "RS512"
-        }
-    }
-
-    func sign(_ input: String) -> Data? {
-        return encryptionAlgortihm.sign(input)
-    }
+    public let name: String
     
-    func verify(signature: Data, for input: String) -> Bool {
-        return encryptionAlgortihm.verify(signature: signature, for: input)
-    }
+    /// the algorithm used to encrypt the data.
+    let encryptionAlgorithm: EncryptionAlgorithm
     
-    var encryptionAlgortihm: EncryptionAlgorithm {
+    /// RSA 256 bits with its key and key type.
+    public static func rs256(key: Data, keyType: RSAKeyType) -> Algorithm {
         #if os(Linux)
-            switch self {
-            case .rs256(let key, let type):
-                return RSA(key: key, keyType: type, algorithm: .sha256)
-            case .rs384(let key, let type):
-                return RSA(key: key, keyType: type, algorithm: .sha384)
-            case .rs512(let key, let type):
-                return RSA(key: key, keyType: type, algorithm: .sha512)
-            }
+            return Algorithm(name: "RS256", encryptionAlgorithm: RSA(key: key, keyType: keyType, algorithm: .sha256))
         #else
-            switch self {
-            case .rs256(let key, let type):
-                return BlueRSA(key: key, keyType: type, algorithm: .sha256)
-            case .rs384(let key, let type):
-                return BlueRSA(key: key, keyType: type, algorithm: .sha384)
-            case .rs512(let key, let type):
-                return BlueRSA(key: key, keyType: type, algorithm: .sha512)
-            }
+            return Algorithm(name: "RS256", encryptionAlgorithm: BlueRSA(key: key, keyType: keyType, algorithm: .sha256))
         #endif
     }
     
-    /// Get an algorithm by name and key.
-    ///
-    /// - Parameter name: The name of the algorithm.
-    /// - Parameter key: A Data struct containing the key.
-    /// - Parameter keyType: The type of the key argument: public/private key or certificate.
-    /// - Returns: An instance of `Algorithm` if the input arguments correspond to a supported algorithm.
-    public static func `for`(name: String, key: Data, keyType: RSAKeyType = .publicKey) -> Algorithm? {
-        switch name.lowercased() {
-        case "rs256":
-            return .rs256(key, keyType)
-        case "rs384":
-            return .rs384(key, keyType)
-        case "rs512":
-            return .rs512(key, keyType)
-        default:
+    /// RSA 384 bits with its key and key type.
+    public static func rs384(key: Data, keyType: RSAKeyType) -> Algorithm {
+        #if os(Linux)
+        return Algorithm(name: "RS384", encryptionAlgorithm: RSA(key: key, keyType: keyType, algorithm: .sha384))
+        #else
+        return Algorithm(name: "RS384", encryptionAlgorithm: BlueRSA(key: key, keyType: keyType, algorithm: .sha384))
+        #endif
+    }
+    
+    /// RSA 512 bits with its key and key type.
+    public static func rs512(key: Data, keyType: RSAKeyType) -> Algorithm {
+        #if os(Linux)
+        return Algorithm(name: "RS512", encryptionAlgorithm: RSA(key: key, keyType: keyType, algorithm: .sha512))
+        #else
+        return Algorithm(name: "RS512", encryptionAlgorithm: BlueRSA(key: key, keyType: keyType, algorithm: .sha512))
+        #endif
+    }
+    
+    /// No Algorithm used. This matches the "none" JWT alg header.
+    /// This algorithm doesn't add a signiture when signing.
+    /// When verifying a JWT, this algorithm always returns true.
+    public static func none() -> Algorithm {
+        return Algorithm(name: "none", encryptionAlgorithm: NoneAlgorithm())
+    }
+
+    func sign(_ input: String) -> Data? {
+        return encryptionAlgorithm.sign(input)
+    }
+    
+    func generateJWT(header: String, claims: String) -> String? {
+        guard let signature = encryptionAlgorithm.sign(header + "." + claims),
+              let signatureString = Base64URL.encode(signature)
+        else {
             return nil
         }
-    }
-    
-    /// Get an algorithm by name and secret.
-    ///
-    /// - Parameter name: The name of the algorithm.
-    /// - Parameter secret: A String containing the secret.
-    /// - Returns: An instance of `Algorithm` if the input arguments correspond to a supported algorithm.
-    public static func `for`(name: String, secret: String) -> Algorithm? {
-        return nil
-    }
-    
-    /// Check if the algorithm specified by the name is supported and what input it requires (a key or a secret).
-    ///
-    /// - Parameter name: The name of the algorithm.
-    /// - Returns: A value of `Supported` enum indicating the result.
-    public static func isSupported(name: String) -> Supported {
-        let algorithmName = name.lowercased()
-        if algorithmName == "rs256" || algorithmName == "rs384" ||  algorithmName == "rs512" {
-            return .supportedWithKey
+        if signatureString.isEmpty {
+            return header + "." + claims
+        } else {
+            return header + "." + claims + "." + signatureString
         }
-        return .unsupported
+    }
+    
+    func verify(signature: Data, for input: String) -> Bool {
+        return encryptionAlgorithm.verify(signature: signature, for: input)
+    }
+    
+    func verify(_ jwt: String) -> Bool {
+        let components = jwt.components(separatedBy: ".")
+        if components.count == 2 {
+            return encryptionAlgorithm.verify(signature: Data(), for: components[0] + "." + components[1])
+        } else if components.count == 3 {
+            guard let signature = Base64URL.decode(components[2]) else {
+                return false
+            }
+            return encryptionAlgorithm.verify(signature: signature, for: components[0] + "." + components[1])
+        } else {
+            return false
+        }
     }
 }

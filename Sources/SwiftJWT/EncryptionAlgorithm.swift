@@ -28,10 +28,16 @@ protocol EncryptionAlgorithm {
 
 extension EncryptionAlgorithm {
     func sign(_ string: String, encoding: String.Encoding = .utf8) -> Data? {
-        return sign(string, encoding: encoding)
+        guard let data = string.data(using: encoding) else {
+            return nil
+        }
+        return sign(data)
     }
     
     func verify(signature: Data, for string: String, encoding: String.Encoding = .utf8) -> Bool {
-        return verify(signature: signature, for: string, encoding: encoding)
+        guard let data = string.data(using: encoding) else {
+            return false
+        }
+        return verify(signature: signature, for: data)
     }   
 }
