@@ -20,12 +20,14 @@ import PackageDescription
 
 var listDependencies: [Package.Dependency] = [
     .package(url: "https://github.com/IBM-Swift/BlueCryptor.git", from: "1.0.2"),
-    .package(url: "https://github.com/IBM-Swift/HeliumLogger.git", from: "1.7.1")
+    .package(url: "https://github.com/IBM-Swift/HeliumLogger.git", from: "1.7.1"),
+    .package(url: "https://github.com/IBM-Swift/KituraContracts.git", from: "1.1.0")
 ]
 
 var listTargets: [Target.Dependency] = [
     .byNameItem(name: "Cryptor"),
-    .byNameItem(name: "HeliumLogger")
+    .byNameItem(name: "HeliumLogger"),
+    .byNameItem(name: "KituraContracts")
 ]
 
 #if os(OSX) || os(iOS) || os(tvOS) || os(watchOS)

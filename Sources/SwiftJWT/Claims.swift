@@ -17,203 +17,109 @@
 import Foundation
 
 // MARK Claims
-
-/// A representation of JSON Web Token claims.
-public struct Claims {
-    var claims: [String:Any]
+/// A protocol representing the claims on a JSON web token.
+public protocol Claims: Codable {
     
-    /// Initialize a `Claims` instance.
-    ///
-    /// - Parameter claims: An optional dictionary containing the claims with `ClaimsKeys` as keys.
-    /// - Returns: A new instance of `Claims`.
-    public init(_ claims: [ClaimKeys:Any]?=nil) {
-        self.claims = [String:Any]()
-        if let claims = claims {
-            for (key, value) in claims {
-                self.claims[key.rawValue] = value
-            }
-        }
+    /**
+     The "iss" (issuer) claim identifies the principal that issued the
+     JWT.  The processing of this claim is generally application specific.
+     The "iss" value is a case-sensitive.
+     */
+    var iss: String? { get }
+    
+    /**
+     The "sub" (subject) claim identifies the principal that is the
+     subject of the JWT.  The claims in a JWT are normally statements
+     about the subject.  The subject value MUST either be scoped to be
+     locally unique in the context of the issuer or be globally unique.
+     The processing of this claim is generally application specific.  The
+     "sub" value is case-sensitive.
+     */
+    var sub: String? { get }
+    
+    /**
+     The "aud" (audience) claim identifies the recipients that the JWT is
+     intended for.  Each principal intended to process the JWT MUST
+     identify itself with a value in the audience claim.  If the principal
+     processing the claim does not identify itself with a value in the
+     "aud" claim when this claim is present, then the JWT MUST be
+     rejected. The interpretation of audience values is generally application specific.
+     The "aud" value is case-sensitive.
+     */
+    var aud: [String]? { get }
+    
+    /**
+     The "exp" (expiration time) claim identifies the expiration time on
+     or after which the JWT MUST NOT be accepted for processing.  The
+     processing of the "exp" claim requires that the current date/time
+     MUST be before the expiration date/time listed in the "exp" claim.
+     Implementers MAY provide for some small leeway, usually no more than
+     a few minutes, to account for clock skew.
+     */
+    var exp: Date? { get }
+    
+    /**
+     The "nbf" (not before) claim identifies the time before which the JWT
+     MUST NOT be accepted for processing.  The processing of the "nbf"
+     claim requires that the current date/time MUST be after or equal to
+     the not-before date/time listed in the "nbf" claim.  Implementers MAY
+     provide for some small leeway, usually no more than a few minutes, to
+     account for clock skew.
+     */
+    var nbf: Date? { get }
+    
+    /**
+     The "iat" (issued at) claim identifies the time at which the JWT was
+     issued.  This claim can be used to determine the age of the JWT.
+     */
+    var iat: Date? { get }
+    
+    /**
+     The "jti" (JWT ID) claim provides a unique identifier for the JWT.
+     The identifier value MUST be assigned in a manner that ensures that
+     there is a negligible probability that the same value will be
+     accidentally assigned to a different data object; if the application
+     uses multiple issuers, collisions MUST be prevented among values
+     produced by different issuers as well.  The "jti" claim can be used
+     to prevent the JWT from being replayed.  The "jti" value is case-
+     sensitive
+     */
+    var jti: String? { get }
+    
+    /// Encode the Claim object as a Base64 String.
+    func encode() throws -> String?
+}
+public extension Claims {
+    var iss: String? {
+        return nil
     }
     
-    /// Initialize a `Claims` instance.
-    ///
-    /// - Parameter claims: A dictionary containing the claims with String as keys type.
-    /// - Returns: A new instance of `Claims`.
-    public init(_ claims: [String:Any]) {
-        self.claims = claims
+    var sub: String? {
+        return nil
     }
     
-    /// Return a claim for the key of type ClaimKeys.
-    ///
-    /// - Parameter key: The key.
-    /// - Returns: The claim for the key.
-    public subscript(key: ClaimKeys) -> Any? {
-        get {
-            return claims[key.rawValue]
-        }
-        
-        set(newValue) {
-            claims[key.rawValue] = newValue
-        }
+    var aud: [String]? {
+        return nil
     }
     
-    /// Return a claim for the key of type String.
-    ///
-    /// - Parameter key: The key.
-    /// - Returns: The claim for the key.
-    public subscript(key: String) -> Any? {
-        get {
-            return claims[key]
-        }
-        
-        set(newValue) {
-            claims[key] = newValue
-        }
+    var exp: Date? {
+        return nil
     }
     
-    /// Representation of the claims as a dictionary.
-    public var asDictionary: [String:Any] {
-        return claims
+    var nbf: Date? {
+        return nil
+    }
+    
+    var iat: Date? {
+        return nil
+    }
+    
+    var jti: String? {
+        return nil
     }
     
     func encode() throws -> String? {
-        let data = try JSONSerialization.data(withJSONObject: claims)
+        let data = try JSONEncoder().encode(self)
         return Base64URL.encode(data)
     }
-}
-
-
-
-/// A list of the [claims names](https://www.iana.org/assignments/jwt/jwt.xhtml).
-/// Standard JWT claims are described in [RFC7519](https://tools.ietf.org/html/rfc7519#section-4.1).
-/// OpenID related claims are decsribed in [OpenID specs](http://openid.net/specs/openid-connect-core-1_0.html).
-/// SIP related claims are listed in [RFC3261](https://tools.ietf.org/html/rfc3261).
-/// MicroProfile claims are listed in [MicroProfile specs](http://microprofile.io/project/eclipse/microprofile-jwt-auth/spec/src/main/asciidoc/interoperability.asciidoc).
-/// Other claims are supported using a String as the key.
-public enum ClaimKeys: String {
-    /// Authentication Context Class Reference (OpenID)
-    case acr
-
-    /// Preferred postal address (OpenID)
-    case address
-
-    /// Authentication Methods References (OpenID)
-    case amr
-
-    /// Access Token hash value (OpenID)
-    case at_hash
-
-    /// Audience - standard JWT claim
-    case aud
-
-    /// Time when the authentication occurred (OpenID)
-    case auth_time
-    
-    /// Authorized party - the party to which the ID Token was issued (OpenID)
-    case azp
-    
-    /// Birthday (OpenID)
-    case birthdate
-    
-    /// Code hash value (OpenID)
-    case c_hash
-    
-    /// Confirmation ([RFC7800](https://tools.ietf.org/html/rfc7800))
-    case cnf
-    
-    /// Preferred e-mail address (OpenID)
-    case email
-
-    /// True if the e-mail address has been verified; otherwise false (OpenID)
-    case email_verified
-    
-    /// Expiration Time - standard JWT claim
-    case exp
-
-    /// Surname(s) or last name(s) (OpenID)
-    case family_name
-
-    /// Gender (OpenID)
-    case gender
-
-    /// Given name(s) or first name(s) (OpenID)
-    case given_name
-    
-    /// The token subject’s group memberships that will be mapped to Java EE style application level roles in the MicroProfile service container (MicroProfile)
-    case groups
-
-    /// Issued At - standard JWT claim
-    case iat
-
-    /// Issuer - standard JWT claim
-    case iss
-
-    /// JWT ID - standard JWT claim
-    case jti
-    
-    /// Locale (OpenID)
-    case locale
-
-    /// Middle name(s) (OpenID)
-    case middle_name
-
-    /// Full name (OpenID)
-    case name
-
-    /// Not Before - standard JWT claim
-    case nbf
-
-    /// Casual name (OpenID)
-    case nickname
-
-    /// Value used to associate a Client session with an ID Token (OpenID)
-    case nonce
-
-    /// Preferred telephone number (OpenID)
-    case phone_number
-
-    /// True if the phone number has been verified; otherwise false (OpenID)
-    case phone_number_verified
-
-    /// Profile picture URL(OpenID)
-    case picture
-
-    /// Shorthand name by which the End-User wishes to be referred to (OpenID)
-    case preferred_username
-
-    /// Profile page URL (OpenID)
-    case profile
-
-    /// SIP Call-Id header field value
-    case sip_callid
-    
-    /// SIP CSeq numeric header field parameter value
-    case sip_cseq_num
-    
-    /// SIP Date header field value
-    case sip_date
-    
-    /// SIP From tag header field parameter value
-    case sip_from_tag
-    
-    /// SIP Via branch header field parameter value
-    case sip_via_branch
-    
-    /// Subject - standard JWT claim
-    case sub
-    
-    /// Public key used to check the signature of an ID Token (OpenID)
-    case sub_jwk
-    
-    /// Time the information was last updated (OpenID)
-    case updated_at
-    
-    /// A human readable claim that uniquely identifies the subject or user principal of the token, across the MicroProfile services the token will be accessed with (MicroProfile)
-    case upn
-    
-    /// Web page or blog URL (OpenID)
-    case website
-    
-    /// Time zone (OpenID)
-    case zoneinfo
 }
