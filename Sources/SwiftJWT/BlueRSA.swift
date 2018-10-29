@@ -20,7 +20,8 @@ import LoggerAPI
 
 import Foundation
 
-class BlueRSA: EncryptionAlgorithm {
+class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
+    let name: String = "RSA"
     
     private let key: Data
     private let keyType: RSAKeyType
@@ -89,11 +90,27 @@ class BlueRSA: EncryptionAlgorithm {
         }
     }
     
-    func verify(signature: Data, for string: String, encoding: String.Encoding) -> Bool {
-        guard let data: Data = string.data(using: encoding) else {
+    func sign(header: String, claims: String) -> String? {
+        let unsignedJWT = header + "." + claims
+        guard let unsignedData = unsignedJWT.data(using: .utf8), let signature = sign(unsignedData) else {
+            return nil
+        }
+        let signatureString = signature.base64urlEncodedString()
+        return header + "." + claims + "." + signatureString
+    }
+
+    func verify(jwt: String) -> Bool {
+        let components = jwt.components(separatedBy: ".")
+        if components.count == 3 {
+            guard let signature = Data(base64urlEncoded: components[2]),
+                  let jwtData = (components[0] + "." + components[1]).data(using: .utf8)
+            else {
+                return false
+            }
+            return self.verify(signature: signature, for: jwtData)
+        } else {
             return false
         }
-        return verify(signature: signature, for: data)
     }
     
 }
