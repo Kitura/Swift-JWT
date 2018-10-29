@@ -18,42 +18,21 @@ import Foundation
 
 // MARK Base64URL
 
-/// Utilities for base64URL encoding and decoding.
-public struct Base64URL {
-    
-    /// Encode the input data.
-    ///
-    /// - Parameter data: The input to encode.
-    /// - Returns: A String containg the base64URL encoded input data. Returns nil if the encoding fails.
-    public static func encode(_ data: Data) -> String? {
-        let base64EncodedData = data.base64EncodedData()
-        if let base64EncodedString = String(data: base64EncodedData, encoding: .utf8) {
-            let base64URLEncodedString = base64EncodedString
-                .replacingOccurrences(of: "+", with: "-")
-                .replacingOccurrences(of: "/", with: "_")
-                .replacingOccurrences(of: "=", with: "")
-            return base64URLEncodedString
-        }
-        return nil
-    }
-    
-    /// Decode the input String.
-    ///
-    /// - Parameter base64URLEncodedString: The input String to decode. Returns nil if the decoding fails.
-    /// - Returns: A Data instance containg the decoded input.
-    public static func decode(_ base64URLEncodedString: String) -> Data? {
-        #if swift(>=4.0)
-        let paddingLength = 4 - base64URLEncodedString.count % 4
-        #else
-        let paddingLength = 4 - base64URLEncodedString.characters.count % 4
-        #endif
+extension Data {
+    init?(base64urlEncoded input: String) {
+        let paddingLength = 4 - input.count % 4
         let padding = (paddingLength < 4) ? String(repeating: "=", count: paddingLength) : ""
-        
-        let base64EncodedString = base64URLEncodedString
+        let base64EncodedString = input
             .replacingOccurrences(of: "-", with: "+")
             .replacingOccurrences(of: "_", with: "/")
             + padding
-        
-        return Data(base64Encoded: base64EncodedString)
+        self.init(base64Encoded: base64EncodedString)
+    }
+    
+    func base64urlEncodedString() -> String {
+        let result = self.base64EncodedString()
+        return result.replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
     }
 }

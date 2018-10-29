@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corporation 2017
+ * Copyright IBM Corporation 2018
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,9 +82,11 @@ public struct Header: Codable {
         self.crit = crit
     }
     
-    func encode() throws -> String? {
-        let data = try JSONEncoder().encode(self)
-        return Base64URL.encode(data)
+    func encode() -> String? {
+        guard let data = try? JSONEncoder().encode(self) else {
+            return nil
+        }
+        return data.base64urlEncodedString()
     }
 }
 extension Header: Equatable {

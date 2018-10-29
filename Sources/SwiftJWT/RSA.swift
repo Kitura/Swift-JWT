@@ -22,8 +22,9 @@ import Foundation
 ///
 /// RSA Handling: Implements a series of Class Level RSA Helper Functions.
 ///
-class RSA: EncryptionAlgorithm {
+class RSA: SignerAlgorithm, VerifierAlgorithm {
     
+    private let name: String
     private let algorithm: Algorithm
     private let key: UnsafeMutablePointer<UInt8>
     private let keySize: Int32
@@ -89,6 +90,7 @@ class RSA: EncryptionAlgorithm {
     }
     
     init(key: Data, keyType: RSAKeyType?=nil, algorithm: Algorithm) {
+        self.name = algorithm
         self.algorithm = algorithm
         self.key = UnsafeMutablePointer<UInt8>.allocate(capacity: key.count)
         key.copyBytes(to: self.key, count: key.count)
@@ -176,11 +178,27 @@ class RSA: EncryptionAlgorithm {
         }
     }
     
-    func verify(signature: Data, for string: String, encoding: String.Encoding) -> Bool {
-        guard let data: Data = string.data(using: encoding) else {
+    func sign(header: String, claims: String) -> String? {
+        let unsignedJWT = header + "." + claims
+        guard let unsignedData = unsignedJWT.data(using: .utf8), let signature = sign(unsignedData) else {
+            return nil
+        }
+        let signatureString = signature.base64urlEncodedString()
+        return header + "." + claims + "." + signatureString
+    }
+    
+    func verify(jwt: String) -> Bool {
+        let components = jwt.components(separatedBy: ".")
+        if components.count == 3 {
+            guard let signature = Data(base64urlEncoded: components[2]),
+                let jwtData = (components[0] + "." + components[1]).data(using: .utf8)
+                else {
+                    return false
+            }
+            return self.verify(signature: signature, for: jwtData)
+        } else {
             return false
         }
-        return verify(signature: signature, for: data)
     }
 }
 #endif

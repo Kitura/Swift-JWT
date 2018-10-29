@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corporation 2017
+ * Copyright IBM Corporation 2018
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ public protocol Claims: Codable {
     var jti: String? { get }
     
     /// Encode the Claim object as a Base64 String.
-    func encode() throws -> String?
+    func encode() -> String?
 }
 public extension Claims {
     var iss: String? {
@@ -118,8 +118,10 @@ public extension Claims {
         return nil
     }
     
-    func encode() throws -> String? {
-        let data = try JSONEncoder().encode(self)
-        return Base64URL.encode(data)
+    func encode() -> String? {
+        guard let data = try? JSONEncoder().encode(self) else {
+            return nil
+        }
+        return data.base64urlEncodedString()
     }
 }

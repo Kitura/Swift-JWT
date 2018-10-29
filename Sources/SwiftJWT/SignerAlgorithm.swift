@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corporation 2017
+ * Copyright IBM Corporation 2018
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,7 @@
  * limitations under the License.
  **/
 
-// MARK RSAKeyType
-
-/// The type of the key used in the RSA algorithm.
-enum RSAKeyType {
-    /// The key is a certificate containing both the private and the public keys.
-    case certificate
-    
-    /// The key is an RSA public key.
-    case publicKey
-    
-    /// The key is an RSA private key.
-    case privateKey
+protocol SignerAlgorithm {
+    /// A function to sign the header and claims of a JSON web token and return a signed JWT string.
+    func sign(header: String, claims: String) -> String?
 }
