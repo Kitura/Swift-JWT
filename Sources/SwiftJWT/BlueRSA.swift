@@ -33,6 +33,15 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
         self.algorithm = algorithm
     }
     
+    func sign(header: String, claims: String) -> String? {
+        let unsignedJWT = header + "." + claims
+        guard let unsignedData = unsignedJWT.data(using: .utf8), let signature = sign(unsignedData) else {
+            return nil
+        }
+        let signatureString = signature.base64urlEncodedString()
+        return header + "." + claims + "." + signatureString
+    }
+    
     func sign(_ data: Data) -> Data? {
         guard #available(macOS 10.12, iOS 10.0, *) else {
             Log.error("macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA")
@@ -54,13 +63,20 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
             return nil
         }
     }
-
-    func sign(_ string: String, encoding: String.Encoding) -> Data? {
-        guard let data: Data = string.data(using: encoding) else {
-            Log.error("macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA")
-            return nil
+    
+    
+    func verify(jwt: String) -> Bool {
+        let components = jwt.components(separatedBy: ".")
+        if components.count == 3 {
+            guard let signature = Data(base64urlEncoded: components[2]),
+                let jwtData = (components[0] + "." + components[1]).data(using: .utf8)
+                else {
+                    return false
+            }
+            return self.verify(signature: signature, for: jwtData)
+        } else {
+            return false
         }
-        return sign(data)
     }
     
     func verify(signature: Data, for data: Data) -> Bool {
@@ -89,29 +105,5 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
             return false
         }
     }
-    
-    func sign(header: String, claims: String) -> String? {
-        let unsignedJWT = header + "." + claims
-        guard let unsignedData = unsignedJWT.data(using: .utf8), let signature = sign(unsignedData) else {
-            return nil
-        }
-        let signatureString = signature.base64urlEncodedString()
-        return header + "." + claims + "." + signatureString
-    }
-
-    func verify(jwt: String) -> Bool {
-        let components = jwt.components(separatedBy: ".")
-        if components.count == 3 {
-            guard let signature = Data(base64urlEncoded: components[2]),
-                  let jwtData = (components[0] + "." + components[1]).data(using: .utf8)
-            else {
-                return false
-            }
-            return self.verify(signature: signature, for: jwtData)
-        } else {
-            return false
-        }
-    }
-    
 }
 #endif
