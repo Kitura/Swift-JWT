@@ -24,7 +24,7 @@ import Foundation
 ///
 class RSA: SignerAlgorithm, VerifierAlgorithm {
     
-    private let name: String
+    private let name: String = "RSA"
     private let algorithm: Algorithm
     private let key: UnsafeMutablePointer<UInt8>
     private let keySize: Int32
@@ -90,7 +90,6 @@ class RSA: SignerAlgorithm, VerifierAlgorithm {
     }
     
     init(key: Data, keyType: RSAKeyType?=nil, algorithm: Algorithm) {
-        self.name = algorithm
         self.algorithm = algorithm
         self.key = UnsafeMutablePointer<UInt8>.allocate(capacity: key.count)
         key.copyBytes(to: self.key, count: key.count)
@@ -136,13 +135,6 @@ class RSA: SignerAlgorithm, VerifierAlgorithm {
             return nil
         }
         return Data(bytes: buffer, count: rsaSize)
-    }
-    
-    func sign(_ string: String, encoding: String.Encoding) -> Data? {
-        guard let data: Data = string.data(using: encoding) else {
-            return nil
-        }
-        return sign(data)
     }
     
     func verify(signature: Data, for data: Data) -> Bool {
