@@ -19,20 +19,20 @@ import Foundation
 // MARK Base64URL
 
 extension Data {
-    init?(base64urlEncoded input: String) {
-        let paddingLength = 4 - input.count % 4
-        let padding = (paddingLength < 4) ? String(repeating: "=", count: paddingLength) : ""
-        let base64EncodedString = input
-            .replacingOccurrences(of: "-", with: "+")
-            .replacingOccurrences(of: "_", with: "/")
-            + padding
-        self.init(base64Encoded: base64EncodedString)
-    }
-    
     func base64urlEncodedString() -> String {
         let result = self.base64EncodedString()
         return result.replacingOccurrences(of: "+", with: "-")
             .replacingOccurrences(of: "/", with: "_")
             .replacingOccurrences(of: "=", with: "")
+    }
+    
+    init?(base64urlEncoded: String) {
+        let paddingLength = 4 - base64urlEncoded.count % 4
+        let padding = (paddingLength < 4) ? String(repeating: "=", count: paddingLength) : ""
+        let base64EncodedString = base64urlEncoded
+            .replacingOccurrences(of: "-", with: "+")
+            .replacingOccurrences(of: "_", with: "/")
+            + padding
+        self.init(base64Encoded: base64EncodedString)
     }
 }
