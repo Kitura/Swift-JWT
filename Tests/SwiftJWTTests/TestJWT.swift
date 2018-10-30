@@ -188,6 +188,21 @@ class TestJWT: XCTestCase {
         else {
             XCTFail("Failed to sign")
         }
+        
+        // certificate
+        if let signed = jwt.sign(using: .rs256(privateKey: certPrivateKey)) {
+            let ok = JWT<MicroProfile>.verify(signed, using: .rs256(certificate: certificate))
+            XCTAssertTrue(ok, "Verification failed")
+            
+            if let decoded = JWT<MicroProfile>(jwtString: signed) {
+                checkMicroProfile(jwt: decoded, algorithm: "RS256")
+                
+                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+            }
+            else {
+                XCTFail("Failed to decode")
+            }
+        }
     }
     
     func testJWTEncoder() {
