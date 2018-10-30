@@ -82,6 +82,15 @@ public struct Header: Codable {
         self.crit = crit
     }
     
+    init?(jwt: String) {
+        guard let data = Data(base64urlEncoded: jwt),
+            let header = try? JSONDecoder().decode(Header.self, from: data)
+        else {
+            return nil
+        }
+        self = header
+    }
+    
     func encode() -> String? {
         guard let data = try? JSONEncoder().encode(self) else {
             return nil

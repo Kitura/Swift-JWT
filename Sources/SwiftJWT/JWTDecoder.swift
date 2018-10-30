@@ -37,7 +37,8 @@ import KituraContracts
 public class JWTDecoder: BodyDecoder {
     
     let useKeyID: Bool
-    let keyIDToVerifier: (String) -> JWTVerifier
+    let keyIDToVerifier: (String) -> JWTVerifier?
+    let jwtVerifier: JWTVerifier?
     
     /// The JSONDecoder that will be used to encode the Header and claims as JSON
     public var jsonDecoder: JSONDecoder
@@ -49,6 +50,7 @@ public class JWTDecoder: BodyDecoder {
     /// - Returns: A new instance of `JWTDecoder`.
     public init(jwtVerifier: JWTVerifier, jsonDecoder:  JSONDecoder = JSONDecoder()) {
         self.keyIDToVerifier = {_ in return jwtVerifier }
+        self.jwtVerifier = jwtVerifier
         self.jsonDecoder = jsonDecoder
         self.useKeyID = false
     }
@@ -58,10 +60,11 @@ public class JWTDecoder: BodyDecoder {
     /// - Parameter algorithmGenerator: The function that will generate the `Algorithm` using the "kid" header.
     /// - Parameter jsonDecoder: The JSONDecoder that will be used to decode the JWT header and claims.
     /// - Returns: A new instance of `JWTDecoder`.
-    public init(keyIDToVerifier: @escaping (String) -> JWTVerifier, jsonDecoder:  JSONDecoder = JSONDecoder()) {
+    public init(keyIDToVerifier: @escaping (String) -> JWTVerifier?, jsonDecoder:  JSONDecoder = JSONDecoder()) {
         self.keyIDToVerifier = keyIDToVerifier
         self.jsonDecoder = jsonDecoder
         self.useKeyID = true
+        self.jwtVerifier = nil
     }
     
     /// Decode a `JWT` instance from a JWT String.
@@ -78,18 +81,19 @@ public class JWTDecoder: BodyDecoder {
             throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed to separate JWT String into Base64 encoded components"))
         }
         let jwtContainer: [String: Data] = ["header": headerData, "claims": claimsData]
-        if useKeyID {
+        var _jwtVerifier = jwtVerifier
+        if _jwtVerifier == nil {
             let decodedHeader = try? jsonDecoder.decode(Header.self, from: headerData)
-            guard let receivedHeader = decodedHeader,
-                  let keyID = receivedHeader.kid,
-                keyIDToVerifier(keyID).verify(jwt: fromString)
-            else {
-                throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed verify JWT signature using kid header"))
+            guard let receivedHeader = decodedHeader, let keyID = receivedHeader.kid else {
+                throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "No kid header field provided when decoding using KeyID"))
             }
-        } else {
-            guard keyIDToVerifier("").verify(jwt: fromString) else {
-                throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed verify JWT signature using given algorithm"))
-            }
+            _jwtVerifier = keyIDToVerifier(keyID)
+        }
+        guard let jwtVerifier = _jwtVerifier else {
+            throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed to generate JWTVerifier for the provided Key ID"))
+        }
+        guard jwtVerifier.verify(jwt: fromString) else {
+            throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed verify JWT signature using given algorithm"))
         }
         let decoder = _JWTDecoder(referencing: jwtContainer, jsonDecoder: jsonDecoder)
         return try decoder.decode(type)

@@ -37,12 +37,12 @@ import KituraContracts
  */
 public class JWTEncoder: BodyEncoder {
     
-    let jwtSigner: JWTSigner
+    let keyIDToSigner: (String) -> JWTSigner?
+    let jwtSigner: JWTSigner?
+    let header: Header?
     
     /// The JSONEncoder that will be used to encode the Header and claims as JSON
     public var jsonEncoder: JSONEncoder
-    
-    let header: String?
     
     /// Initialize a `JWTEncoder` instance.
     ///
@@ -50,9 +50,22 @@ public class JWTEncoder: BodyEncoder {
     /// - Parameter jsonEncoder: The JSONEncoder that will be used to encode the JWT header and claims.
     /// - Returns: A new instance of `JWTEncoder`.
     public init(jwtSigner: JWTSigner, jsonEncoder:  JSONEncoder = JSONEncoder(), header: Header? = nil) {
+        self.keyIDToSigner = {_ in return jwtSigner }
         self.jwtSigner = jwtSigner
         self.jsonEncoder = jsonEncoder
-        self.header = header?.encode()
+        self.header = header
+    }
+    
+    /// Initialize a `JWTEncoder` instance.
+    ///
+    /// - Parameter algorithm: The `Algorithm` that will be used to sign the JWT.
+    /// - Parameter jsonEncoder: The JSONEncoder that will be used to encode the JWT header and claims.
+    /// - Returns: A new instance of `JWTEncoder`.
+    public init(keyIDToSigner: @escaping (String) -> JWTSigner?, jsonEncoder:  JSONEncoder = JSONEncoder(), header: Header? = nil) {
+        self.keyIDToSigner = keyIDToSigner
+        self.jsonEncoder = jsonEncoder
+        self.header = header
+        self.jwtSigner = nil
     }
     
     /// Encode a `JWT` instance into a utf8 encoded JWT String.
@@ -75,11 +88,29 @@ public class JWTEncoder: BodyEncoder {
     public func encodeToString<T : Encodable>(_ value: T) throws -> String {
         let encoder = _JWTEncoder(jsonEncoder: jsonEncoder)
         try value.encode(to: encoder)
-        guard let header = header ?? encoder.header, let claims = encoder.claims else {
-            throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to encode into header and/or claims CodingKey"))
+        var _header = header
+        if _header == nil {
+            guard let headerString = encoder.header, let newHeader = Header(jwt: headerString) else {
+                throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to encode into header CodingKey"))
+            }
+            _header = newHeader
         }
-        guard let jwt = jwtSigner.sign(header: header, claims: claims) else {
-            throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to sign the JWT with the provided algorithm"))
+        guard let claims = encoder.claims else {
+            throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to encode into claims CodingKey"))
+        }
+        var _jwtSigner = jwtSigner
+        if _jwtSigner == nil {
+            guard let keyID = _header?.kid else {
+                throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "No kid header field provided when encoding using KeyID"))
+            }
+            _jwtSigner = keyIDToSigner(keyID)
+        }
+        guard let jwtSigner = _jwtSigner else {
+            throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to generate JWTSigner for the provided Key ID"))
+        }
+         _header?.alg = jwtSigner.name
+        guard let encodedHeader =  _header?.encode(), let jwt = jwtSigner.sign(header: encodedHeader, claims: claims) else {
+            throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to sign JWT headers and claims"))
         }
         return jwt
     }
