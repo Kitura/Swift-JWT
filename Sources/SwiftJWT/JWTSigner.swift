@@ -31,7 +31,7 @@ import Cryptor
  let signedJWT: String = jwt.sign(using: jwtSigner)
  ```
  */
-public class JWTSigner {
+public struct JWTSigner {
     
     /// The name of the algorithm that will be set in the "alg" header
     let name: String

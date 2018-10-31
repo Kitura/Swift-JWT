@@ -23,7 +23,6 @@ import Foundation
  
  A struct representing the `Header` and `Claims` of a JSON Web Token.
  
- 
  ### Usage Example: ###
  ````swift
  struct MyClaims: Claims {
