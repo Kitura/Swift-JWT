@@ -58,7 +58,7 @@ Therefore, a JWT typically looks like the following: xxxxx.yyyyy.zzzzz
 #### Header
 
 The Header struct contains the fields of the JSON Web Token header as defined by [RFC7515](https://tools.ietf.org/html/rfc7515#section-4).   
-The "typ" header will default to "JWT". The "alg" header will be set the the algorithm name when you sign the JWT.  
+The "typ" header will default to "JWT". The "alg" header will be set the algorithm name when you sign the JWT.  
 The other Header fields can be set when initializing the Header or by changing them directly on the Header object.
 
 ```swift
@@ -68,7 +68,7 @@ let myHeader = Header(kid: "KeyID1")
 #### Claims
 
 Claims are statements about an entity (typically, the user) and additional data.
-The Claims are defined by creating a Swift type that conforms to the `Claims` protocol. The fields of of this type represent the information that will be shared using the JWT.  
+The Claims are defined by creating a Swift type that conforms to the `Claims` protocol. The fields of this type represent the information that will be shared using the JWT.  
 
 A list of recommended claims is defined in [RFC7519](https://tools.ietf.org/html/rfc7519#section-4.1).
 
@@ -147,7 +147,7 @@ To verify a signed JWT string, call the `sign` function on your JWT instance, pa
 ```swift
 let verified = JWT<MyClaims>.verify(signedJWT, using: jwtVerifier)
 ```
-The `verified` field will be a `bool` that is true if the signiture is verified.
+The `verified` field will be a `bool` that is true if the signature is verified.
 
 
 #### Supported Algorithms
@@ -179,8 +179,7 @@ if validationResult != .success {
 
 ### Decode a JWT from a JWT string
 
-A JWT struct can be initialized from a JWT string.  
-The initializer will validate the claims and verify the signiture using the provide JWTVerifier before initializing the JWT.
+A JWT struct can be initialized from a JWT string.  If a JWTVerifier is provided it will be used to verify the signature before initialization
 
 ```swift
 let newJWT = JWT<MyClaims>(jwtString: signedJWT, jwtVerifier: jwtVerifier)
