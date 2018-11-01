@@ -73,9 +73,6 @@ public struct JWT<T: Claims>: Codable {
         }
         self.header = header
         self.claims = claims
-        if self.validateClaims() != .success {
-            return nil
-        }
     }
     
     /// Sign the JWT using the given algorithm and encode the header, claims and signature as a JWT String.
