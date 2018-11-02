@@ -82,7 +82,7 @@ class TestJWT: XCTestCase {
         jwt.claims.exp = Date(timeIntervalSince1970: 2485949565.58463)
         jwt.claims.nbf = Date(timeIntervalSince1970: 1485949565.58463)
         // encode
-        if let encoded = jwt.sign(using: .none()){
+        if let encoded = jwt.sign(using: .none){
             if let decoded = JWT<TestClaims>(jwtString: encoded) {
                 check(jwt: decoded, algorithm: "none")
                 

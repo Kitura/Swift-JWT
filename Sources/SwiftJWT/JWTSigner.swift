@@ -75,8 +75,6 @@ public struct JWTSigner {
     }
     
     /// Initialize a JWTSigner that will not sign the JWT. This is equivelent to using the "none" alg header.
-    public static func none() -> JWTSigner {
-        return JWTSigner(name: "none", signerAlgorithm: NoneAlgorithm())
-    }
+    public static let none = JWTSigner(name: "none", signerAlgorithm: NoneAlgorithm())
 }
 

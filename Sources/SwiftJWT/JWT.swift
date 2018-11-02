@@ -60,7 +60,7 @@ public struct JWT<T: Claims>: Codable {
     /// - Parameter jwt: A String with the encoded and signed JWT.
     /// - Parameter verifier: The `JWTVerifier` used to verify the JWT.
     /// - Returns: An instance of `JWT` if the decoding succeeds.
-    public init?(jwtString: String, verifier: JWTVerifier = .none() ) {
+    public init?(jwtString: String, verifier: JWTVerifier = .none ) {
         let components = jwtString.components(separatedBy: ".")
         guard components.count == 2 || components.count == 3,
             JWT.verify(jwtString, using: verifier),

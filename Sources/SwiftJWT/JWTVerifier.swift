@@ -103,7 +103,5 @@ public struct JWTVerifier {
     }
     
     /// Initialize a JWTVerifier that will always return true when verifying the JWT. This is equivelent to using the "none" alg header.
-    public static func none() -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: NoneAlgorithm())
-    }
+    public static let none = JWTVerifier(verifierAlgorithm: NoneAlgorithm())
 }
