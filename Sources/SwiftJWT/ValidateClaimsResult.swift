@@ -21,6 +21,7 @@
 /// problems that may occur during claims validation and indicate that the validation failed.
 public struct ValidateClaimsResult: CustomStringConvertible, Equatable {
     
+    /// The human readable description of the ValidateClaimsResult
     public let description: String
     
     /// Successful validation.
@@ -44,6 +45,7 @@ public struct ValidateClaimsResult: CustomStringConvertible, Equatable {
     /// Issued At claim is in the future.
     public static let issuedAt = ValidateClaimsResult(description: "Issued At claim is greater than the current time")
  
+    /// Check if two ValidateClaimsResults are equal. Required for the Equatable protocol
     public static func == (lhs: ValidateClaimsResult, rhs: ValidateClaimsResult) -> Bool {
         return lhs.description == rhs.description
     }

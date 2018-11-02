@@ -28,8 +28,8 @@ import Foundation
  struct MyClaims: Claims {
     var name: String
  }
- let key = "<PrivateKey>".data(using: .utf8)!
  let jwt = JWT(claims: MyClaims(name: "Kitura"))
+ let key = "<PrivateKey>".data(using: .utf8)!
  let signedJWT: String = jwt.sign(using: .rs256(key: key, keyType: .privateKey))
  ````
  */
@@ -77,7 +77,7 @@ public struct JWT<T: Claims>: Codable {
     
     /// Sign the JWT using the given algorithm and encode the header, claims and signature as a JWT String.
     ///
-    /// - Note: If header.alg is nil, will set header.alg with the name of the signing algorithm.
+    /// - Note: This function will set header.alg field to the name of the signing algorithm.
     ///
     /// - Parameter using algorithm: The algorithm to sign with.
     /// - Returns: A String with the encoded and signed JWT.
@@ -88,7 +88,7 @@ public struct JWT<T: Claims>: Codable {
         guard let headerString = tempHeader.encode(), let claimsString = claims.encode() else {
             return nil
         }
-        header.alg = jwtSigner.name
+        header.alg = tempHeader.alg
         return jwtSigner.sign(header: headerString, claims: claimsString)
     }
 

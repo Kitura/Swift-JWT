@@ -23,15 +23,11 @@ import Cryptor
  
  ### Usage Example: ###
  ```swift
+ let signedJWT = "<SignedJWTString>"
  struct MyClaims: Claims {
     var name: String
  }
  let jwt = JWT(claims: MyClaims(name: "Kitura"))
- 
- let privateKey = "<PrivateKey>".data(using: .utf8)!
- let jwtSigner = JWTSigner.rs256(privateKey: privateKey)
- let signedJWT: String = jwt.sign(using: jwtSigner)
- 
  let publicKey = "<PublicKey>".data(using: .utf8)!
  let jwtVerifier = JWTVerifier.rs256(publicKey: publicKey)
  let verified: Bool = jwt.verify(signedJWT, using: jwtVerifier)

@@ -73,7 +73,7 @@ class TestJWT: XCTestCase {
     }
     
     func testSignAndVerify() {
-        var jwt = JWT(header: Header(), claims: TestClaims(name:"Kitura"))
+        var jwt = JWT(claims: TestClaims(name:"Kitura"))
         jwt.claims.name = "Kitura-JWT"
         XCTAssertEqual(jwt.claims.name, "Kitura-JWT")
         jwt.claims.iss = "issuer"
@@ -155,7 +155,7 @@ class TestJWT: XCTestCase {
     
     func testMicroProfile() {
         
-        var jwt = JWT(header: Header(), claims: MicroProfile(name: "MP-JWT"))
+        var jwt = JWT(claims: MicroProfile(name: "MP-JWT"))
         jwt.header.kid = "abc-1234567890"
         jwt.header.typ = "JWT"
         XCTAssertEqual(jwt.claims.name, "MP-JWT")
