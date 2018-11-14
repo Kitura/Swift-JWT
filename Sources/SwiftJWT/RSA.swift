@@ -98,13 +98,23 @@ class RSA: EncryptionAlgorithm {
     
     deinit {
         key.deinitialize(count: Int(keySize))
-        key.deallocate()
+        #if swift(>=4.1)
+            key.deallocate()
+        #else
+            key.deallocate(capacity: 1)
+        #endif
     }
     
     func sign(_ data: Data) -> Data? {
         // Generate hash
         let ptr = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
-        defer { ptr.deallocate() }
+        defer {
+        #if swift(>=4.1)
+            ptr.deallocate()
+        #else
+            ptr.deallocate(capacity: 1)
+        #endif
+        }
         data.copyBytes(to: ptr, count: data.count)
         guard let digest = Digest(using: algorithm.digest).update(from: ptr, byteCount: data.count) else {
             return nil
@@ -136,7 +146,13 @@ class RSA: EncryptionAlgorithm {
     func verify(signature: Data, for data: Data) -> Bool {
         // Generate hash
         let ptr = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
-        defer { ptr.deallocate() }
+        defer {
+        #if swift(>=4.1)
+            ptr.deallocate()
+        #else
+            ptr.deallocate(capacity: 1)
+        #endif
+        }
         data.copyBytes(to: ptr, count: data.count)
         guard let digest = Digest(using: algorithm.digest).update(from: ptr, byteCount: data.count) else {
             return false
@@ -144,7 +160,13 @@ class RSA: EncryptionAlgorithm {
         var digestBytes = digest.final()
         
         let signPtr = UnsafeMutablePointer<UInt8>.allocate(capacity: signature.count)
-        defer { signPtr.deallocate() }
+        defer {
+        #if swift(>=4.1)
+            signPtr.deallocate()
+        #else
+            signPtr.deallocate(capacity: 1)
+        #endif
+        }
         signature.copyBytes(to: signPtr, count: signature.count)
         
         let keybuf = BIO_new_mem_buf(key, keySize)
