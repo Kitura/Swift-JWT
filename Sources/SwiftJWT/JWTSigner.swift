@@ -30,7 +30,7 @@ import Cryptor
     var name: String
  }
  let jwt = JWT(claims: MyClaims(name: "Kitura"))
- let signedJWT: String = jwt.sign(using: jwtSigner)
+ let signedJWT: String? = try? jwt.sign(using: jwtSigner)
  ```
  */
 public struct JWTSigner {

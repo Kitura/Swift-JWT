@@ -30,7 +30,7 @@ import Foundation
  }
  let jwt = JWT(claims: MyClaims(name: "Kitura"))
  let key = "<PrivateKey>".data(using: .utf8)!
- let signedJWT: String = jwt.sign(using: .rs256(key: key, keyType: .privateKey))
+ let signedJWT: String? = try? jwt.sign(using: .rs256(key: key, keyType: .privateKey))
  ```
  */
 
