@@ -22,7 +22,7 @@ struct NoneAlgorithm: VerifierAlgorithm, SignerAlgorithm {
     
     let name: String = "none"
     
-    func sign(header: String, claims: String) -> String? {
+    func sign(header: String, claims: String) -> String {
         return header + "." + claims
     }
     

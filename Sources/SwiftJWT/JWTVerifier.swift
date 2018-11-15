@@ -17,6 +17,8 @@
 import Foundation
 import Cryptor
 
+// MARK: JWTVerifier
+
 /**
  
  A struct that will be used to verify the signature of a JWT is valid for the provided `Header` and `Claims`.

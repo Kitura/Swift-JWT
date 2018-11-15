@@ -16,7 +16,6 @@
 
 import Foundation
 
-// MARK Base64URL
 
 extension Data {
     func base64urlEncodedString() -> String {

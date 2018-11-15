@@ -33,35 +33,31 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
         self.algorithm = algorithm
     }
     
-    func sign(header: String, claims: String) -> String? {
+    func sign(header: String, claims: String) throws -> String {
         let unsignedJWT = header + "." + claims
-        guard let unsignedData = unsignedJWT.data(using: .utf8), let signature = sign(unsignedData) else {
-            return nil
+        guard let unsignedData = unsignedJWT.data(using: .utf8) else {
+            // replace with custom error
+            throw NSError(domain: "sign", code: 500, userInfo: [:])
         }
+        let signature = try sign(unsignedData)
         let signatureString = signature.base64urlEncodedString()
         return header + "." + claims + "." + signatureString
     }
     
-    func sign(_ data: Data) -> Data? {
+    func sign(_ data: Data) throws -> Data {
         guard #available(macOS 10.12, iOS 10.0, *) else {
             Log.error("macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA")
-            return nil
+            throw JWTError.osVersionToLow
         }
-        do {
-            guard let keyString = String(data: key, encoding: .utf8) else {
-                return nil
-            }
-            let privateKey = try CryptorRSA.createPrivateKey(withPEM: keyString)
-            let myPlaintext = CryptorRSA.createPlaintext(with: data)
-            if let signedData = try myPlaintext.signed(with: privateKey, algorithm: algorithm) {
-                return signedData.data
-            }
-            return nil
+        guard let keyString = String(data: key, encoding: .utf8) else {
+            throw JWTError.invalidPrivateKey
         }
-        catch {
-            Log.error("Signing failed: \(error)")
-            return nil
+        let privateKey = try CryptorRSA.createPrivateKey(withPEM: keyString)
+        let myPlaintext = CryptorRSA.createPlaintext(with: data)
+        guard let signedData = try myPlaintext.signed(with: privateKey, algorithm: algorithm) else {
+            throw JWTError.invalidPrivateKey
         }
+        return signedData.data
     }
     
     

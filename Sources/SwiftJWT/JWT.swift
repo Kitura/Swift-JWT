@@ -17,21 +17,21 @@
 import Cryptor
 import Foundation
 
-// MARK JWT
+// MARK: JWT
 
 /**
  
  A struct representing the `Header` and `Claims` of a JSON Web Token.
  
  ### Usage Example: ###
- ````swift
+ ```swift
  struct MyClaims: Claims {
     var name: String
  }
  let jwt = JWT(claims: MyClaims(name: "Kitura"))
  let key = "<PrivateKey>".data(using: .utf8)!
  let signedJWT: String = jwt.sign(using: .rs256(key: key, keyType: .privateKey))
- ````
+ ```
  */
 
 public struct JWT<T: Claims>: Codable {
@@ -60,17 +60,24 @@ public struct JWT<T: Claims>: Codable {
     /// - Parameter jwt: A String with the encoded and signed JWT.
     /// - Parameter verifier: The `JWTVerifier` used to verify the JWT.
     /// - Returns: An instance of `JWT` if the decoding succeeds.
-    public init?(jwtString: String, verifier: JWTVerifier = .none ) {
+    /// - Throws: `JWTError.invalidJWTString` if the jwtString is not base64urlEncoded sections seperated by either 2 or 3 full stops.
+    /// - Throws: `JWTError.iailedVerification` if the verifier fails to verify the jwtString.
+    /// - Throws: A DecodingError if the JSONDecoder throws an error while decoding the JWT.
+    public init(jwtString: String, verifier: JWTVerifier = .none ) throws {
         let components = jwtString.components(separatedBy: ".")
         guard components.count == 2 || components.count == 3,
-            JWT.verify(jwtString, using: verifier),
             let headerData = Data(base64urlEncoded: components[0]),
-            let claimsData = Data(base64urlEncoded: components[1]),
-            let header = try? JSONDecoder().decode(Header.self, from: headerData),
-            let claims = try? JSONDecoder().decode(T.self, from: claimsData)
+            let claimsData = Data(base64urlEncoded: components[1])
         else {
-            return nil
+            // Replace with custom error
+            throw JWTError.invalidJWTString
         }
+        guard JWT.verify(jwtString, using: verifier) else {
+            // Replace with custom error
+            throw JWTError.failedVerification
+        }
+        let header = try JSONDecoder().decode(Header.self, from: headerData)
+        let claims = try JSONDecoder().decode(T.self, from: claimsData)
         self.header = header
         self.claims = claims
     }
@@ -81,15 +88,16 @@ public struct JWT<T: Claims>: Codable {
     ///
     /// - Parameter using algorithm: The algorithm to sign with.
     /// - Returns: A String with the encoded and signed JWT.
-    /// - Throws: An error thrown during the encoding or signing.
-    public mutating func sign(using jwtSigner: JWTSigner) -> String? {
+    /// - Throws: An EncodingError if the JSONEncoder throws an error while encoding the JWT.
+    /// - Throws: `JWTError.osVersionToLow` if not using macOS 10.12.0 (Sierra) or iOS 10.0 or higher.
+    /// - Throws: A Signing error if the jwtSigner is unable to sign the JWT with the provided key.
+    public mutating func sign(using jwtSigner: JWTSigner) throws -> String {
         var tempHeader = header
         tempHeader.alg = jwtSigner.name
-        guard let headerString = tempHeader.encode(), let claimsString = claims.encode() else {
-            return nil
-        }
+        let headerString = try tempHeader.encode()
+        let claimsString = try claims.encode()
         header.alg = tempHeader.alg
-        return jwtSigner.sign(header: headerString, claims: claimsString)
+        return try jwtSigner.sign(header: headerString, claims: claimsString)
     }
 
     /// Verify the signature of the encoded JWT using the given algorithm.
@@ -97,7 +105,6 @@ public struct JWT<T: Claims>: Codable {
     /// - Parameter jwt: A String with the encoded and signed JWT.
     /// - Parameter using algorithm: The algorithm to verify with.
     /// - Returns: A Bool indicating whether the verification was successful.
-    /// - Throws: An error thrown during the verification.
     public static func verify(_ jwt: String, using jwtVerifier: JWTVerifier) -> Bool {
         return jwtVerifier.verify(jwt: jwt)
     }

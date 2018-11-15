@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-// MARK ValidateClaimsResult
+// MARK: ValidateClaimsResult
 
 /// ValidateClaimsResult list the possible results of a call to JWT.validateClaims method.
 /// In case of successful validation, .success is returned, all other cases list various

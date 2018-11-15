@@ -17,6 +17,8 @@
 import Foundation
 import Cryptor
 
+// MARK: JWTSigner
+
 /**
  A struct that will be used to sign the JWT `Header` and `Claims` and generate a signed JWT.
  
@@ -43,8 +45,8 @@ public struct JWTSigner {
         self.signerAlgorithm = signerAlgorithm
     }
     
-    func sign(header: String, claims: String) -> String? {
-        return signerAlgorithm.sign(header: header, claims: claims)
+    func sign(header: String, claims: String) throws -> String {
+        return try signerAlgorithm.sign(header: header, claims: claims)
     }
     
     /// Initialize a JWTSigner using the RSA 256 bits algorithm and the provided privateKey.

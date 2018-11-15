@@ -124,7 +124,7 @@ let jwtSigner = JWTSigner.rs256(privateKey: privateKey)
 To generate a signed JWT string, call the `sign` function on your JWT instance, passing in a JWTSigner:
 
 ```swift
-let signedJWT = myJWT.sign(using: jwtSigner)
+let signedJWT = try myJWT.sign(using: jwtSigner)
 ```
 
 The resulting `signedJWT` will be a `String` of the form:
@@ -182,7 +182,7 @@ if validationResult != .success {
 A JWT struct can be initialized from a JWT string.  If a JWTVerifier is provided it will be used to verify the signature before initialization
 
 ```swift
-let newJWT = JWT<MyClaims>(jwtString: signedJWT, jwtVerifier: jwtVerifier)
+let newJWT = try JWT<MyClaims>(jwtString: signedJWT, jwtVerifier: jwtVerifier)
 ```
 
 ## MicroProfile Support

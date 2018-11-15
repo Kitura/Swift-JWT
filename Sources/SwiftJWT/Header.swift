@@ -16,9 +16,20 @@
 
 import Foundation
 
-// MARK Header
+// MARK: Header
 
-/// A representation of a JSON Web Token header.
+/**
+ A representation of a JSON Web Token header.
+ https://tools.ietf.org/html/rfc7515#section-4.1
+ ### Usage Example: ###
+ ```swift
+ struct MyClaims: Claims {
+    var name: String
+ }
+ let myHeader = Header(kid: "keyID")
+ let jwt = JWT(header: myHeader, claims: MyClaims(name: "Kitura"))
+ ```
+ */
 public struct Header: Codable {
     
     /// Type Header Parameter
@@ -82,10 +93,8 @@ public struct Header: Codable {
         self.crit = crit
     }
     
-    func encode() -> String? {
-        guard let data = try? JSONEncoder().encode(self) else {
-            return nil
-        }
+    func encode() throws -> String  {
+        let data = try JSONEncoder().encode(self)
         return data.base64urlEncodedString()
     }
 }
