@@ -43,7 +43,17 @@ struct TestClaims: Claims, Equatable {
     init(name: String? = nil) {
         self.name = name
     }
-    
+    static func == (lhs: TestClaims, rhs: TestClaims) -> Bool {
+        return lhs.name == rhs.name &&
+        lhs.admin == rhs.admin &&
+        lhs.iss == rhs.iss &&
+        lhs.sub == rhs.sub &&
+        lhs.aud == rhs.aud &&
+        lhs.exp == rhs.exp &&
+        lhs.nbf == rhs.nbf &&
+        lhs.iat == rhs.iat &&
+        lhs.jti == rhs.jti
+    }
 }
 struct MicroProfile: Claims {
     var name: String?
@@ -133,7 +143,7 @@ class TestJWT: XCTestCase {
         }
     }
     
-    func check<T: Claims>(jwt: JWT<T>, algorithm: String) {
+    func check(jwt: JWT<TestClaims>, algorithm: String) {
 
         XCTAssertEqual(jwt.header.alg, algorithm, "Wrong .alg in decoded")
         XCTAssertEqual(jwt.claims.exp, Date(timeIntervalSince1970: 2485949565.58463), "Wrong .exp in decoded")
@@ -147,8 +157,8 @@ class TestJWT: XCTestCase {
         XCTAssertEqual(jwt.claims.iss, "https://server.example.com", "Wrong .iss in decoded")
         XCTAssertEqual(jwt.claims.exp, Date(timeIntervalSince1970: 2485949565.58463), "Wrong .exp in decoded")
         XCTAssertEqual(jwt.claims.iat, Date(timeIntervalSince1970: 1485949565.58463), "Wrong .iat in decoded")
-        XCTAssertEqual(jwt.claims.aud, ["clientID"], "Wrong .aud in decoded")
-        XCTAssertEqual(jwt.claims.groups, ["red-group", "green-group", "admin-group", "admin"], "Wrong .groups in decoded")
+        XCTAssertEqual(jwt.claims.aud ?? [""], ["clientID"], "Wrong .aud in decoded")
+        XCTAssertEqual(jwt.claims.groups ?? [""], ["red-group", "green-group", "admin-group", "admin"], "Wrong .groups in decoded")
 
     }
     

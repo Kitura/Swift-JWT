@@ -14,7 +14,6 @@
  * limitations under the License.
  **/
 
-import Cryptor
 import Foundation
 
 // MARK: JWT
@@ -61,7 +60,7 @@ public struct JWT<T: Claims>: Codable {
     /// - Parameter verifier: The `JWTVerifier` used to verify the JWT.
     /// - Returns: An instance of `JWT` if the decoding succeeds.
     /// - Throws: `JWTError.invalidJWTString` if the jwtString is not base64urlEncoded sections seperated by either 2 or 3 full stops.
-    /// - Throws: `JWTError.iailedVerification` if the verifier fails to verify the jwtString.
+    /// - Throws: `JWTError.failedVerification` if the verifier fails to verify the jwtString.
     /// - Throws: A DecodingError if the JSONDecoder throws an error while decoding the JWT.
     public init(jwtString: String, verifier: JWTVerifier = .none ) throws {
         let components = jwtString.components(separatedBy: ".")
