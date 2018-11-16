@@ -50,29 +50,17 @@ public struct JWTSigner {
     
     /// Initialize a JWTSigner using the RSA 256 bits algorithm and the provided privateKey.
     public static func rs256(privateKey: Data) -> JWTSigner {
-        #if os(Linux)
-        return JWTSigner(name: "RS256", signerAlgorithm: RSA(key: privateKey, keyType: .privateKey, algorithm: .sha256))
-        #else
         return JWTSigner(name: "RS256", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha256))
-        #endif
     }
     
     /// Initialize a JWTSigner using the RSA 384 bits algorithm and the provided privateKey.
     public static func rs384(privateKey: Data) -> JWTSigner {
-        #if os(Linux)
-        return JWTSigner(name: "RS384", signerAlgorithm: RSA(key: privateKey, keyType: .privateKey, algorithm: .sha384))
-        #else
         return JWTSigner(name: "RS384", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha384))
-        #endif
     }
     
     /// Initialize a JWTSigner using the RSA 512 bits algorithm and the provided privateKey.
     public static func rs512(privateKey: Data) -> JWTSigner {
-        #if os(Linux)
-        return JWTSigner(name: "RS512", signerAlgorithm: RSA(key: privateKey, keyType: .privateKey, algorithm: .sha512))
-        #else
         return JWTSigner(name: "RS512", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha512))
-        #endif
     }
     
     /// Initialize a JWTSigner that will not sign the JWT. This is equivelent to using the "none" alg header.

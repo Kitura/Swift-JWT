@@ -36,7 +36,7 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
         let unsignedJWT = header + "." + claims
         guard let unsignedData = unsignedJWT.data(using: .utf8) else {
             // replace with custom error
-            throw NSError(domain: "sign", code: 500, userInfo: [:])
+            throw JWTError.invalidJWTString
         }
         let signature = try sign(unsignedData)
         let signatureString = signature.base64urlEncodedString()

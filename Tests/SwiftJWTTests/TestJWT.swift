@@ -16,11 +16,6 @@
 
 import XCTest
 import Foundation
-#if os(Linux)
-    import Glibc
-#elseif os(macOS)
-    import Darwin
-#endif
 
 @testable import SwiftJWT
 

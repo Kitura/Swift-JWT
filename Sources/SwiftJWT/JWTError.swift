@@ -20,24 +20,30 @@ import Foundation
 
 /// A struct representing the different errors that can be thrown by SwiftJWT
 public struct JWTError: Error, Equatable {
-    
+
     /// A human readable description of the error.
     public let localizedDescription: String
     
+    private let internalError: InternalError
+    
+    private enum InternalError {
+        case invalidJWTString, failedVerification, osVersionToLow, invalidPrivateKey
+    }
+    
     /// Error when an invalid JWT String is provided
-    public static let invalidJWTString = JWTError(localizedDescription: "Input was not a valid JWT String")
+    public static let invalidJWTString = JWTError(localizedDescription: "Input was not a valid JWT String", internalError: .invalidJWTString)
     
     /// Error when the JWT signiture fails verification.
-    public static let failedVerification = JWTError(localizedDescription: "JWT verifier failed to verify the JWT String signiture")
+    public static let failedVerification = JWTError(localizedDescription: "JWT verifier failed to verify the JWT String signiture", internalError: .failedVerification)
     
     /// Error when using RSA encryption with an OS version that is too low.
-    public static let osVersionToLow = JWTError(localizedDescription: "macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA")
+    public static let osVersionToLow = JWTError(localizedDescription: "macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA", internalError: .osVersionToLow)
     
     /// Error when an invalid private key is provided for RSA encryption.
-    public static let invalidPrivateKey = JWTError(localizedDescription: "Provided private key could not be used to sign JWT")
+    public static let invalidPrivateKey = JWTError(localizedDescription: "Provided private key could not be used to sign JWT", internalError: .invalidPrivateKey)
     
     /// Function to check if JWTErrors are equal. Required for equatable protocol.
     public static func == (lhs: JWTError, rhs: JWTError) -> Bool {
-        return lhs.localizedDescription == rhs.localizedDescription
+        return lhs.internalError == rhs.internalError
     }
 }
