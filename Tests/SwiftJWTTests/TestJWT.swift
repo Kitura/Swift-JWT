@@ -43,7 +43,7 @@ struct TestClaims: Claims, Equatable {
         lhs.admin == rhs.admin &&
         lhs.iss == rhs.iss &&
         lhs.sub == rhs.sub &&
-        lhs.aud == rhs.aud &&
+        lhs.aud ?? [""] == rhs.aud ?? [""] &&
         lhs.exp == rhs.exp &&
         lhs.nbf == rhs.nbf &&
         lhs.iat == rhs.iat &&
