@@ -18,16 +18,6 @@
 
 import PackageDescription
 
-var listDependencies: [Package.Dependency] = [
-    .package(url: "https://github.com/IBM-Swift/HeliumLogger.git", from: "1.7.1"),
-    .package(url: "https://github.com/IBM-Swift/BlueRSA.git", from:"1.0.0")
-]
-
-var listTargets: [Target.Dependency] = [
-    .byNameItem(name: "HeliumLogger"),
-    .byNameItem(name: "CryptorRSA")
-]
-
 let package = Package(
     name: "SwiftJWT",
     products: [
@@ -37,9 +27,11 @@ let package = Package(
             targets: ["SwiftJWT"]
         )
     ],
-    dependencies: listDependencies,
+    dependencies: [
+        .package(url: "https://github.com/IBM-Swift/BlueRSA.git", from:"1.0.0")
+    ],
     targets: [
-        .target(name: "SwiftJWT", dependencies: listTargets),
+        .target(name: "SwiftJWT", dependencies: ["CryptorRSA"]),
         .testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
 	]
 )

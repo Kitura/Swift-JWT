@@ -15,7 +15,6 @@
  **/
 
 import CryptorRSA
-import LoggerAPI
 
 import Foundation
 
@@ -45,7 +44,6 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
     
     func sign(_ data: Data) throws -> Data {
         guard #available(macOS 10.12, iOS 10.0, *) else {
-            Log.error("macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA")
             throw JWTError.osVersionToLow
         }
         guard let keyString = String(data: key, encoding: .utf8) else {
@@ -96,7 +94,6 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
             return try myPlaintext.verify(with: publicKey, signature: signedData, algorithm: algorithm)
         }
         catch {
-            Log.error("Verification failed: \(error)")
             return false
         }
     }
