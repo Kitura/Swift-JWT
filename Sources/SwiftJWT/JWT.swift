@@ -14,82 +14,89 @@
  * limitations under the License.
  **/
 
-import Cryptor
 import Foundation
 
-// MARK JWT
+// MARK: JWT
 
 /**
  
- JSON Web Token with its header and claims.
+ A struct representing the `Header` and `Claims` of a JSON Web Token.
  
  ### Usage Example: ###
- ````swift
- let jwt = JWT(header: Header([.typ:"JWT"]), claims: Claims([.name:"Kitura"]))
- let signedJWT = jwt.sign(using: .rs256(key, .privateKey))
- ````
+ ```swift
+ struct MyClaims: Claims {
+    var name: String
+ }
+ let jwt = JWT(claims: MyClaims(name: "Kitura"))
+ let key = "<PrivateKey>".data(using: .utf8)!
+ let signedJWT: String? = try? jwt.sign(using: .rs256(key: key, keyType: .privateKey))
+ ```
  */
 
-public struct JWT {
+public struct JWT<T: Claims>: Codable {
     
     /// The JWT header.
     public var header: Header
     
     /// The JWT claims
-    public var claims: Claims
+    public var claims: T
     
-    /// Initialize a `JWT` instance.
+    /// Initialize a `JWT` instance from a `Header` and `Claims`.
     ///
     /// - Parameter header: A JSON Web Token header object.
     /// - Parameter claims: A JSON Web Token claims object.
     /// - Returns: A new instance of `JWT`.
-    public init(header: Header, claims: Claims) {
+    public init(header: Header = Header(), claims: T) {
         self.header = header
         self.claims = claims
     }
     
-    init(header: [String:Any], claims: [String:Any]) {
-        self.header = Header(header)
-        self.claims = Claims(claims)
+    /// Initialize a `JWT` instance from a JWT String.
+    /// The signature will be verified using the provided JWTVerifier.
+    /// The time based standard JWT claims will be verified with `validateClaims()`.
+    /// If the string is not a valid JWT, or the verification fails, the initializer returns nil.
+    ///
+    /// - Parameter jwt: A String with the encoded and signed JWT.
+    /// - Parameter verifier: The `JWTVerifier` used to verify the JWT.
+    /// - Returns: An instance of `JWT` if the decoding succeeds.
+    /// - Throws: `JWTError.invalidJWTString` if the jwtString is not base64urlEncoded sections seperated by either 2 or 3 full stops.
+    /// - Throws: `JWTError.failedVerification` if the verifier fails to verify the jwtString.
+    /// - Throws: A DecodingError if the JSONDecoder throws an error while decoding the JWT.
+    public init(jwtString: String, verifier: JWTVerifier = .none ) throws {
+        let components = jwtString.components(separatedBy: ".")
+        guard components.count == 2 || components.count == 3,
+            let headerData = Data(base64urlEncoded: components[0]),
+            let claimsData = Data(base64urlEncoded: components[1])
+        else {
+            // Replace with custom error
+            throw JWTError.invalidJWTString
+        }
+        guard JWT.verify(jwtString, using: verifier) else {
+            // Replace with custom error
+            throw JWTError.failedVerification
+        }
+        let header = try JSONDecoder().decode(Header.self, from: headerData)
+        let claims = try JSONDecoder().decode(T.self, from: claimsData)
+        self.header = header
+        self.claims = claims
     }
     
-    /// Sign the JWT using the given algorithm. 
+    /// Sign the JWT using the given algorithm and encode the header, claims and signature as a JWT String.
     ///
-    /// - Note: Sets header.alg with the name of the signing algorithm.
+    /// - Note: This function will set header.alg field to the name of the signing algorithm.
     ///
     /// - Parameter using algorithm: The algorithm to sign with.
     /// - Returns: A String with the encoded and signed JWT.
-    /// - Throws: An error thrown during the encoding or signing.
-    public mutating func sign(using algorithm: Algorithm) throws -> String? {
-        header[.alg] = algorithm.name
-        guard let encodedJwt = try encodeHeaderAndClaims() else {
-            return nil
-        }
-        guard let signature = algorithm.sign(encodedJwt),
-            let encodedSignature = Base64URL.encode(signature) else {
-                return nil
-        }
-        return encodedJwt + "." + encodedSignature
-    }
-    
-    /// Encode the JWT.
-    ///
-    /// - Note: Sets header.alg with 'none'.
-    ///
-    /// - Returns: A String with the encoded.
-    /// - Throws: An error thrown during the encoding.
-    public mutating func encode() throws -> String? {
-        header[.alg] = "none"
-        return try encodeHeaderAndClaims()
-    }
-
-    private func encodeHeaderAndClaims() throws -> String? {
-        guard let encodedHeader = try header.encode(),
-            let encodedClaims = try claims.encode() else {
-                return nil
-        }
-        let encodedInput = encodedHeader + "." + encodedClaims
-        return encodedInput
+    /// - Throws: An EncodingError if the JSONEncoder throws an error while encoding the JWT.
+    /// - Throws: `JWTError.osVersionToLow` if not using macOS 10.12.0 (Sierra) or iOS 10.0 or higher.
+    /// - Throws: A Signing error if the jwtSigner is unable to sign the JWT with the provided key.
+    public mutating func sign(using jwtSigner: JWTSigner) throws -> String {
+        var tempHeader = header
+        tempHeader.alg = jwtSigner.name
+        let headerString = try tempHeader.encode()
+        let claimsString = try claims.encode()
+        header.alg = tempHeader.alg
+        return try jwtSigner.sign(header: headerString, claims: claimsString)
     }
 
     /// Verify the signature of the encoded JWT using the given algorithm.
@@ -97,74 +104,18 @@ public struct JWT {
     /// - Parameter jwt: A String with the encoded and signed JWT.
     /// - Parameter using algorithm: The algorithm to verify with.
     /// - Returns: A Bool indicating whether the verification was successful.
-    /// - Throws: An error thrown during the verification.
-    public static func verify(_ jwt: String, using algorithm: Algorithm) throws -> Bool {
-        let components = jwt.components(separatedBy: ".")
-        guard components.count == 3,
-            let signature = Base64URL.decode(components[2]) else {
-                return false
-        }
-        return algorithm.verify(signature: signature, for: components[0] + "." + components[1])
-    }
-    
-    /// Decode the encoded JWT.
-    ///
-    /// - Parameter jwt: A String with the encoded and signed JWT.
-    /// - Returns: An instance of `JWT` if the decoding succeeds.
-    /// - Throws: An error thrown during the decoding.
-    public static func decode(_ jwt: String) throws -> JWT? {
-        let components = jwt.components(separatedBy: ".")
-        guard components.count == 2 || components.count == 3,
-            let headerData = Base64URL.decode(components[0]),
-            let claimsData = Base64URL.decode(components[1]),
-            let header = (try JSONSerialization.jsonObject(with: headerData)) as? [String:Any],
-            let claims = (try JSONSerialization.jsonObject(with: claimsData)) as? [String:Any] else {
-                return nil
-        }
-        return JWT(header: header, claims: claims)
+    public static func verify(_ jwt: String, using jwtVerifier: JWTVerifier) -> Bool {
+        return jwtVerifier.verify(jwt: jwt)
     }
 
-    /// Validate the JWT claims. Various claims are validated if they are present in the `Claims` object.
-    /// Various validations require an input. In these cases, if the claim in question exists and the input
-    /// is provided the validation will be performed. Otherwise, the validation is skipped.
+    /// Validate the time based standard JWT claims.
+    /// This function checks that the "exp" (expiration time) is in the future
+    /// and the "iat" (issued at) and "nbf" (not before) headers are in the past,
     ///
-    /// The following claims are validated: iss, aud, azp, at_hash, exp, nbf, iat.
-    ///
-    /// - Parameter issuer: An optional String to compare with the iss claim.
-    /// - Parameter audience: An optional String to compare with the aud claim.
     /// - Returns: A value of `ValidateClaimsResult`.
-    public func validateClaims(issuer: String?=nil, audience: String?=nil) -> ValidateClaimsResult {
-        
-        if let issuer = issuer,
-            let jwtIssuer = claims[.iss] as? String,
-            jwtIssuer != issuer {
-            return .mismatchedIssuer
-        }
-        
-        if let audience = audience,
-            let jwtAudience = claims[.aud] {
-            switch jwtAudience {
-            case let value as [String]:
-                if value.count == 0 {
-                    return .emptyAudience
-                }
-                if value.count > 1 {
-                    return .multipleAudiences
-                }
-                if value[0] != audience {
-                    return .mismatchedAudience
-                }
-            case let value as String:
-                if value != audience {
-                    return .mismatchedAudience
-                }
-            default:
-                return .invalidAudience
-            }
-        }
-        
-        if let _ = claims[.exp] {
-            if let expirationDate = getDateFromClaim(.exp) {
+    public func validateClaims() -> ValidateClaimsResult {        
+        if let _ = claims.exp {
+            if let expirationDate = claims.exp {
                 if expirationDate < Date() {
                     return .expired
                 }
@@ -174,8 +125,8 @@ public struct JWT {
             }
         }
         
-        if let _ = claims[.nbf] {
-            if let notBeforeDate = getDateFromClaim(.nbf) {
+        if let _ = claims.nbf {
+            if let notBeforeDate = claims.nbf {
                 if notBeforeDate > Date() {
                     return .notBefore
                 }
@@ -185,8 +136,8 @@ public struct JWT {
             }
         }
         
-        if let _ = claims[.iat] {
-            if let issuedAtDate = getDateFromClaim(.iat) {
+        if let _ = claims.iat {
+            if let issuedAtDate = claims.iat {
                 if issuedAtDate > Date() {
                     return .issuedAt
                 }
@@ -197,27 +148,6 @@ public struct JWT {
         }
         
         return .success
-    }
-    
-    private func getDateFromClaim(_ claim: ClaimKeys) -> Date? {
-        if let jwtDate = claims[claim] {
-            var date: Date?
-            switch jwtDate {
-            case let value as TimeInterval:
-                date = Date(timeIntervalSince1970: value)
-            case let value as Int:
-                date = Date(timeIntervalSince1970: Double(value))
-            case let value as String:
-                guard let doubleValue = Double(value) else {
-                    return nil
-                }
-                date = Date(timeIntervalSince1970: doubleValue)
-            default:
-                return nil
-            }
-            return date
-        }
-        return nil
     }
 }
 

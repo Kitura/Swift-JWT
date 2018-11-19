@@ -14,75 +14,39 @@
  * limitations under the License.
  **/
 
-// MARK ValidateClaimsResult
+// MARK: ValidateClaimsResult
 
 /// ValidateClaimsResult list the possible results of a call to JWT.validateClaims method.
 /// In case of successful validation, .success is returned, all other cases list various
 /// problems that may occur during claims validation and indicate that the validation failed.
-public enum ValidateClaimsResult: CustomStringConvertible {
+public struct ValidateClaimsResult: CustomStringConvertible, Equatable {
+    
+    /// The human readable description of the ValidateClaimsResult
+    public let description: String
+    
     /// Successful validation.
-    case success
-    
-    /// The Audience claim exists but is empty.
-    case emptyAudience
-    
-    /// The Audience claim contains more than one value.
-    case multipleAudiences
-    
-    /// Mismatched Audience claim.
-    case mismatchedAudience
-    
-    /// Invalid Audience claim.
-    case invalidAudience
+    public static let success = ValidateClaimsResult(description: "Success")
 
-    /// Mismatched Issuer.
-    case mismatchedIssuer
-    
     /// Invalid Expiration claim.
-    case invalidExpiration
+    public static let invalidExpiration = ValidateClaimsResult(description: "Invalid Expiration claim")
     
     /// Expired token: expiration time claim is in the past.
-    case expired
+    public static let expired = ValidateClaimsResult(description: "Expired token")
     
     /// Invalid Not Before claim.
-    case invalidNotBefore
+    public static let invalidNotBefore = ValidateClaimsResult(description: "Invalid Not Before claim")
     
     /// Not Before claim is in the future.
-    case notBefore
+    public static let notBefore = ValidateClaimsResult(description: "Token is not valid yet, Not Before claim is greater than the current time")
     
     /// Invalid Issued At claim.
-    case invalidIssuedAt
+    public static let invalidIssuedAt = ValidateClaimsResult(description: "Invalid Issued At claim")
     
     /// Issued At claim is in the future.
-    case issuedAt
-    
-    /// A textual respresentation of the validation result.
-    public var description: String {
-        switch self {
-        case .success:
-            return "Success"
-        case .emptyAudience:
-            return "Audience claim is empty"
-        case .multipleAudiences:
-            return "Multiple values in Audience claim"
-        case .mismatchedAudience:
-            return "Mismatched Audience claim"
-        case .invalidAudience:
-            return "Invalid Audience claim"
-        case .mismatchedIssuer:
-            return "Mismatched Issuer claim"
-        case .invalidExpiration:
-            return "Invalid Expiration claim"
-        case .expired:
-            return "Expired token"
-        case .invalidNotBefore:
-            return "Invalid Not Before claim"
-        case .notBefore:
-            return "Token is not valid yet, Not Before claim is greater than the current time"
-        case .invalidIssuedAt:
-            return "Invalid Issued At claim"
-        case .issuedAt:
-            return "Issued At claim is greater than the current time"
-        }
+    public static let issuedAt = ValidateClaimsResult(description: "Issued At claim is greater than the current time")
+ 
+    /// Check if two ValidateClaimsResults are equal. Required for the Equatable protocol
+    public static func == (lhs: ValidateClaimsResult, rhs: ValidateClaimsResult) -> Bool {
+        return lhs.description == rhs.description
     }
- }
+}

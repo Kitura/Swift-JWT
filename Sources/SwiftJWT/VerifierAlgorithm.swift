@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corporation 2017
+ * Copyright IBM Corporation 2018
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,8 @@
  * limitations under the License.
  **/
 
-// MARK RSAKeyType
-
-/// The type of the key used in the RSA algorithm.
-enum RSAKeyType {
-    /// The key is a certificate containing both the private and the public keys.
-    case certificate
+protocol VerifierAlgorithm {
+    /// A function to verify the signature of a JSON web token string is correct for the header and claims.
+    func verify(jwt: String) -> Bool
     
-    /// The key is an RSA public key.
-    case publicKey
-    
-    /// The key is an RSA private key.
-    case privateKey
 }

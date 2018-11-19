@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corporation 2017
+ * Copyright IBM Corporation 2018
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,71 +16,85 @@
 
 import Foundation
 
-// MARK Header
+// MARK: Header
 
-/// A representation of a JSON Web Token header.
-public struct Header {
-    var headers: [String:Any]
-
+/**
+ A representation of a JSON Web Token header.
+ https://tools.ietf.org/html/rfc7515#section-4.1
+ ### Usage Example: ###
+ ```swift
+ struct MyClaims: Claims {
+    var name: String
+ }
+ let myHeader = Header(kid: "keyID")
+ let jwt = JWT(header: myHeader, claims: MyClaims(name: "Kitura"))
+ ```
+ */
+public struct Header: Codable {
+    
+    /// Type Header Parameter
+    public var typ: String?
+    /// Algorithm Header Parameter
+    public internal(set) var alg: String?
+    /// JSON Web Token Set URL Header Parameter
+    public var jku : String?
+    /// JSON Web Key Header Parameter
+    public var jwk: String?
+    /// Key ID Header Parameter
+    public var kid: String?
+    /// X.509 URL Header Parameter
+    public var x5u: String?
+    /// X.509 Certificate Chain Header Parameter
+    public var x5c: [String]?
+    /// X.509 Certificate SHA-1 Thumbprint Header Parameter
+    public var x5t: String?
+    /// X.509 Certificate SHA-256 Thumbprint Header Parameter
+    public var x5tS256: String?
+    /// Content Type Header Parameter
+    public var cty: String?
+    /// Critical Header Parameter
+    public var crit: [String]?
+    
     /// Initialize a `Header` instance.
     ///
-    /// - Parameter header: An optional dictionary containing the claims with `HeaderKeys` as keys.
+    /// - Parameter typ: The Type Header Parameter
+    /// - Parameter jku: The JSON Web Token Set URL Header Parameter
+    /// - Parameter jwk: The JSON Web Key Header Parameter
+    /// - Parameter kid: The Key ID Header Parameter
+    /// - Parameter x5u: The X.509 URL Header Parameter
+    /// - Parameter x5c: The X.509 Certificate SHA-1 Thumbprint Header Parameter
+    /// - Parameter x5t: The X.509 Certificate Chain Header Parameter
+    /// - Parameter x5tS256: X.509 Certificate SHA-256 Thumbprint Header Parameter
+    /// - Parameter cty: The Content Type Header Parameter
+    /// - Parameter crit: The Critical Header Parameter
     /// - Returns: A new instance of `Header`.
-    public init(_ header: [HeaderKeys:Any]?=nil) {
-        self.headers = [String:Any]()
-        if let header = header {
-            for (key, value) in header {
-                self.headers[key.rawValue] = value
-            }
-        }
+    public init(
+        typ: String? = "JWT",
+        jku: String? = nil,
+        jwk: String? = nil,
+        kid: String? = nil,
+        x5u: String? = nil,
+        x5c: [String]? = nil,
+        x5t: String? = nil,
+        x5tS256: String? = nil,
+        cty: String? = nil,
+        crit: [String]? = nil
+    ) {
+        self.typ = typ
+        self.alg = nil
+        self.jku = jku
+        self.jwk = jwk
+        self.kid = kid
+        self.x5u = x5u
+        self.x5c = x5c
+        self.x5t = x5t
+        self.x5tS256 = x5tS256
+        self.cty = cty
+        self.crit = crit
     }
     
-    init(_ header: [String:Any]) {
-        headers = header
+    func encode() throws -> String  {
+        let data = try JSONEncoder().encode(self)
+        return data.base64urlEncodedString()
     }
-    
-    /// Return a header value for the key of type HeaderKeys.
-    ///
-    /// - Parameter key: The key.
-    /// - Returns: The header value for the key.
-    public subscript(key: HeaderKeys) -> Any? {
-        get {
-            return headers[key.rawValue]
-        }
-        
-        set(newValue) {
-            headers[key.rawValue] = newValue
-        }
-    }
-    
-    func encode() throws -> String? {
-        let data = try JSONSerialization.data(withJSONObject: headers)
-        return Base64URL.encode(data)
-    }
-}
-
-/// A list of the available header keys. Can be used to create a Header, which would then be attached to a payload to form a JWT.
-public enum HeaderKeys: String {
-    /// Algorithm Header Parameter
-    case alg
-    /// JSON Web Token Set URL Header Parameter
-    case jku
-    /// JSON Web Key Header Parameter
-    case jwk
-    /// Key ID Header Parameter
-    case kid
-    /// X.509 URL Header Parameter
-    case x5u
-    /// X.509 Certificate Chain Header Parameter
-    case x5c
-    /// X.509 Certificate SHA-1 Thumbprint Header Parameter
-    case x5t
-    /// X.509 Certificate SHA-256 Thumbprint Header Parameter
-    case x5tS256 = "x5t#S256"
-    /// Type Header Parameter
-    case typ
-    /// Content Type Header Parameter
-    case cty
-    /// Critical Header Parameter
-    case crit
 }

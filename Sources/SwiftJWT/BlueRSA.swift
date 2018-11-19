@@ -14,13 +14,13 @@
  * limitations under the License.
  **/
 
-#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import CryptorRSA
 import LoggerAPI
 
 import Foundation
 
-class BlueRSA: EncryptionAlgorithm {
+class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
+    let name: String = "RSA"
     
     private let key: Data
     private let keyType: RSAKeyType
@@ -32,34 +32,46 @@ class BlueRSA: EncryptionAlgorithm {
         self.algorithm = algorithm
     }
     
-    func sign(_ data: Data) -> Data? {
+    func sign(header: String, claims: String) throws -> String {
+        let unsignedJWT = header + "." + claims
+        guard let unsignedData = unsignedJWT.data(using: .utf8) else {
+            // replace with custom error
+            throw JWTError.invalidJWTString
+        }
+        let signature = try sign(unsignedData)
+        let signatureString = signature.base64urlEncodedString()
+        return header + "." + claims + "." + signatureString
+    }
+    
+    func sign(_ data: Data) throws -> Data {
         guard #available(macOS 10.12, iOS 10.0, *) else {
             Log.error("macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA")
-            return nil
+            throw JWTError.osVersionToLow
         }
-        do {
-            guard let keyString = String(data: key, encoding: .utf8) else {
-                return nil
-            }
-            let privateKey = try CryptorRSA.createPrivateKey(withPEM: keyString)
-            let myPlaintext = CryptorRSA.createPlaintext(with: data)
-            if let signedData = try myPlaintext.signed(with: privateKey, algorithm: algorithm) {
-                return signedData.data
-            }
-            return nil
+        guard let keyString = String(data: key, encoding: .utf8) else {
+            throw JWTError.invalidPrivateKey
         }
-        catch {
-            Log.error("Signing failed: \(error)")
-            return nil
+        let privateKey = try CryptorRSA.createPrivateKey(withPEM: keyString)
+        let myPlaintext = CryptorRSA.createPlaintext(with: data)
+        guard let signedData = try myPlaintext.signed(with: privateKey, algorithm: algorithm) else {
+            throw JWTError.invalidPrivateKey
         }
+        return signedData.data
     }
-
-    func sign(_ string: String, encoding: String.Encoding) -> Data? {
-        guard let data: Data = string.data(using: encoding) else {
-            Log.error("macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA")
-            return nil
+    
+    
+    func verify(jwt: String) -> Bool {
+        let components = jwt.components(separatedBy: ".")
+        if components.count == 3 {
+            guard let signature = Data(base64urlEncoded: components[2]),
+                let jwtData = (components[0] + "." + components[1]).data(using: .utf8)
+                else {
+                    return false
+            }
+            return self.verify(signature: signature, for: jwtData)
+        } else {
+            return false
         }
-        return sign(data)
     }
     
     func verify(signature: Data, for data: Data) -> Bool {
@@ -84,17 +96,8 @@ class BlueRSA: EncryptionAlgorithm {
             return try myPlaintext.verify(with: publicKey, signature: signedData, algorithm: algorithm)
         }
         catch {
-            Log.error("Verification failed: \(error)")
+            Log.error("Verification failed: \(error)") 
             return false
         }
     }
-    
-    func verify(signature: Data, for string: String, encoding: String.Encoding) -> Bool {
-        guard let data: Data = string.data(using: encoding) else {
-            return false
-        }
-        return verify(signature: signature, for: data)
-    }
-    
 }
-#endif
