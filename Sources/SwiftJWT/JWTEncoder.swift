@@ -91,29 +91,28 @@ public class JWTEncoder: BodyEncoder {
         if let header = header {
             _header = header
         } else {
-            guard let headerString = encoder.header, let newHeader = Header(jwt: headerString) else {
+            guard let headerString = encoder.header, let headerData = Data(base64urlEncoded: headerString) else {
                 throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to encode into header CodingKey"))
             }
+            let newHeader = try JSONDecoder().decode(Header.self, from: headerData)
             _header = newHeader
         }
         guard let claims = encoder.claims else {
             throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to encode into claims CodingKey"))
         }
-        var _jwtSigner = jwtSigner
-        if _jwtSigner == nil {
-            guard let keyID = _header.kid else {
+        let _jwtSigner: JWTSigner
+        if let jwtSigner = jwtSigner {
+            _jwtSigner = jwtSigner
+        } else {
+            guard let keyID = _header.kid, let keyIDJWTSigner = keyIDToSigner(keyID) else {
                 throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "No kid header field provided when encoding using KeyID"))
             }
-            _jwtSigner = keyIDToSigner(keyID)
+            _jwtSigner = keyIDJWTSigner
         }
-        guard let jwtSigner = _jwtSigner else {
-            throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to generate JWTSigner for the provided Key ID"))
-        }
-        _header.alg = jwtSigner.name
+        _header.alg = _jwtSigner.name
         do {
             let encodedHeader =  try _header.encode()
-            let jwt = try jwtSigner.sign(header: encodedHeader, claims: claims)
-            return jwt
+            return try _jwtSigner.sign(header: encodedHeader, claims: claims)
         } catch {
             throw error
         }

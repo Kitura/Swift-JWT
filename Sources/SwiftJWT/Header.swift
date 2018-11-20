@@ -97,30 +97,4 @@ public struct Header: Codable {
         let data = try JSONEncoder().encode(self)
         return data.base64urlEncodedString()
     }
-    
-    init?(jwt: String) {
-        guard let data = Data(base64urlEncoded: jwt),
-            let header = try? JSONDecoder().decode(Header.self, from: data)
-            else {
-                return nil
-        }
-        self = header
-    }
-}
-extension Header: Equatable {
-    
-    /// Function to check if two headers are equal. Required to conform to the equatable protocol.
-    public static func == (lhs: Header, rhs: Header) -> Bool {
-        return lhs.alg == rhs.alg &&
-            lhs.crit ?? [] == rhs.crit ?? [] &&
-            lhs.cty == rhs.cty &&
-            lhs.jku == rhs.jku &&
-            lhs.jwk == rhs.jwk &&
-            lhs.kid == rhs.kid &&
-            lhs.typ == rhs.typ &&
-            lhs.x5c ?? [] == rhs.x5c ?? [] &&
-            lhs.x5t == rhs.x5t &&
-            lhs.x5tS256 == rhs.x5tS256 &&
-            lhs.x5u == rhs.x5u
-    }
 }

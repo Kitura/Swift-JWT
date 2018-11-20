@@ -80,18 +80,17 @@ public class JWTDecoder: BodyDecoder {
             throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed to separate JWT String into Base64 encoded components"))
         }
         let jwtContainer: [String: Data] = ["header": headerData, "claims": claimsData]
-        var _jwtVerifier = jwtVerifier
-        if _jwtVerifier == nil {
-            let decodedHeader = try? JSONDecoder().decode(Header.self, from: headerData)
-            guard let receivedHeader = decodedHeader, let keyID = receivedHeader.kid else {
+        let _jwtVerifier: JWTVerifier
+        if let jwtVerifier = jwtVerifier {
+            _jwtVerifier = jwtVerifier
+        } else {
+            let receivedHeader = try JSONDecoder().decode(Header.self, from: headerData)
+            guard let keyID = receivedHeader.kid, let jwtVerifier = keyIDToVerifier(keyID) else {
                 throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "No kid header field provided when decoding using KeyID"))
             }
-            _jwtVerifier = keyIDToVerifier(keyID)
+            _jwtVerifier = jwtVerifier
         }
-        guard let jwtVerifier = _jwtVerifier else {
-            throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed to generate JWTVerifier for the provided Key ID"))
-        }
-        guard jwtVerifier.verify(jwt: fromString) else {
+        guard _jwtVerifier.verify(jwt: fromString) else {
             throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed verify JWT signature using given algorithm"))
         }
         let decoder = _JWTDecoder(referencing: jwtContainer)
