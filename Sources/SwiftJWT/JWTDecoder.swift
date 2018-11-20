@@ -161,7 +161,11 @@ private struct _JWTKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContaine
     var codingPath: [CodingKey]
     
     public var allKeys: [Key] {
+        #if swift(>=4.1)
         return self.container.keys.compactMap { Key(stringValue: $0) }
+        #else
+        return self.container.keys.flatMap { Key(stringValue: $0) }
+        #endif
     }
     
     fileprivate init(decoder: _JWTDecoder, wrapping container: [String : Data]) {
