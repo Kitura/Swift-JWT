@@ -18,28 +18,6 @@
 
 import PackageDescription
 
-var listDependencies: [Package.Dependency] = [
-    .package(url: "https://github.com/IBM-Swift/BlueCryptor.git", from: "1.0.2"),
-    .package(url: "https://github.com/IBM-Swift/HeliumLogger.git", from: "1.7.1"),
-    .package(url: "https://github.com/IBM-Swift/KituraContracts.git", from: "1.1.0")
-]
-
-var listTargets: [Target.Dependency] = [
-    .byNameItem(name: "Cryptor"),
-    .byNameItem(name: "HeliumLogger"),
-    .byNameItem(name: "KituraContracts")
-]
-
-#if os(OSX) || os(iOS) || os(tvOS) || os(watchOS)
-listDependencies.append(contentsOf: [
-    .package(url: "https://github.com/IBM-Swift/BlueRSA.git", from:"1.0.0")
-    ])
-    
-listTargets.append(contentsOf: [
-    .byNameItem(name: "CryptorRSA")
-    ])
-#endif
-
 let package = Package(
     name: "SwiftJWT",
     products: [
@@ -49,9 +27,13 @@ let package = Package(
             targets: ["SwiftJWT"]
         )
     ],
-    dependencies: listDependencies,
+    dependencies: [
+        .package(url: "https://github.com/IBM-Swift/BlueRSA.git", from:"1.0.0"),
+        .package(url: "https://github.com/IBM-Swift/LoggerAPI.git", from: "1.7.0"),
+        .package(url: "https://github.com/IBM-Swift/KituraContracts.git", from: "1.1.0")
+    ],
     targets: [
-        .target(name: "SwiftJWT", dependencies: listTargets),
+        .target(name: "SwiftJWT", dependencies: ["CryptorRSA", "LoggerAPI", "KituraContracts"]),
         .testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
 	]
 )

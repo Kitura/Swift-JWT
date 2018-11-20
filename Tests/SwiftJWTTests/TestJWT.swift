@@ -16,11 +16,6 @@
 
 import XCTest
 import Foundation
-#if os(Linux)
-    import Glibc
-#elseif os(macOS)
-    import Darwin
-#endif
 
 @testable import SwiftJWT
 
@@ -50,7 +45,18 @@ struct TestClaims: Claims, Equatable {
     init(name: String? = nil) {
         self.name = name
     }
-    
+
+    static func == (lhs: TestClaims, rhs: TestClaims) -> Bool {
+        return lhs.name == rhs.name &&
+        lhs.admin == rhs.admin &&
+        lhs.iss == rhs.iss &&
+        lhs.sub == rhs.sub &&
+        lhs.aud ?? [""] == rhs.aud ?? [""] &&
+        lhs.exp == rhs.exp &&
+        lhs.nbf == rhs.nbf &&
+        lhs.iat == rhs.iat &&
+        lhs.jti == rhs.jti
+    }
 }
 struct MicroProfile: Claims {
     var name: String?
@@ -86,7 +92,7 @@ class TestJWT: XCTestCase {
     }
 
     func testSignAndVerify() {
-        var jwt = JWT(header: Header(), claims: TestClaims(name:"Kitura"))
+        var jwt = JWT(claims: TestClaims(name:"Kitura"))
         jwt.claims.name = "Kitura-JWT"
         XCTAssertEqual(jwt.claims.name, "Kitura-JWT")
         jwt.claims.iss = "issuer"
@@ -95,10 +101,10 @@ class TestJWT: XCTestCase {
         jwt.claims.exp = Date(timeIntervalSince1970: 2485949565.58463)
         jwt.claims.nbf = Date(timeIntervalSince1970: 1485949565.58463)
         // encode
-        if let encoded = jwt.sign(using: .none()){
-            if let decoded = JWT<TestClaims>(jwtString: encoded) {
+        if let encoded = try? jwt.sign(using: .none){
+            if let decoded = try? JWT<TestClaims>(jwtString: encoded) {
                 check(jwt: decoded, algorithm: "none")
-
+                
                 XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
             }
             else {
@@ -108,15 +114,15 @@ class TestJWT: XCTestCase {
         else {
             XCTFail("Failed to encode")
         }
-
+       
         // public key
-        if let signed = jwt.sign(using: .rs256(privateKey: rsaPrivateKey)) {
+        if let signed = try? jwt.sign(using: .rs256(privateKey: rsaPrivateKey)) {
             let ok = JWT<TestClaims>.verify(signed, using: .rs256(publicKey: rsaPublicKey))
             XCTAssertTrue(ok, "Verification failed")
-
-            if let decoded = JWT<TestClaims>(jwtString: signed) {
+            
+            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
                 check(jwt: decoded, algorithm: "RS256")
-
+                
                 XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
             }
             else {
@@ -126,15 +132,15 @@ class TestJWT: XCTestCase {
         else {
             XCTFail("Failed to sign")
         }
-
+        
         // certificate
-        if let signed = jwt.sign(using: .rs256(privateKey: certPrivateKey)) {
+        if let signed = try? jwt.sign(using: .rs256(privateKey: certPrivateKey)) {
             let ok = JWT<TestClaims>.verify(signed, using: .rs256(certificate: certificate))
             XCTAssertTrue(ok, "Verification failed")
-
-            if let decoded = JWT<TestClaims>(jwtString: signed) {
+            
+            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
                 check(jwt: decoded, algorithm: "RS256")
-
+                
                 XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
             }
             else {
@@ -145,29 +151,28 @@ class TestJWT: XCTestCase {
             XCTFail("Failed to sign")
         }
     }
-
-    func check<T: Claims>(jwt: JWT<T>, algorithm: String) {
+    
+    func check(jwt: JWT<TestClaims>, algorithm: String) {
 
         XCTAssertEqual(jwt.header.alg, algorithm, "Wrong .alg in decoded")
         XCTAssertEqual(jwt.claims.exp, Date(timeIntervalSince1970: 2485949565.58463), "Wrong .exp in decoded")
         XCTAssertEqual(jwt.claims.iat, Date(timeIntervalSince1970: 1485949565.58463), "Wrong .iat in decoded")
         XCTAssertEqual(jwt.claims.nbf, Date(timeIntervalSince1970: 1485949565.58463), "Wrong .nbf in decoded")
     }
-
+    
     func checkMicroProfile(jwt: JWT<MicroProfile>, algorithm: String) {
-
+        
         XCTAssertEqual(jwt.header.alg, "RS256", "Wrong .alg in decoded. MicroProfile only supports RS256.")
         XCTAssertEqual(jwt.claims.iss, "https://server.example.com", "Wrong .iss in decoded")
         XCTAssertEqual(jwt.claims.exp, Date(timeIntervalSince1970: 2485949565.58463), "Wrong .exp in decoded")
         XCTAssertEqual(jwt.claims.iat, Date(timeIntervalSince1970: 1485949565.58463), "Wrong .iat in decoded")
-        XCTAssertEqual(jwt.claims.aud, ["clientID"], "Wrong .aud in decoded")
-        XCTAssertEqual(jwt.claims.groups, ["red-group", "green-group", "admin-group", "admin"], "Wrong .groups in decoded")
+        XCTAssertEqual(jwt.claims.aud ?? [""], ["clientID"], "Wrong .aud in decoded")
+        XCTAssertEqual(jwt.claims.groups ?? [""], ["red-group", "green-group", "admin-group", "admin"], "Wrong .groups in decoded")
 
     }
 
 
     func testMicroProfile() {
-
         var jwt = JWT(claims: MicroProfile(name: "MP-JWT"))
         jwt.header.kid = "abc-1234567890"
         jwt.header.typ = "JWT"
@@ -178,15 +183,15 @@ class TestJWT: XCTestCase {
         jwt.claims.exp = Date(timeIntervalSince1970: 2485949565.58463)
         jwt.claims.upn = "jdoe@server.example.com"
         jwt.claims.groups = ["red-group", "green-group", "admin-group", "admin"]
-
+            
         // public key (MP-JWT needs to be signed)
-        if let signed = jwt.sign(using: .rs256(privateKey: rsaPrivateKey)) {
+        if let signed = try? jwt.sign(using: .rs256(privateKey: rsaPrivateKey)) {
             let ok = JWT<MicroProfile>.verify(signed, using: .rs256(publicKey: rsaPublicKey))
             XCTAssertTrue(ok, "Verification failed")
-
-            if let decoded = JWT<MicroProfile>(jwtString: signed) {
+            
+            if let decoded = try? JWT<MicroProfile>(jwtString: signed) {
                 checkMicroProfile(jwt: decoded, algorithm: "RS256")
-
+                
                 XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
             }
             else {
@@ -196,15 +201,15 @@ class TestJWT: XCTestCase {
         else {
             XCTFail("Failed to sign")
         }
-
+        
         // certificate
-        if let signed = jwt.sign(using: .rs256(privateKey: certPrivateKey)) {
+        if let signed = try? jwt.sign(using: .rs256(privateKey: certPrivateKey)) {
             let ok = JWT<MicroProfile>.verify(signed, using: .rs256(certificate: certificate))
             XCTAssertTrue(ok, "Verification failed")
-
-            if let decoded = JWT<MicroProfile>(jwtString: signed) {
+            
+            if let decoded = try? JWT<MicroProfile>(jwtString: signed) {
                 checkMicroProfile(jwt: decoded, algorithm: "RS256")
-
+                
                 XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
             }
             else {
@@ -220,13 +225,13 @@ class TestJWT: XCTestCase {
         jwt.claims.admin = true
         do {
             let jwtString = try rsaJWTEncoder.encodeToString(jwt)
-            let decodedJWTString = JWT<TestClaims>(jwtString: jwtString)
-            let decodedTestClaimJWT = JWT<TestClaims>(jwtString: encodedTestClaimJWT)
+            let decodedJWTString = try JWT<TestClaims>(jwtString: jwtString)
+            let decodedTestClaimJWT = try JWT<TestClaims>(jwtString: encodedTestClaimJWT)
             jwt.header.alg = "RS256"
-            XCTAssertEqual(jwt.claims, decodedJWTString?.claims)
-            XCTAssertEqual(jwt.header, decodedJWTString?.header)
-            XCTAssertEqual(jwt.claims, decodedTestClaimJWT?.claims)
-            XCTAssertEqual(jwt.header, decodedTestClaimJWT?.header)
+            XCTAssertEqual(jwt.claims, decodedJWTString.claims)
+            XCTAssertEqual(jwt.header, decodedJWTString.header)
+            XCTAssertEqual(jwt.claims, decodedTestClaimJWT.claims)
+            XCTAssertEqual(jwt.header, decodedTestClaimJWT.header)
         } catch {
             XCTFail("Failed to encode JTW: \(error)")
         }
@@ -271,10 +276,10 @@ class TestJWT: XCTestCase {
         jwt.claims.admin = true
         do {
             let jwtString = try rsaJWTKidEncoder.encodeToString(jwt)
-            let decodedJWTString = JWT<TestClaims>(jwtString: jwtString)
+            let decodedJWTString = try JWT<TestClaims>(jwtString: jwtString)
             jwt.header.alg = "RS256"
-            XCTAssertEqual(jwt.claims, decodedJWTString?.claims)
-            XCTAssertEqual(jwt.header, decodedJWTString?.header)
+            XCTAssertEqual(jwt.claims, decodedJWTString.claims)
+            XCTAssertEqual(jwt.header, decodedJWTString.header)
         } catch {
             XCTFail("Failed to encode JTW: \(error)")
         }
@@ -317,15 +322,15 @@ class TestJWT: XCTestCase {
     func testJWT() {
         let ok = JWT<TestClaims>.verify(encodedTestClaimJWT, using: .rs256(publicKey: rsaPublicKey))
         XCTAssertTrue(ok, "Verification failed")
-
-        if let decoded = JWT<TestClaims>(jwtString: encodedTestClaimJWT) {
+        
+        if let decoded = try? JWT<TestClaims>(jwtString: encodedTestClaimJWT) {
             XCTAssertEqual(decoded.header.alg, "RS256", "Wrong .alg in decoded")
             XCTAssertEqual(decoded.header.typ, "JWT", "Wrong .typ in decoded")
-
+            
             XCTAssertEqual(decoded.claims.sub, "1234567890", "Wrong .sub in decoded")
             XCTAssertEqual(decoded.claims.name, "John Doe", "Wrong .name in decoded")
             XCTAssertEqual(decoded.claims.admin, true, "Wrong .admin in decoded")
-
+            
             XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
         }
         else {

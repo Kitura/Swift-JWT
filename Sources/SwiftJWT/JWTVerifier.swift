@@ -15,7 +15,8 @@
  **/
 
 import Foundation
-import Cryptor
+
+// MARK: JWTVerifier
 
 /**
  
@@ -23,15 +24,11 @@ import Cryptor
  
  ### Usage Example: ###
  ```swift
+ let signedJWT = "<SignedJWTString>"
  struct MyClaims: Claims {
     var name: String
  }
  let jwt = JWT(claims: MyClaims(name: "Kitura"))
- 
- let privateKey = "<PrivateKey>".data(using: .utf8)!
- let jwtSigner = JWTSigner.rs256(privateKey: privateKey)
- let signedJWT: String = jwt.sign(using: jwtSigner)
- 
  let publicKey = "<PublicKey>".data(using: .utf8)!
  let jwtVerifier = JWTVerifier.rs256(publicKey: publicKey)
  let verified: Bool = jwt.verify(signedJWT, using: jwtVerifier)
@@ -50,60 +47,34 @@ public struct JWTVerifier {
     
     /// Initialize a JWTVerifier using the RSA 256 bits algorithm and the provided publicKey.
     public static func rs256(publicKey: Data) -> JWTVerifier {
-        #if os(Linux)
-        return JWTVerifier(verifierAlgorithm: RSA(key: publicKey, keyType: .publicKey, algorithm: .sha256))
-        #else
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha256))
-        #endif
     }
     
     /// Initialize a JWTVerifier using the RSA 384 bits algorithm and the provided publicKey.
     public static func rs384(publicKey: Data) -> JWTVerifier {
-        #if os(Linux)
-        return JWTVerifier(verifierAlgorithm: RSA(key: publicKey, keyType: .publicKey, algorithm: .sha384))
-        #else
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha384))
-        #endif
     }
     
     /// Initialize a JWTVerifier using the RSA 512 bits algorithm and the provided publicKey.
     public static func rs512(publicKey: Data) -> JWTVerifier {
-        #if os(Linux)
-        return JWTVerifier(verifierAlgorithm: RSA(key: publicKey, keyType: .publicKey, algorithm: .sha512))
-        #else
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha512))
-        #endif
     }
     
     /// Initialize a JWTVerifier using the RSA 256 bits algorithm and the provided certificate.
     public static func rs256(certificate: Data) -> JWTVerifier {
-        #if os(Linux)
-        return JWTVerifier(verifierAlgorithm: RSA(key: certificate, keyType: .certificate, algorithm: .sha256))
-        #else
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: certificate, keyType: .certificate, algorithm: .sha256))
-        #endif
     }
     
     /// Initialize a JWTVerifier using the RSA 384 bits algorithm and the provided certificate.
     public static func rs384(certificate: Data) -> JWTVerifier {
-        #if os(Linux)
-        return JWTVerifier(verifierAlgorithm: RSA(key: certificate, keyType: .certificate, algorithm: .sha384))
-        #else
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: certificate, keyType: .certificate, algorithm: .sha384))
-        #endif
     }
     
     /// Initialize a JWTVerifier using the RSA 512 bits algorithm and the provided certificate.
     public static func rs512(certificate: Data) -> JWTVerifier {
-        #if os(Linux)
-        return JWTVerifier(verifierAlgorithm: RSA(key: certificate, keyType: .certificate, algorithm: .sha512))
-        #else
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: certificate, keyType: .certificate, algorithm: .sha512))
-        #endif
     }
     
     /// Initialize a JWTVerifier that will always return true when verifying the JWT. This is equivelent to using the "none" alg header.
-    public static func none() -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: NoneAlgorithm())
-    }
+    public static let none = JWTVerifier(verifierAlgorithm: NoneAlgorithm())
 }
