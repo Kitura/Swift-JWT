@@ -27,7 +27,7 @@ public struct JWTError: Error, Equatable {
     private let internalError: InternalError
     
     private enum InternalError {
-        case invalidJWTString, failedVerification, osVersionToLow, invalidPrivateKey
+        case invalidJWTString, failedVerification, osVersionToLow, invalidPrivateKey, invalidData, invalidKeyID
     }
     
     /// Error when an invalid JWT String is provided
@@ -41,6 +41,12 @@ public struct JWTError: Error, Equatable {
     
     /// Error when an invalid private key is provided for RSA encryption.
     public static let invalidPrivateKey = JWTError(localizedDescription: "Provided private key could not be used to sign JWT", internalError: .invalidPrivateKey)
+    
+    /// Error when the provided Data cannot be decoded to a String
+    public static let invalidUTF8Data = JWTError(localizedDescription: "Could not decode Data from UTF8 to String", internalError: .invalidData)
+    
+    /// Error when the KeyID field `kid` in the JWT header fails to generate a JWTSigner or JWTVerifier
+    public static let invalidKeyID = JWTError(localizedDescription: "The JWT KeyID `kid` header failed to generate a JWTSigner/JWTVerifier", internalError: .invalidKeyID)
     
     /// Function to check if JWTErrors are equal. Required for equatable protocol.
     public static func == (lhs: JWTError, rhs: JWTError) -> Bool {

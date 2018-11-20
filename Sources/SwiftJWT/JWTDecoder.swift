@@ -20,7 +20,7 @@ import KituraContracts
 // MARK: JWTDecoder
 
 /**
- A thread safe decoder that decodes either data or a JWT String as a `JWT` instance and verifies the signiture using the provided algorithm.
+ A thread safe decoder that decodes either Data or a JWT String as a `JWT` instance and verifies the signiture using the provided algorithm.
 
  ### Usage Example: ###
  ```swift
@@ -38,7 +38,6 @@ import KituraContracts
  */
 public class JWTDecoder: BodyDecoder {
     
-    let useKeyID: Bool
     let keyIDToVerifier: (String) -> JWTVerifier?
     let jwtVerifier: JWTVerifier?
     
@@ -51,7 +50,6 @@ public class JWTDecoder: BodyDecoder {
     public init(jwtVerifier: JWTVerifier) {
         self.keyIDToVerifier = {_ in return jwtVerifier }
         self.jwtVerifier = jwtVerifier
-        self.useKeyID = false
     }
     
     /// Initialize a `JWTDecoder` instance which will select the Algorithm key based on the "kid" header.
@@ -60,7 +58,6 @@ public class JWTDecoder: BodyDecoder {
     /// - Returns: A new instance of `JWTDecoder`.
     public init(keyIDToVerifier: @escaping (String) -> JWTVerifier?) {
         self.keyIDToVerifier = keyIDToVerifier
-        self.useKeyID = true
         self.jwtVerifier = nil
     }
     
@@ -71,13 +68,16 @@ public class JWTDecoder: BodyDecoder {
     /// - Parameter type: The JWT type the String will be decoded as.
     /// - Parameter fromString: The JWT String that will be decoded.
     /// - Returns: A `JWT` instance of the provided type.
-    /// - throws: An error if any value throws an error during decoding.
+    /// - throws: `JWTError.invalidJWTString` if the provided String is not base64urlEncoded sections seperated by full stops.
+    /// - throws: `JWTError.invalidKeyID` if the KeyID `kid` header fails to generate a jwtVerifier.
+    /// - throws: `JWTError.failedVerification` if the `JWTVerifier` fails to verify the decoded String.
+    /// - throws: `DecodingError` if the decoder fails to decode the String as the provided type.
     public func decode<T : Decodable>(_ type: T.Type, fromString: String) throws -> T {
         let components = fromString.components(separatedBy: ".")
         guard let headerData = Data(base64urlEncoded: components[0]),
               let claimsData = Data(base64urlEncoded: components[1])
         else {
-            throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed to separate JWT String into Base64 encoded components"))
+            throw JWTError.invalidJWTString
         }
         let jwtContainer: [String: Data] = ["header": headerData, "claims": claimsData]
         let _jwtVerifier: JWTVerifier
@@ -86,12 +86,12 @@ public class JWTDecoder: BodyDecoder {
         } else {
             let receivedHeader = try JSONDecoder().decode(Header.self, from: headerData)
             guard let keyID = receivedHeader.kid, let jwtVerifier = keyIDToVerifier(keyID) else {
-                throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "No kid header field provided when decoding using KeyID"))
+                throw JWTError.invalidKeyID
             }
             _jwtVerifier = jwtVerifier
         }
         guard _jwtVerifier.verify(jwt: fromString) else {
-            throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed verify JWT signature using given algorithm"))
+            throw JWTError.failedVerification
         }
         let decoder = _JWTDecoder(referencing: jwtContainer)
         return try decoder.decode(type)
@@ -102,10 +102,14 @@ public class JWTDecoder: BodyDecoder {
     /// - Parameter type: The JWT type the Data will be decoded as.
     /// - Parameter data: The utf8 encoded JWT String that will be decoded.
     /// - Returns: A `JWT` instance of the provided type.
-    /// - throws: An error if any value throws an error during decoding.
+    /// - throws: `JWTError.invalidUTF8Data` if the provided Data can't be decoded to a String.
+    /// - throws: `JWTError.invalidJWTString` if the provided String is not base64urlEncoded sections seperated by full stops.
+    /// - throws: `JWTError.invalidKeyID` if the KeyID `kid` header fails to generate a jwtVerifier.
+    /// - throws: `JWTError.failedVerification` if the `JWTVerifier` fails to verify the decoded String.
+    /// - throws: `DecodingError` if the decoder fails to decode the String as the provided type.
     public func decode<T : Decodable>(_ type: T.Type, from data: Data) throws -> T {
         guard let jwtString = String(data: data, encoding: .utf8) else {
-            throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed to decode Data as a String"))
+            throw JWTError.invalidUTF8Data
         }
         return try decode(type, fromString: jwtString)
     }

@@ -20,7 +20,7 @@ import KituraContracts
 // MARK: JWTEncoder
 
 /**
- A thread safe encoder that signs the JWT header and claims using the provided algorithm and encodes a `JWT` instance as either data or a JWT String.
+ A thread safe encoder that signs the JWT header and claims using the provided algorithm and encodes a `JWT` instance as either Data or a JWT String.
  
  ### Usage Example: ###
  ```swift
@@ -45,7 +45,7 @@ public class JWTEncoder: BodyEncoder {
     
     // MARK: Initializers
     
-    /// Initialize a `JWTEncoder` instance.
+    /// Initialize a `JWTEncoder` instance with a single `JWTSigner`.
     ///
     /// - Parameter algorithm: The `Algorithm` that will be used to sign the JWT.
     /// - Returns: A new instance of `JWTEncoder`.
@@ -55,7 +55,7 @@ public class JWTEncoder: BodyEncoder {
         self.header = header
     }
     
-    /// Initialize a `JWTEncoder` instance.
+    /// Initialize a `JWTEncoder` instance with a function to generate the `JWTSigner` from the JWT `kid` header.
     ///
     /// - Parameter algorithm: The `Algorithm` that will be used to sign the JWT.
     /// - Returns: A new instance of `JWTEncoder`.
@@ -71,10 +71,12 @@ public class JWTEncoder: BodyEncoder {
     ///
     /// - Parameter value: The JWT instance to be encoded as Data.
     /// - Returns: The utf8 encoded JWT String.
-    /// - throws: An error if any value throws an error during Encoding.
+    /// - throws: `JWTError.invalidUTF8Data` if the provided Data can't be decoded to a String.
+    /// - throws: `JWTError.invalidKeyID` if the KeyID `kid` header fails to generate a jwtSigner.
+    /// - throws: `EncodingError` if the encoder fails to encode the object as Data.
     public func encode<T : Encodable>(_ value: T) throws -> Data {
         guard let jwt = try self.encodeToString(value).data(using: .utf8) else {
-            throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to encode String to utf8"))
+            throw JWTError.invalidUTF8Data
         }
         return jwt
     }
@@ -83,7 +85,8 @@ public class JWTEncoder: BodyEncoder {
     ///
     /// - Parameter value: The JWT instance to be encoded as a JWT String.
     /// - Returns: A JWT String.
-    /// - throws: An error if any value throws an error during encoding.
+    /// - throws: `JWTError.invalidKeyID` if the KeyID `kid` header fails to generate a jwtSigner.
+    /// - throws: `EncodingError` if the encoder fails to encode the object as Data.
     public func encodeToString<T : Encodable>(_ value: T) throws -> String {
         let encoder = _JWTEncoder()
         try value.encode(to: encoder)
@@ -105,7 +108,7 @@ public class JWTEncoder: BodyEncoder {
             _jwtSigner = jwtSigner
         } else {
             guard let keyID = _header.kid, let keyIDJWTSigner = keyIDToSigner(keyID) else {
-                throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "No kid header field provided when encoding using KeyID"))
+                throw JWTError.invalidKeyID
             }
             _jwtSigner = keyIDJWTSigner
         }
