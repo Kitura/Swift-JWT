@@ -24,7 +24,7 @@
 # SwiftJWT
 An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519) using Swift. JWTs offer a lightweight and compact format for transmitting information between parties, and the information can be verified and trusted due to JWTs being digitally signed.
 
-For more information on JSON Web Tokens, their use cases and how they work, we recommend visiting [jwt.io](https://jwt.io/introduction/). 
+For more information on JSON Web Tokens, their use cases and how they work, we recommend visiting [jwt.io](https://jwt.io/introduction/).
 
 **Reminder:** JWTs sent as JWS do **not** encrypt data, so never send anything sensitive or confidential in a JWT. This library does not currently support JWE.
 
@@ -85,7 +85,7 @@ let myClaims = MyClaims(iss: "Kitura", sub: "John", exp: Date(timeIntervalSinceN
 #### JWT
 
 The JWT struct represents the `Header` and `Claims` of a JSON Web Token.  
-You can initialize a JWT by decoding a JWT String, or by providing the JWT Header and Claims. 
+You can initialize a JWT by decoding a JWT String, or by providing the JWT Header and Claims.
 
 ```swift
 let myJWT = JWT(header: myHeader, claims: myClaims)
@@ -93,7 +93,7 @@ let myJWT = JWT(header: myHeader, claims: myClaims)
 
 ### Signing and Verifying JSON web tokens
 
-#### Creating the RSA public and private keys 
+#### Creating the RSA public and private keys
 
 To sign and verify a JWT using an RSA algorithm, you must provide a public and private key. This could be the contents of a .key file generated via the following Terminal commands:
 
@@ -124,11 +124,7 @@ let jwtSigner = JWTSigner.rs256(privateKey: privateKey)
 To generate a signed JWT string, call the `sign` function on your JWT instance, passing in a JWTSigner:
 
 ```swift
-<<<<<<< HEAD
-let signedJWT = myJWT.sign(using: jwtSigner)
-=======
 let signedJWT = try myJWT.sign(using: jwtSigner)
->>>>>>> master
 ```
 
 The resulting `signedJWT` will be a `String` of the form:
@@ -186,11 +182,7 @@ if validationResult != .success {
 A JWT struct can be initialized from a JWT string.  If a JWTVerifier is provided it will be used to verify the signature before initialization
 
 ```swift
-<<<<<<< HEAD
-let newJWT = JWT<MyClaims>(jwtString: signedJWT, jwtVerifier: jwtVerifier)
-=======
 let newJWT = try JWT<MyClaims>(jwtString: signedJWT, jwtVerifier: jwtVerifier)
->>>>>>> master
 ```
 
 ## MicroProfile Support
