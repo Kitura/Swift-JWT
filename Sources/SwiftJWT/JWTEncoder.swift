@@ -17,6 +17,8 @@
 import Foundation
 import KituraContracts
 
+// MARK: JWTEncoder
+
 /**
  A thread safe encoder that signs the JWT header and claims using the provided algorithm and encodes a `JWT` instance as either data or a JWT String.
  
@@ -25,13 +27,13 @@ import KituraContracts
  struct MyClaims: Claims {
     var name: String
  }
- var jwt = JWT(header: Header(typ: "JWT", alg: "RS256"), claims: MyClaims(name: "John Doe"))
+ var jwt = JWT(claims: MyClaims(name: "John Doe"))
  let rsaPrivateKey = read(fileName: "rsa_private_key")
  let rsaJWTEncoder = JWTEncoder(algorithm: Algorithm.rs256(rsaPrivateKey, .privateKey))
  do {
     let jwtString = try rsaJWTEncoder.encodeToString(jwt)
  } catch {
-    print("Failed to encode JWT")
+    print("Failed to encode JWT: \(error)")
  }
  ```
  */
@@ -41,32 +43,29 @@ public class JWTEncoder: BodyEncoder {
     let jwtSigner: JWTSigner?
     let header: Header?
     
-    /// The JSONEncoder that will be used to encode the Header and claims as JSON
-    public var jsonEncoder: JSONEncoder
+    // MARK: Initializers
     
     /// Initialize a `JWTEncoder` instance.
     ///
     /// - Parameter algorithm: The `Algorithm` that will be used to sign the JWT.
-    /// - Parameter jsonEncoder: The JSONEncoder that will be used to encode the JWT header and claims.
     /// - Returns: A new instance of `JWTEncoder`.
-    public init(jwtSigner: JWTSigner, jsonEncoder:  JSONEncoder = JSONEncoder(), header: Header? = nil) {
+    public init(jwtSigner: JWTSigner, header: Header? = nil) {
         self.keyIDToSigner = {_ in return jwtSigner }
         self.jwtSigner = jwtSigner
-        self.jsonEncoder = jsonEncoder
         self.header = header
     }
     
     /// Initialize a `JWTEncoder` instance.
     ///
     /// - Parameter algorithm: The `Algorithm` that will be used to sign the JWT.
-    /// - Parameter jsonEncoder: The JSONEncoder that will be used to encode the JWT header and claims.
     /// - Returns: A new instance of `JWTEncoder`.
-    public init(keyIDToSigner: @escaping (String) -> JWTSigner?, jsonEncoder:  JSONEncoder = JSONEncoder(), header: Header? = nil) {
+    public init(keyIDToSigner: @escaping (String) -> JWTSigner?, header: Header? = nil) {
         self.keyIDToSigner = keyIDToSigner
-        self.jsonEncoder = jsonEncoder
         self.header = header
         self.jwtSigner = nil
     }
+    
+    // MARK: Encode
     
     /// Encode a `JWT` instance into a utf8 encoded JWT String.
     ///
@@ -86,7 +85,7 @@ public class JWTEncoder: BodyEncoder {
     /// - Returns: A JWT String.
     /// - throws: An error if any value throws an error during encoding.
     public func encodeToString<T : Encodable>(_ value: T) throws -> String {
-        let encoder = _JWTEncoder(jsonEncoder: jsonEncoder)
+        let encoder = _JWTEncoder()
         try value.encode(to: encoder)
         var _header: Header
         if let header = header {
@@ -123,11 +122,7 @@ public class JWTEncoder: BodyEncoder {
 
 fileprivate class _JWTEncoder: Encoder {
     
-    init(jsonEncoder: JSONEncoder = JSONEncoder()) {
-        self.jsonEncoder = jsonEncoder
-    }
-    
-    let jsonEncoder: JSONEncoder
+    init() {}
     
     var header: String?
     var claims: String?
@@ -153,7 +148,7 @@ fileprivate class _JWTEncoder: Encoder {
         mutating func encode<T : Encodable>(_ value: T, forKey key: Key) throws {
             self.codingPath.append(key)
             let fieldName = key.stringValue
-            let data = try encoder.jsonEncoder.encode(value)
+            let data = try JSONEncoder().encode(value)
             if fieldName == "header" {
                 encoder.header = data.base64urlEncodedString()
             } else if fieldName == "claims" {

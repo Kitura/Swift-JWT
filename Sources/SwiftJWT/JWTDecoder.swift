@@ -17,6 +17,8 @@
 import Foundation
 import KituraContracts
 
+// MARK: JWTDecoder
+
 /**
  A thread safe decoder that decodes either data or a JWT String as a `JWT` instance and verifies the signiture using the provided algorithm.
 
@@ -30,7 +32,7 @@ import KituraContracts
  do {
     let jwt = try rsaJWTDecoder.decode(JWT<MyClaims>.self, fromString: exampleJWTString)
  } catch {
-    print("Failed to decode JWT")
+    print("Failed to decode JWT: \(error)")
  }
  ```
  */
@@ -40,32 +42,29 @@ public class JWTDecoder: BodyDecoder {
     let keyIDToVerifier: (String) -> JWTVerifier?
     let jwtVerifier: JWTVerifier?
     
-    /// The JSONDecoder that will be used to encode the Header and claims as JSON
-    public var jsonDecoder: JSONDecoder
+    // MARK: Initializers
     
     /// Initialize a `JWTDecoder` instance.
     ///
     /// - Parameter algorithm: The `Algorithm` that will be used to verify the signiture of the JWT.
-    /// - Parameter jsonDecoder: The JSONDecoder that will be used to decode the JWT header and claims.
     /// - Returns: A new instance of `JWTDecoder`.
-    public init(jwtVerifier: JWTVerifier, jsonDecoder:  JSONDecoder = JSONDecoder()) {
+    public init(jwtVerifier: JWTVerifier) {
         self.keyIDToVerifier = {_ in return jwtVerifier }
         self.jwtVerifier = jwtVerifier
-        self.jsonDecoder = jsonDecoder
         self.useKeyID = false
     }
     
     /// Initialize a `JWTDecoder` instance which will select the Algorithm key based on the "kid" header.
     ///
     /// - Parameter algorithmGenerator: The function that will generate the `Algorithm` using the "kid" header.
-    /// - Parameter jsonDecoder: The JSONDecoder that will be used to decode the JWT header and claims.
     /// - Returns: A new instance of `JWTDecoder`.
-    public init(keyIDToVerifier: @escaping (String) -> JWTVerifier?, jsonDecoder:  JSONDecoder = JSONDecoder()) {
+    public init(keyIDToVerifier: @escaping (String) -> JWTVerifier?) {
         self.keyIDToVerifier = keyIDToVerifier
-        self.jsonDecoder = jsonDecoder
         self.useKeyID = true
         self.jwtVerifier = nil
     }
+    
+    // MARK: Decode
     
     /// Decode a `JWT` instance from a JWT String.
     ///
@@ -83,7 +82,7 @@ public class JWTDecoder: BodyDecoder {
         let jwtContainer: [String: Data] = ["header": headerData, "claims": claimsData]
         var _jwtVerifier = jwtVerifier
         if _jwtVerifier == nil {
-            let decodedHeader = try? jsonDecoder.decode(Header.self, from: headerData)
+            let decodedHeader = try? JSONDecoder().decode(Header.self, from: headerData)
             guard let receivedHeader = decodedHeader, let keyID = receivedHeader.kid else {
                 throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "No kid header field provided when decoding using KeyID"))
             }
@@ -95,7 +94,7 @@ public class JWTDecoder: BodyDecoder {
         guard jwtVerifier.verify(jwt: fromString) else {
             throw DecodingError.typeMismatch(type, DecodingError.Context(codingPath: [], debugDescription: "Failed verify JWT signature using given algorithm"))
         }
-        let decoder = _JWTDecoder(referencing: jwtContainer, jsonDecoder: jsonDecoder)
+        let decoder = _JWTDecoder(referencing: jwtContainer)
         return try decoder.decode(type)
     }
     
@@ -115,14 +114,11 @@ public class JWTDecoder: BodyDecoder {
 
 fileprivate class _JWTDecoder: Decoder {
     
-    init(referencing container: [String: Data], jsonDecoder: JSONDecoder = JSONDecoder()) {
+    init(referencing container: [String: Data]) {
         self.container = container
-        self.jsonDecoder = jsonDecoder
     }
     
     var container: [String: Data]
-    
-    let jsonDecoder: JSONDecoder
     
     var codingPath: [CodingKey] = []
     
@@ -184,7 +180,7 @@ private struct _JWTKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContaine
         guard let data = self.container[key.stringValue] else {
             throw DecodingError.keyNotFound(key, DecodingError.Context(codingPath: codingPath, debugDescription: "value not found for provided key"))
         }
-        return try decoder.jsonDecoder.decode(type, from: data)
+        return try JSONDecoder().decode(type, from: data)
     }
     
     // No functions beyond this point should be called when decoding JWT, However the functions are required KeyedDecodingContainerProtocol.
