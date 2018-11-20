@@ -59,7 +59,7 @@ public struct JWT<T: Claims>: Codable {
     /// - Parameter jwt: A String with the encoded and signed JWT.
     /// - Parameter verifier: The `JWTVerifier` used to verify the JWT.
     /// - Returns: An instance of `JWT` if the decoding succeeds.
-    /// - Throws: `JWTError.invalidJWTString` if the jwtString is not base64urlEncoded sections seperated by either 2 or 3 full stops.
+    /// - Throws: `JWTError.invalidJWTString` if the provided String is not in the form mandated by the JWT specification.
     /// - Throws: `JWTError.failedVerification` if the verifier fails to verify the jwtString.
     /// - Throws: A DecodingError if the JSONDecoder throws an error while decoding the JWT.
     public init(jwtString: String, verifier: JWTVerifier = .none ) throws {
@@ -68,11 +68,9 @@ public struct JWT<T: Claims>: Codable {
             let headerData = Data(base64urlEncoded: components[0]),
             let claimsData = Data(base64urlEncoded: components[1])
         else {
-            // Replace with custom error
             throw JWTError.invalidJWTString
         }
         guard JWT.verify(jwtString, using: verifier) else {
-            // Replace with custom error
             throw JWTError.failedVerification
         }
         let header = try JSONDecoder().decode(Header.self, from: headerData)

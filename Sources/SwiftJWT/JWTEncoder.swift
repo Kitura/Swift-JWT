@@ -28,8 +28,8 @@ import KituraContracts
     var name: String
  }
  var jwt = JWT(claims: MyClaims(name: "John Doe"))
- let rsaPrivateKey = read(fileName: "rsa_private_key")
- let rsaJWTEncoder = JWTEncoder(algorithm: Algorithm.rs256(rsaPrivateKey, .privateKey))
+ let privateKey = "<PrivateKey>".data(using: .utf8)!
+ let rsaJWTEncoder = JWTEncoder(jwtSigner: JWTSigner.rs256(privateKey: privateKey))
  do {
     let jwtString = try rsaJWTEncoder.encodeToString(jwt)
  } catch {
@@ -41,36 +41,33 @@ public class JWTEncoder: BodyEncoder {
     
     let keyIDToSigner: (String) -> JWTSigner?
     let jwtSigner: JWTSigner?
-    let header: Header?
     
     // MARK: Initializers
     
     /// Initialize a `JWTEncoder` instance with a single `JWTSigner`.
     ///
-    /// - Parameter algorithm: The `Algorithm` that will be used to sign the JWT.
+    /// - Parameter jwtSigner: The `JWTSigner` that will be used to sign the JWT.
     /// - Returns: A new instance of `JWTEncoder`.
-    public init(jwtSigner: JWTSigner, header: Header? = nil) {
+    public init(jwtSigner: JWTSigner) {
         self.keyIDToSigner = {_ in return jwtSigner }
         self.jwtSigner = jwtSigner
-        self.header = header
     }
     
     /// Initialize a `JWTEncoder` instance with a function to generate the `JWTSigner` from the JWT `kid` header.
     ///
-    /// - Parameter algorithm: The `Algorithm` that will be used to sign the JWT.
+    /// - Parameter keyIDToSigner: The function to generate the `JWTSigner` from the JWT `kid` header.
     /// - Returns: A new instance of `JWTEncoder`.
-    public init(keyIDToSigner: @escaping (String) -> JWTSigner?, header: Header? = nil) {
+    public init(keyIDToSigner: @escaping (String) -> JWTSigner?) {
         self.keyIDToSigner = keyIDToSigner
-        self.header = header
         self.jwtSigner = nil
     }
     
     // MARK: Encode
     
-    /// Encode a `JWT` instance into a utf8 encoded JWT String.
+    /// Encode a `JWT` instance into a UTF8 encoded JWT String.
     ///
     /// - Parameter value: The JWT instance to be encoded as Data.
-    /// - Returns: The utf8 encoded JWT String.
+    /// - Returns: The UTF8 encoded JWT String.
     /// - throws: `JWTError.invalidUTF8Data` if the provided Data can't be decoded to a String.
     /// - throws: `JWTError.invalidKeyID` if the KeyID `kid` header fails to generate a jwtSigner.
     /// - throws: `EncodingError` if the encoder fails to encode the object as Data.
@@ -88,46 +85,32 @@ public class JWTEncoder: BodyEncoder {
     /// - throws: `JWTError.invalidKeyID` if the KeyID `kid` header fails to generate a jwtSigner.
     /// - throws: `EncodingError` if the encoder fails to encode the object as Data.
     public func encodeToString<T : Encodable>(_ value: T) throws -> String {
-        let encoder = _JWTEncoder()
+        let encoder = _JWTEncoder(jwtSigner: jwtSigner, keyIDToSigner: keyIDToSigner)
         try value.encode(to: encoder)
-        var _header: Header
-        if let header = header {
-            _header = header
-        } else {
-            guard let headerString = encoder.header, let headerData = Data(base64urlEncoded: headerString) else {
-                throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to encode into header CodingKey"))
-            }
-            let newHeader = try JSONDecoder().decode(Header.self, from: headerData)
-            _header = newHeader
+        guard let header = encoder.header,
+            let claims = encoder.claims,
+            let jwtSigner = encoder.jwtSigner
+        else {
+            throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to sign JWT Header and Claims"))
         }
-        guard let claims = encoder.claims else {
-            throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to encode into claims CodingKey"))
-        }
-        let _jwtSigner: JWTSigner
-        if let jwtSigner = jwtSigner {
-            _jwtSigner = jwtSigner
-        } else {
-            guard let keyID = _header.kid, let keyIDJWTSigner = keyIDToSigner(keyID) else {
-                throw JWTError.invalidKeyID
-            }
-            _jwtSigner = keyIDJWTSigner
-        }
-        _header.alg = _jwtSigner.name
-        do {
-            let encodedHeader =  try _header.encode()
-            return try _jwtSigner.sign(header: encodedHeader, claims: claims)
-        } catch {
-            throw error
-        }
+        return try jwtSigner.sign(header: header, claims: claims)
     }
 }
 
 fileprivate class _JWTEncoder: Encoder {
     
-    init() {}
+    init(jwtSigner: JWTSigner?, keyIDToSigner: @escaping (String) -> JWTSigner?) {
+        self.jwtSigner = jwtSigner
+        self.keyIDToSigner = keyIDToSigner
+    }
+    
+    var claims: String?
     
     var header: String?
-    var claims: String?
+    
+    var jwtSigner: JWTSigner?
+    
+    let keyIDToSigner: (String) -> JWTSigner?
     
     var codingPath: [CodingKey] = []
     
@@ -150,10 +133,21 @@ fileprivate class _JWTEncoder: Encoder {
         mutating func encode<T : Encodable>(_ value: T, forKey key: Key) throws {
             self.codingPath.append(key)
             let fieldName = key.stringValue
-            let data = try JSONEncoder().encode(value)
             if fieldName == "header" {
+                guard var _header = value as? Header else {
+                    throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to encode into header CodingKey"))
+                }
+                if encoder.jwtSigner == nil {
+                    guard let keyID = _header.kid, let keyIDJWTSigner = encoder.keyIDToSigner(keyID) else {
+                        throw JWTError.invalidKeyID
+                    }
+                    encoder.jwtSigner = keyIDJWTSigner
+                }
+                _header.alg = encoder.jwtSigner?.name
+                let data = try JSONEncoder().encode(_header)
                 encoder.header = data.base64urlEncodedString()
             } else if fieldName == "claims" {
+                let data = try JSONEncoder().encode(value)
                 encoder.claims = data.base64urlEncodedString()
             }
         }

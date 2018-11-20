@@ -27,8 +27,8 @@ import KituraContracts
  struct MyClaims: Claims {
     var name: String
  }
- let rsaPublicKey = read(fileName: "rsa_public_key")
- let rsaJWTDecoder = JWTDecoder(algorithm: Algorithm.rs256(rsaPublicKey, .publicKey))
+ let publicKey = "<PublicKey>".data(using: .utf8)!
+ let rsaJWTDecoder = JWTDecoder(jwtVerifier: JWTVerifier.rs256(publicKey: publicKey))
  do {
     let jwt = try rsaJWTDecoder.decode(JWT<MyClaims>.self, fromString: exampleJWTString)
  } catch {
@@ -43,18 +43,18 @@ public class JWTDecoder: BodyDecoder {
     
     // MARK: Initializers
     
-    /// Initialize a `JWTDecoder` instance.
+    /// Initialize a `JWTDecoder` instance with a single `JWTVerifier`.
     ///
-    /// - Parameter algorithm: The `Algorithm` that will be used to verify the signiture of the JWT.
+    /// - Parameter JWTVerifier: The `JWTVerifier` that will be used to verify the signiture of the JWT.
     /// - Returns: A new instance of `JWTDecoder`.
     public init(jwtVerifier: JWTVerifier) {
         self.keyIDToVerifier = {_ in return jwtVerifier }
         self.jwtVerifier = jwtVerifier
     }
     
-    /// Initialize a `JWTDecoder` instance which will select the Algorithm key based on the "kid" header.
+    /// Initialize a `JWTDecoder` instance with a function to generate the `JWTVerifier` from the JWT `kid` header.
     ///
-    /// - Parameter algorithmGenerator: The function that will generate the `Algorithm` using the "kid" header.
+    /// - Parameter keyIDToVerifier: The function that will generate the `JWTVerifier` using the "kid" header.
     /// - Returns: A new instance of `JWTDecoder`.
     public init(keyIDToVerifier: @escaping (String) -> JWTVerifier?) {
         self.keyIDToVerifier = keyIDToVerifier
@@ -68,7 +68,7 @@ public class JWTDecoder: BodyDecoder {
     /// - Parameter type: The JWT type the String will be decoded as.
     /// - Parameter fromString: The JWT String that will be decoded.
     /// - Returns: A `JWT` instance of the provided type.
-    /// - throws: `JWTError.invalidJWTString` if the provided String is not base64urlEncoded sections seperated by full stops.
+    /// - throws: `JWTError.invalidJWTString` if the provided String is not in the form mandated by the JWT specification.
     /// - throws: `JWTError.invalidKeyID` if the KeyID `kid` header fails to generate a jwtVerifier.
     /// - throws: `JWTError.failedVerification` if the `JWTVerifier` fails to verify the decoded String.
     /// - throws: `DecodingError` if the decoder fails to decode the String as the provided type.
@@ -79,13 +79,15 @@ public class JWTDecoder: BodyDecoder {
         else {
             throw JWTError.invalidJWTString
         }
-        let jwtContainer: [String: Data] = ["header": headerData, "claims": claimsData]
+        
+        let decoder = _JWTDecoder(header: headerData, claims: claimsData)
+        let jwt = try decoder.decode(type)
+        
         let _jwtVerifier: JWTVerifier
         if let jwtVerifier = jwtVerifier {
             _jwtVerifier = jwtVerifier
         } else {
-            let receivedHeader = try JSONDecoder().decode(Header.self, from: headerData)
-            guard let keyID = receivedHeader.kid, let jwtVerifier = keyIDToVerifier(keyID) else {
+            guard let keyID = decoder.keyID, let jwtVerifier = keyIDToVerifier(keyID) else {
                 throw JWTError.invalidKeyID
             }
             _jwtVerifier = jwtVerifier
@@ -93,8 +95,7 @@ public class JWTDecoder: BodyDecoder {
         guard _jwtVerifier.verify(jwt: fromString) else {
             throw JWTError.failedVerification
         }
-        let decoder = _JWTDecoder(referencing: jwtContainer)
-        return try decoder.decode(type)
+        return jwt
     }
     
     /// Decode a `JWT` instance from a utf8 encoded JWT String.
@@ -103,8 +104,8 @@ public class JWTDecoder: BodyDecoder {
     /// - Parameter data: The utf8 encoded JWT String that will be decoded.
     /// - Returns: A `JWT` instance of the provided type.
     /// - throws: `JWTError.invalidUTF8Data` if the provided Data can't be decoded to a String.
-    /// - throws: `JWTError.invalidJWTString` if the provided String is not base64urlEncoded sections seperated by full stops.
-    /// - throws: `JWTError.invalidKeyID` if the KeyID `kid` header fails to generate a jwtVerifier.
+    /// - throws: `JWTError.invalidJWTString` if the provided String is not in the form mandated by the JWT specification.
+    /// - throws: `JWTError.invalidKeyID` if the KeyID `kid` header fails to generate a `JWTVerifier`.
     /// - throws: `JWTError.failedVerification` if the `JWTVerifier` fails to verify the decoded String.
     /// - throws: `DecodingError` if the decoder fails to decode the String as the provided type.
     public func decode<T : Decodable>(_ type: T.Type, from data: Data) throws -> T {
@@ -117,11 +118,16 @@ public class JWTDecoder: BodyDecoder {
 
 fileprivate class _JWTDecoder: Decoder {
     
-    init(referencing container: [String: Data]) {
-        self.container = container
+    init(header: Data, claims: Data) {
+        self.header = header
+        self.claims = claims
     }
     
-    var container: [String: Data]
+    var header: Data
+    
+    var claims: Data
+    
+    var keyID: String?
     
     var codingPath: [CodingKey] = []
     
@@ -134,7 +140,7 @@ fileprivate class _JWTDecoder: Decoder {
     
     // JWT should only be a Keyed container
     func container<Key : CodingKey>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> {
-        let container = _JWTKeyedDecodingContainer<Key>(decoder: self, wrapping: self.container)
+        let container = _JWTKeyedDecodingContainer<Key>(decoder: self, header: header, claims: claims)
         return KeyedDecodingContainer(container)
     }
     
@@ -154,36 +160,49 @@ private struct _JWTKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContaine
     // A reference to the Decoder the container is inside
     let decoder: _JWTDecoder
     
-    /// A reference to the container we're reading from.
-    private let container: [String : Data]
+    var header: Data
+    
+    var claims: Data
     
     var codingPath: [CodingKey]
     
-    public var allKeys: [Key] {
+    public var allKeys: [Key]
+    {
         #if swift(>=4.1)
-        return self.container.keys.compactMap { Key(stringValue: $0) }
+            return ["header", "claims"].compactMap { Key(stringValue: $0) }
         #else
-        return self.container.keys.flatMap { Key(stringValue: $0) }
+            return ["header", "claims"].flatMap { Key(stringValue: $0) }
         #endif
     }
     
-    fileprivate init(decoder: _JWTDecoder, wrapping container: [String : Data]) {
+    fileprivate init(decoder: _JWTDecoder, header: Data, claims: Data) {
         self.decoder = decoder
-        self.container = container
+        self.header = header
+        self.claims = claims
         self.codingPath = decoder.codingPath
     }
     
     public func contains(_ key: Key) -> Bool {
-        return self.container[key.stringValue] != nil
+        return key.stringValue == "header" || key.stringValue == "claims"
     }
     
     // The JWT Class should only have to decode Decodable types
+    // Those types will be a `Header` object and a generic `Claims` object.
     func decode<T : Decodable>(_ type: T.Type, forKey key: Key) throws -> T {
         decoder.codingPath.append(key)
-        guard let data = self.container[key.stringValue] else {
+        if key.stringValue == "header" {
+            let header = try JSONDecoder().decode(Header.self, from: self.header)
+            decoder.keyID = header.kid
+            guard let decodedHeader = header as? T else {
+                throw DecodingError.typeMismatch(T.self, DecodingError.Context(codingPath: codingPath, debugDescription: "Type of header key was not a JWT Header"))
+            }
+            return decodedHeader
+        } else
+        if key.stringValue == "claims" {
+            return try JSONDecoder().decode(type, from: claims)
+        } else {
             throw DecodingError.keyNotFound(key, DecodingError.Context(codingPath: codingPath, debugDescription: "value not found for provided key"))
         }
-        return try JSONDecoder().decode(type, from: data)
     }
     
     // No functions beyond this point should be called when decoding JWT, However the functions are required KeyedDecodingContainerProtocol.
