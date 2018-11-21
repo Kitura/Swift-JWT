@@ -167,7 +167,7 @@ The following claims are validated if they are present in the `Claims` object:
 - nbf (not before date)
 - iat (issued at date)
 
-The method returns `ValidateClaimsResult` - an enum that list the various reasons for validation failure.
+The method returns `ValidateClaimsResult` - an struct that list the various reasons for validation failure.
 If the validation succeeds `ValidateClaimsResult.success` is returned.
 
 ```swift
@@ -184,6 +184,27 @@ A JWT struct can be initialized from a JWT string.  If a JWTVerifier is provided
 ```swift
 let newJWT = try JWT<MyClaims>(jwtString: signedJWT, jwtVerifier: jwtVerifier)
 ```
+
+### JWTEncoder and JWTDecoder
+
+The JWTEncoder and JWTDecoder classes encode and decode JWT Strings using the same API as JSONEncoder and JSONDecoder:
+
+```swift
+ let jwtEncoder = JWTEncoder(jwtSigner: jwtSigner)
+ let jwtString = try jwtEncoder.encodeToString(myJWT)
+
+ let jwtDecoder = JWTDecoder(jwtVerifier: jwtVerifier)
+ let jwt = try jwtDecoder.decode(JWT<MyClaims>.self, fromString: jwtString)
+```
+
+Because JWTEncoder and JWTDecoder conform to [KituraContract's](https://github.com/IBM-Swift/KituraContracts/blob/master/Sources/KituraContracts/Contracts.swift) BodyEncoder and BodyDecoder protocols, they can be used as a [custom coder](https://developer.ibm.com/swift/2018/09/01/kitura-custom-encoders-and-decoders/) in Codable routes for sending and receiving JWTs:
+
+```swift
+ router.encoders[MediaType(type: .application, subtype: "jwt")] = jwtEncoder
+ router.decoders[MediaType(type: .application, subtype: "jwt")] = jwtDecoder
+```
+
+This allows for the use of JWT's in information exchange. By sending and receiving JWT's you can ensure the sending is who they say they are and verify the content hasn't been tampered with.
 
 ## MicroProfile Support
 
