@@ -19,7 +19,7 @@ import Foundation
 // MARK StandardJWTClaims
 
 /// A class representing the Standard JWT claims as described in [RFC7519](https://tools.ietf.org/html/rfc7519#section-4.1).
-public class StandardJWTClaims: Claims {
+public class ClaimsStandardJWT: Claims {
     
     /**
      The "iss" (issuer) claim identifies the principal that issued the

@@ -19,7 +19,7 @@ import Foundation
 // MARK MicroProfileClaims
 
 /// A class representing the MicroProfile claims as listed in [MicroProfile specs](http://microprofile.io/project/eclipse/microprofile-jwt-auth/spec/src/main/asciidoc/interoperability.asciidoc).
-public class MicroProfileClaims: Claims {
+public class ClaimsMicroProfile: Claims {
     
     public init(
         iss: String,

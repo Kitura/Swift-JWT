@@ -19,7 +19,7 @@ import Foundation
 // MARK OpenIDClaims
 
 /// A class representing OpenID related claims as decsribed in [OpenID specs](http://openid.net/specs/openid-connect-core-1_0.html).
-public class OpenIDClaims: Claims {
+public class ClaimsOpenID: Claims {
     
     /// Initalise the OpenIDClaims
     public init(
