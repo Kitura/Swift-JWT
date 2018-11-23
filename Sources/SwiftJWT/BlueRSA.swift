@@ -35,7 +35,6 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
     func sign(header: String, claims: String) throws -> String {
         let unsignedJWT = header + "." + claims
         guard let unsignedData = unsignedJWT.data(using: .utf8) else {
-            // replace with custom error
             throw JWTError.invalidJWTString
         }
         let signature = try sign(unsignedData)

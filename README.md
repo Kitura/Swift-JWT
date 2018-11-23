@@ -24,7 +24,7 @@
 # SwiftJWT
 An implementation of [JSON Web Token](https://tools.ietf.org/html/rfc7519) using Swift. JWTs offer a lightweight and compact format for transmitting information between parties, and the information can be verified and trusted due to JWTs being digitally signed.
 
-For more information on JSON Web Tokens, their use cases and how they work, we recommend visiting [jwt.io](https://jwt.io/introduction/). 
+For more information on JSON Web Tokens, their use cases and how they work, we recommend visiting [jwt.io](https://jwt.io/introduction/).
 
 **Reminder:** JWTs sent as JWS do **not** encrypt data, so never send anything sensitive or confidential in a JWT. This library does not currently support JWE.
 
@@ -85,7 +85,7 @@ let myClaims = MyClaims(iss: "Kitura", sub: "John", exp: Date(timeIntervalSinceN
 #### JWT
 
 The JWT struct represents the `Header` and `Claims` of a JSON Web Token.  
-You can initialize a JWT by decoding a JWT String, or by providing the JWT Header and Claims. 
+You can initialize a JWT by decoding a JWT String, or by providing the JWT Header and Claims.
 
 ```swift
 let myJWT = JWT(header: myHeader, claims: myClaims)
@@ -93,7 +93,7 @@ let myJWT = JWT(header: myHeader, claims: myClaims)
 
 ### Signing and Verifying JSON web tokens
 
-#### Creating the RSA public and private keys 
+#### Creating the RSA public and private keys
 
 To sign and verify a JWT using an RSA algorithm, you must provide a public and private key. This could be the contents of a .key file generated via the following Terminal commands:
 
@@ -167,7 +167,7 @@ The following claims are validated if they are present in the `Claims` object:
 - nbf (not before date)
 - iat (issued at date)
 
-The method returns `ValidateClaimsResult` - an enum that list the various reasons for validation failure.
+The method returns `ValidateClaimsResult` - an struct that list the various reasons for validation failure.
 If the validation succeeds `ValidateClaimsResult.success` is returned.
 
 ```swift
@@ -184,6 +184,27 @@ A JWT struct can be initialized from a JWT string.  If a JWTVerifier is provided
 ```swift
 let newJWT = try JWT<MyClaims>(jwtString: signedJWT, jwtVerifier: jwtVerifier)
 ```
+
+### JWTEncoder and JWTDecoder
+
+The JWTEncoder and JWTDecoder classes encode and decode JWT Strings using the same API as JSONEncoder and JSONDecoder:
+
+```swift
+ let jwtEncoder = JWTEncoder(jwtSigner: jwtSigner)
+ let jwtString = try jwtEncoder.encodeToString(myJWT)
+
+ let jwtDecoder = JWTDecoder(jwtVerifier: jwtVerifier)
+ let jwt = try jwtDecoder.decode(JWT<MyClaims>.self, fromString: jwtString)
+```
+
+Because JWTEncoder and JWTDecoder conform to [KituraContract's](https://github.com/IBM-Swift/KituraContracts/blob/master/Sources/KituraContracts/Contracts.swift) BodyEncoder and BodyDecoder protocols, they can be used as a [custom coder](https://developer.ibm.com/swift/2018/09/01/kitura-custom-encoders-and-decoders/) in Codable routes for sending and receiving JWTs:
+
+```swift
+ router.encoders[MediaType(type: .application, subtype: "jwt")] = jwtEncoder
+ router.decoders[MediaType(type: .application, subtype: "jwt")] = jwtDecoder
+```
+
+This allows for the use of JWT's in information exchange. By sending and receiving JWT's you can ensure the sending is who they say they are and verify the content hasn't been tampered with.
 
 ## MicroProfile Support
 

@@ -29,10 +29,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/IBM-Swift/BlueRSA.git", from:"1.0.0"),
-        .package(url: "https://github.com/IBM-Swift/LoggerAPI.git", from: "1.7.0")
+        .package(url: "https://github.com/IBM-Swift/LoggerAPI.git", from: "1.7.0"),
+        .package(url: "https://github.com/IBM-Swift/KituraContracts.git", from: "1.1.0")
     ],
     targets: [
-        .target(name: "SwiftJWT", dependencies: ["CryptorRSA", "LoggerAPI"]),
+        .target(name: "SwiftJWT", dependencies: ["CryptorRSA", "LoggerAPI", "KituraContracts"]),
         .testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
 	]
 )
