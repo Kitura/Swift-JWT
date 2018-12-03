@@ -165,6 +165,9 @@ The supported algorithms for signing and verifying JWTs are:
 * RS256 - RSASSA-PKCS1-v1_5 using SHA-256
 * RS384 - RSASSA-PKCS1-v1_5 using SHA-384
 * RS512 - RSASSA-PKCS1-v1_5 using SHA-512
+* HS256 - HMAC using using SHA-256
+* HS384 - HMAC using using SHA-384
+* HS512 - HMAC using using SHA-512
 * none - Don't sign or verify the JWT
 
 ### Validate claims
