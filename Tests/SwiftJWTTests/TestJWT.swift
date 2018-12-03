@@ -19,6 +19,7 @@ import Foundation
 
 @testable import SwiftJWT
 
+let hmacKey = "Super Secret Key"
 let rsaPrivateKey = read(fileName: "rsa_private_key")
 let rsaPublicKey = read(fileName: "rsa_public_key")
 let rsaJWTEncoder = JWTEncoder(jwtSigner: .rs256(privateKey: rsaPrivateKey))
@@ -160,6 +161,25 @@ class TestJWT: XCTestCase {
             if let decoded = try? JWT<TestClaims>(jwtString: signed) {
                 check(jwt: decoded, algorithm: "RS256")
                 
+                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+            }
+            else {
+                XCTFail("Failed to decode")
+            }
+        }
+        else {
+            XCTFail("Failed to sign")
+        }
+        
+        // HMAC key
+        if let hmacData = hmacKey.data(using: .utf8),
+            let signed = try? jwt.sign(using: .hs256(key: hmacData))
+        {
+            let ok = JWT<TestClaims>.verify(signed, using: .hs256(key: hmacData))
+            XCTAssertTrue(ok, "Verification failed")
+            
+            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
+                check(jwt: decoded, algorithm: "HS256")
                 XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
             }
             else {
