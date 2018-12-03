@@ -205,20 +205,6 @@ class TestJWT: XCTestCase {
         jwt.claims.iat = Date(timeIntervalSince1970: 1485949565.58463)
         jwt.claims.exp = Date(timeIntervalSince1970: 2485949565.58463)
         jwt.claims.nbf = Date(timeIntervalSince1970: 1485949565.58463)
-        // encode
-        if let encoded = try? jwt.sign(using: .none){
-            if let decoded = try? JWT<TestClaims>(jwtString: encoded) {
-                check(jwt: decoded, algorithm: "none")
-                
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to encode")
-        }
         
         // public key
         if let signed = try? jwt.sign(using: .rs384(privateKey: rsaPrivateKey)) {
@@ -285,20 +271,6 @@ class TestJWT: XCTestCase {
         jwt.claims.iat = Date(timeIntervalSince1970: 1485949565.58463)
         jwt.claims.exp = Date(timeIntervalSince1970: 2485949565.58463)
         jwt.claims.nbf = Date(timeIntervalSince1970: 1485949565.58463)
-        // encode
-        if let encoded = try? jwt.sign(using: .none){
-            if let decoded = try? JWT<TestClaims>(jwtString: encoded) {
-                check(jwt: decoded, algorithm: "none")
-                
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to encode")
-        }
         
         // public key
         if let signed = try? jwt.sign(using: .rs512(privateKey: rsaPrivateKey)) {
