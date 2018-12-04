@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.module_name  = 'SwiftJWT'
   s.ios.deployment_target = "10.3"
   s.source       = { :git => "https://github.com/IBM-Swift/Swift-JWT.git", :tag => s.version }
-  s.source_files  = "Sources/SwiftJWT/*.swift", "Sources/SwiftJWT/ClaimsExamples/*.swift"
+  s.source_files  = "Sources/**/*.swift"
   s.dependency 'BlueRSA', '~> 1.0'
   s.dependency 'LoggerAPI', '~> 1.7'
   s.dependency 'KituraContracts', '~> 1.1'

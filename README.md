@@ -33,6 +33,8 @@ The latest version of Swift-JWT requires **Swift 4.0** or later. You can downloa
 
 ## Usage
 
+### Swift Package Manager
+
 #### Add dependencies
 Add the `Swift-JWT` package to the dependencies within your application’s `Package.swift` file. Substitute `"x.x.x"` with the latest `Swift-JWT` [release](https://github.com/IBM-Swift/Kitura-Session/releases).
 ```swift
@@ -47,6 +49,12 @@ Add `SwiftJWT` to your target's dependencies:
 import SwiftJWT
 ```
 
+### Cocoapods
+
+To include `Swift-JWT` in a project using CocoaPods, add `SwiftJWT` to your Podfile:
+```
+pod 'SwiftJWT'
+```
 ## Getting Started
 
 ### The JWT model
