@@ -14,7 +14,7 @@ let header = Header([.typ:"JWT", .kid:"KeyID"])
 
 Set the fields directly:
 ```swift
-let header = Header(typ: "JWT", kid: "KeyID)
+let header = Header(typ: "JWT", kid: "KeyID")
 ```
 
 Instead of accessing the fields using subscripting:
@@ -27,14 +27,12 @@ let keyID = header.kid
 ```
 
 ### Claims:
-
-`Claims` is now a protocol instead of a struct. Instead of initialising the claims struct using a `[String:Any]` dictionary:
+In Swift-JWT 2.0, you initialize the `Claims` struct using a dictionary:
 ```swift
 let myClaims = Claims(["name":"Kitura"])
 ```
-
-Define your object conforming to `Claims` and initialise it:
-```swift
+ In Swift-JWT 3.0, instead you define an object conforming to claims:
+ ```swift
 struct MyClaims: Claims {
     let name: String
 }
