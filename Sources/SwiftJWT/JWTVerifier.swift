@@ -75,6 +75,21 @@ public struct JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: certificate, keyType: .certificate, algorithm: .sha512))
     }
     
+    /// Initialize a JWTSigner using the HMAC 256 bits algorithm and the provided privateKey.
+    public static func hs256(key: Data) -> JWTVerifier {
+        return JWTVerifier(verifierAlgorithm: BlueHMAC(key: key, algorithm: .sha256))
+    }
+    
+    /// Initialize a JWTSigner using the HMAC 384 bits algorithm and the provided privateKey.
+    public static func hs384(key: Data) -> JWTVerifier {
+        return JWTVerifier(verifierAlgorithm: BlueHMAC(key: key, algorithm: .sha384))
+    }
+    
+    /// Initialize a JWTSigner using the HMAC 512 bits algorithm and the provided privateKey.
+    public static func hs512(key: Data) -> JWTVerifier {
+        return JWTVerifier(verifierAlgorithm: BlueHMAC(key: key, algorithm: .sha512))
+    }
+    
     /// Initialize a JWTVerifier that will always return true when verifying the JWT. This is equivelent to using the "none" alg header.
     public static let none = JWTVerifier(verifierAlgorithm: NoneAlgorithm())
 }
