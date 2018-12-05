@@ -66,7 +66,7 @@ Therefore, a JWT typically looks like the following: xxxxx.yyyyy.zzzzz
 #### Header
 
 The Header struct contains the fields of the JSON Web Token header as defined by [RFC7515](https://tools.ietf.org/html/rfc7515#section-4).   
-The "typ" header will default to "JWT". The "alg" header will be set the algorithm name when you sign the JWT.  
+The "typ" header will default to "JWT". The "alg" header will be set to the algorithm name when you sign the JWT.  
 The other Header fields can be set when initializing the Header or by changing them directly on the Header object.
 
 ```swift
@@ -150,7 +150,7 @@ Initialize a JWTVerifier using the static function corresponding to the desired 
 ```swift
 let jwtVerifier = JWTVerifier.rs256(publicKey: publicKey)
 ```
-To verify a signed JWT string, call the `sign` function on your JWT instance, passing in a JWTSigner:
+To verify a signed JWT string, call the static `verify` function, passing in your JWT string and the JWTVerifier:
 
 ```swift
 let verified = JWT<MyClaims>.verify(signedJWT, using: jwtVerifier)
