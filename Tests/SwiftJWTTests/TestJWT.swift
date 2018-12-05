@@ -28,7 +28,7 @@ let certPrivateKey = read(fileName: "cert_private_key")
 let certificate = read(fileName: "certificate")
 let rsaEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.WJHaxAjhLu7wkw2J3B7ZpW-pnX-WEDJuy7l46nHZRWtZrH_4f8724v-4V48UlHtEgQpUXCHyGRyWPgPJCdGIfy2vD5GBoMJ1kdNWQa0UVOajTk0omUIloBPKgo-45m3w15ub-_4bihyZOI8dCK9zk5vjvUGnzdKartNi9AN5kNM"
 let certificateEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.CpnzQLuWGfH5Kba36vg0ZZKBnzwlrIgapFVfBfk_nea-eej84ktHZANqIeolskZopRJ4DQ3oaLtHWEg16-ZsujxmkOdiAIbk0-C4QLOVFLZH78WLZAqkyNLS8rFuK9hloLNwz1j6VVUd1f0SOT-wIRzL0_0VRYqQd1bVcCj7wc7BmXENlOfHY7KGHS-6JX-EClT1DygDSoCmdvBExBf3vx0lwMIbP4ryKkyhOoU13ZfSUt1gpP9nZAfzqfRTPxZc_f7neiAlMlF6SzsedsskRCNegW8cg5e_NuVmZZkj0_bnswXFDMmIaxiPdtOEWkmyEOca-EHSwbO5PgCgXOIrgg"
-// encoded using "Super Secret Key"
+// A `TestClaims` encoded using HMAC with "Super Secret Key" from "www.jwt.io"
 let hmacEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.8kIE0ZCq1Vw7aW1kACpgJLcgY2DpTXgO6P5T3cdCuTs"
 let jwtSigners: [String: JWTSigner] = ["0": .rs256(privateKey: rsaPrivateKey), "1": .rs256(privateKey: certPrivateKey)]
 let jwtVerifiers: [String: JWTVerifier] = ["0": .rs256(publicKey: rsaPublicKey), "1": .rs256(certificate: certificate)]
