@@ -211,8 +211,8 @@ The JWTEncoder and JWTDecoder classes encode and decode JWT Strings using the sa
 Because JWTEncoder and JWTDecoder conform to [KituraContract's](https://github.com/IBM-Swift/KituraContracts/blob/master/Sources/KituraContracts/Contracts.swift) BodyEncoder and BodyDecoder protocols, they can be used as a [custom coder](https://developer.ibm.com/swift/2018/09/01/kitura-custom-encoders-and-decoders/) in Codable routes for sending and receiving JWTs:
 
 ```swift
- router.encoders[MediaType(type: .application, subtype: "jwt")] = jwtEncoder
- router.decoders[MediaType(type: .application, subtype: "jwt")] = jwtDecoder
+ router.encoders[MediaType(type: .application, subType: "jwt")] = { return jwtEncoder }
+ router.decoders[MediaType(type: .application, subType: "jwt")] = { return jwtDecoder }
 ```
 
 This allows for the use of JWT's in information exchange. By sending and receiving JWT's you can ensure the sending is who they say they are and verify the content hasn't been tampered with.
