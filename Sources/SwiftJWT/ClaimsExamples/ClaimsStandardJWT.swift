@@ -16,10 +16,29 @@
 
 import Foundation
 
-// MARK StandardJWTClaims
+// MARK ClaimsStandardJWT
 
 /// A class representing the Standard JWT claims as described in [RFC7519](https://tools.ietf.org/html/rfc7519#section-4.1).
 public class ClaimsStandardJWT: Claims {
+    
+    /// Initialize a `ClaimsStandardJWT`
+    public init(
+        iss: String? = nil,
+        sub: String? = nil,
+        aud: [String]? = nil,
+        exp: Date? = nil,
+        nbf: Date? = nil,
+        iat: Date? = nil,
+        jti: String? = nil
+        ) {
+        self.iss = iss
+        self.sub = sub
+        self.aud = aud
+        self.exp = exp
+        self.nbf = nbf
+        self.iat = iat
+        self.jti = jti
+    }
     
     /**
      The "iss" (issuer) claim identifies the principal that issued the
