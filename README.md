@@ -182,7 +182,7 @@ The method returns `ValidateClaimsResult` - an struct that list the various reas
 If the validation succeeds `ValidateClaimsResult.success` is returned.
 
 ```swift
-let validationResult = validateClaims()
+let validationResult = verified.validateClaims()
 if validationResult != .success {
     print("Claims validation failed: ", validationResult)
 }
