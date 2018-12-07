@@ -66,7 +66,7 @@ Therefore, a JWT typically looks like the following: xxxxx.yyyyy.zzzzz
 #### Header
 
 The Header struct contains the fields of the JSON Web Token header as defined by [RFC7515](https://tools.ietf.org/html/rfc7515#section-4).   
-The "typ" header will default to "JWT". The "alg" header will be set the algorithm name when you sign the JWT.  
+The "typ" header will default to "JWT". The "alg" header will be set to the algorithm name when you sign the JWT.  
 The other Header fields can be set when initializing the Header or by changing them directly on the Header object.
 
 ```swift
@@ -150,7 +150,7 @@ Initialize a JWTVerifier using the static function corresponding to the desired 
 ```swift
 let jwtVerifier = JWTVerifier.rs256(publicKey: publicKey)
 ```
-To verify a signed JWT string, call the `sign` function on your JWT instance, passing in a JWTSigner:
+To verify a signed JWT string, call the static `verify` function, passing in your JWT string and the JWTVerifier:
 
 ```swift
 let verified = JWT<MyClaims>.verify(signedJWT, using: jwtVerifier)
@@ -211,8 +211,8 @@ The JWTEncoder and JWTDecoder classes encode and decode JWT Strings using the sa
 Because JWTEncoder and JWTDecoder conform to [KituraContract's](https://github.com/IBM-Swift/KituraContracts/blob/master/Sources/KituraContracts/Contracts.swift) BodyEncoder and BodyDecoder protocols, they can be used as a [custom coder](https://developer.ibm.com/swift/2018/09/01/kitura-custom-encoders-and-decoders/) in Codable routes for sending and receiving JWTs:
 
 ```swift
- router.encoders[MediaType(type: .application, subtype: "jwt")] = jwtEncoder
- router.decoders[MediaType(type: .application, subtype: "jwt")] = jwtDecoder
+ router.encoders[MediaType(type: .application, subType: "jwt")] = { return jwtEncoder }
+ router.decoders[MediaType(type: .application, subType: "jwt")] = { return jwtDecoder }
 ```
 
 This allows for the use of JWT's in information exchange. By sending and receiving JWT's you can ensure the sending is who they say they are and verify the content hasn't been tampered with.

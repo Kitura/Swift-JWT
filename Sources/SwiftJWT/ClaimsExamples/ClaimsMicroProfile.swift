@@ -16,11 +16,12 @@
 
 import Foundation
 
-// MARK MicroProfileClaims
+// MARK ClaimsMicroProfile
 
 /// A class representing the MicroProfile claims as listed in [MicroProfile specs](http://microprofile.io/project/eclipse/microprofile-jwt-auth/spec/src/main/asciidoc/interoperability.asciidoc).
 public class ClaimsMicroProfile: Claims {
     
+    /// Initialize a `ClaimsMicroProfile`
     public init(
         iss: String,
         sub: String,
@@ -38,6 +39,7 @@ public class ClaimsMicroProfile: Claims {
         self.upn = upn
         self.groups = groups
     }
+    
     /**
      The MP-JWT issuer. [RFC7519, Section 4.1.1](https://tools.ietf.org/html/rfc7519#section-4.1.1)
      */

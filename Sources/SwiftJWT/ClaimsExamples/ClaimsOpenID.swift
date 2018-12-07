@@ -16,12 +16,12 @@
 
 import Foundation
 
-// MARK OpenIDClaims
+// MARK ClaimsOpenID
 
 /// A class representing OpenID related claims as decsribed in [OpenID specs](http://openid.net/specs/openid-connect-core-1_0.html).
 public class ClaimsOpenID: Claims {
     
-    /// Initalise the OpenIDClaims
+    /// Initalise the `ClaimsOpenID`
     public init(
         iss: String,
         sub: String,
