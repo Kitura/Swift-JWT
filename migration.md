@@ -64,10 +64,10 @@ let verifier = JWTVerifier.rs256(publicKey: publicKey)
  
  ```swift
  // Swift-JWT 2.0
- JWT
+ let myJWT: JWT
  
  // Swift-JWT 3.0
- JWT<MyClaims>
+ let myJWT: JWT<MyClaims>
  ```
  
  - The `sign` function takes a `JWTSigner` and returns `String` instead of `String?`.  
@@ -90,7 +90,7 @@ let signedJWT: String? = try jwt.sign(using: Algorithm.rs256(key, .privateKey))
  let verified = JWT<MyClaims>.verify(signedJWT, using: JWTVerifier.rs256(publicKey: key))
 ```
  
- - The `validateClaims` function now only checks registered JWT date based claims.  
+ - The `validateClaims` function now only checks the `iat`, `exp`, and `nbf` claims are valid at the current point in time.  
  
  ```swift
  // Swift-JWT 2.0
@@ -98,7 +98,7 @@ let signedJWT: String? = try jwt.sign(using: Algorithm.rs256(key, .privateKey))
 
  // Swift-JWT 3.0
  let validationResult = jwt.validateClaims()
- let validateOthers = jwt.issuer == "issuer" && jwt.audience == "clientID"
+ let validateOthers = jwt.iss == "issuer" && jwt.aud == "clientID"
  ```
 
 The `encode()` function has been removed. To encode a JWT without signing it use the `none` JWTSigner:
