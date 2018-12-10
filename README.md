@@ -89,6 +89,12 @@ struct MyClaims: Claims {
 }
 let myClaims = MyClaims(iss: "Kitura", sub: "John", exp: Date(timeIntervalSinceNow: 3600), admin: true)
 ```
+##### ClaimsExamples
+
+This library includes some example `Claims` structs as defined by their online specifications:
+ - `ClaimsStandardJWT` as defined in [RFC7519](https://tools.ietf.org/html/rfc7519#section-4.1).
+ - `ClaimsMicroProfile` as defined [here](http://microprofile.io/project/eclipse/microprofile-jwt-auth/spec/src/main/asciidoc/interoperability.asciidoc).
+ - `ClaimsOpenID.swift` as defined [here](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims).
 
 #### JWT
 
@@ -217,10 +223,12 @@ Because JWTEncoder and JWTDecoder conform to [KituraContract's](https://github.c
 
 This allows for the use of JWT's in information exchange. By sending and receiving JWT's you can ensure the sending is who they say they are and verify the content hasn't been tampered with.
 
-## MicroProfile Support
+## API Documentation
+For more information visit our [API reference](https://ibm-swift.github.io/Swift-JWT/index.html.
 
-This library supports MicroProfile by allowing the creation of JWTs with specific claims needed by MicroProfile. These claims are found [here](http://microprofile.io/project/eclipse/microprofile-jwt-auth/spec/src/main/asciidoc/interoperability.asciidoc). For full compliance, ensure your application saves the JWT with the name `MP-JWT` and uses `rs256` for token signing.
+## Community
 
+We love to talk server-side Swift, and Kitura. Join our [Slack](http://swift-at-ibm-slack.mybluemix.net/) to meet the team!
 
 ## License
-This library is licensed under Apache 2.0. Full license text is available in [LICENSE](LICENSE.txt).
+This library is licensed under Apache 2.0. Full license text is available in [LICENSE](https://github.com/IBM-Swift/Swift-JWT/blob/master/LICENSE).
