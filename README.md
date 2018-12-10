@@ -224,7 +224,7 @@ Because JWTEncoder and JWTDecoder conform to [KituraContract's](https://github.c
 This allows for the use of JWT's in information exchange. By sending and receiving JWT's you can ensure the sending is who they say they are and verify the content hasn't been tampered with.
 
 ## API Documentation
-For more information visit our [API reference](https://ibm-swift.github.io/Swift-JWT/index.html.
+For more information visit our [API reference](https://ibm-swift.github.io/Swift-JWT/index.html).
 
 ## Community
 
