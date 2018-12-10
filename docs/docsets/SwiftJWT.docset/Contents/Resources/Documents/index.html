@@ -50,25 +50,30 @@
       <nav class="navigation">
         <ul class="nav-groups">
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="Enums.html">Enumerations</a>
+            <a class="nav-group-name-link" href="Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Enums/Algorithm.html">Algorithm</a>
+                <a class="nav-group-task-link" href="Classes/ClaimsMicroProfile.html">ClaimsMicroProfile</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Enums/Algorithm/Supported.html">– Supported</a>
+                <a class="nav-group-task-link" href="Classes/ClaimsOpenID.html">ClaimsOpenID</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Enums/ClaimKeys.html">ClaimKeys</a>
+                <a class="nav-group-task-link" href="Classes/ClaimsStandardJWT.html">ClaimsStandardJWT</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Enums/HeaderKeys.html">HeaderKeys</a>
+                <a class="nav-group-task-link" href="Classes/JWTDecoder.html">JWTDecoder</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Enums/RSAKeyType.html">RSAKeyType</a>
+                <a class="nav-group-task-link" href="Classes/JWTEncoder.html">JWTEncoder</a>
               </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Enums/ValidateClaimsResult.html">ValidateClaimsResult</a>
+                <a class="nav-group-task-link" href="Protocols/Claims.html">Claims</a>
               </li>
             </ul>
           </li>
@@ -76,19 +81,25 @@
             <a class="nav-group-name-link" href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/Base64URL.html">Base64URL</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/Claims.html">Claims</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/Hash.html">Hash</a>
+                <a class="nav-group-task-link" href="Structs/AddressClaim.html">AddressClaim</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/Header.html">Header</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/JWT.html">JWT</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/JWTError.html">JWTError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/JWTSigner.html">JWTSigner</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/JWTVerifier.html">JWTVerifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ValidateClaimsResult.html">ValidateClaimsResult</a>
               </li>
             </ul>
           </li>
@@ -99,151 +110,203 @@
         <section class="section">
           <div class="section-content">
             
-            <h1 id='swiftjwt' class='heading'>SwiftJWT</h1>
+            <p align="center">
+<a href="http://kitura.io/">
+<img src="https://raw.githubusercontent.com/IBM-Swift/Kitura/master/Sources/Kitura/resources/kitura-bird.svg?sanitize=true" height="100" alt="Kitura">
+</a>
+</p>
 
-<p>An implementation of JSON Web Token</p>
-
-<p><img src="https://img.shields.io/badge/os-macOS-green.svg?style=flat" alt="Mac OS X">
+<p align="center">
+<a href="https://ibm-swift.github.io/Swift-JWT/index.html">
+<img src="https://img.shields.io/badge/apidoc-SwiftJWT-1FBCE4.svg?style=flat" alt="APIDoc">
+</a>
+<a href="https://travis-ci.org/IBM-Swift/Swift-JWT">
+<img src="https://travis-ci.org/IBM-Swift/Swift-JWT.svg?branch=master" alt="Build Status - Master">
+</a>
+<img src="https://img.shields.io/badge/os-macOS-green.svg?style=flat" alt="macOS">
 <img src="https://img.shields.io/badge/os-linux-green.svg?style=flat" alt="Linux">
-<img src="https://img.shields.io/badge/license-Apache2-blue.svg?style=flat" alt="Apache 2"></p>
-<h2 id='summary' class='heading'>Summary</h2>
+<img src="https://img.shields.io/badge/license-Apache2-blue.svg?style=flat" alt="Apache 2">
+<a href="http://swift-at-ibm-slack.mybluemix.net/">
+<img src="http://swift-at-ibm-slack.mybluemix.net/badge.svg" alt="Slack Status">
+</a>
+</p>
+<h1 id='swiftjwt' class='heading'>SwiftJWT</h1>
 
 <p>An implementation of <a href="https://tools.ietf.org/html/rfc7519">JSON Web Token</a> using Swift. JWTs offer a lightweight and compact format for transmitting information between parties, and the information can be verified and trusted due to JWTs being digitally signed.</p>
 
-<p>For more information on JSON Web Tokens, their use cases and how they work, we recommend visiting <a href="https://jwt.io/introduction/">jwt.io</a>. </p>
+<p>For more information on JSON Web Tokens, their use cases and how they work, we recommend visiting <a href="https://jwt.io/introduction/">jwt.io</a>.</p>
 
-<p><strong>Reminder:</strong> JWTs do <strong>not</strong> encrypt data, so never send anything sensitive or confidential in a JWT.</p>
-<h2 id='table-of-contents' class='heading'>Table of Contents</h2>
+<p><strong>Reminder:</strong> JWTs sent as JWS do <strong>not</strong> encrypt data, so never send anything sensitive or confidential in a JWT. This library does not currently support JWE.</p>
+<h2 id='swift-version' class='heading'>Swift version</h2>
 
-<ul>
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#supported-algorithms">Supported algorithms</a></li>
-<li><a href="#usage">Usage</a></li>
-<li><a href="#license">License</a></li>
-</ul>
-<h2 id='prerequisites' class='heading'>Prerequisites</h2>
-<h3 id='macos' class='heading'>macOS</h3>
-
-<ul>
-<li>macOS 10.12.0 (<em>Sierra</em>) or higher</li>
-<li>Swift 4.1 and above installed</li>
-</ul>
-<h3 id='linux' class='heading'>Linux</h3>
-
-<ul>
-<li>Ubuntu 14.04 or Ubuntu 16.04</li>
-<li>Swift 4.1 and above installed</li>
-</ul>
-<h2 id='supported-algorithms' class='heading'>Supported Algorithms</h2>
-
-<p>At the moment the supported algorithms are:</p>
-
-<ul>
-<li>RS256 - RSASSA-PKCS1-v1_5 using SHA-256</li>
-<li>RS384 - RSASSA-PKCS1-v1_5 using SHA-384</li>
-<li>RS512 - RSASSA-PKCS1-v1_5 using SHA-512</li>
-</ul>
+<p>The latest version of Swift-JWT requires <strong>Swift 4.0</strong> or later. You can download this version of the Swift binaries by following this <a href="https://swift.org/download/">link</a>. Compatibility with other Swift versions is not guaranteed.</p>
 <h2 id='usage' class='heading'>Usage</h2>
+<h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
+<h4 id='add-dependencies' class='heading'>Add dependencies</h4>
 
-<p>Start by importing the module:</p>
+<p>Add the <code>Swift-JWT</code> package to the dependencies within your application’s <code>Package.swift</code> file. Substitute <code>&quot;x.x.x&quot;</code> with the latest <code>Swift-JWT</code> <a href="https://github.com/IBM-Swift/Kitura-Session/releases">release</a>.</p>
+<pre class="highlight swift"><code><span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/IBM-Swift/Swift-JWT.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"x.x.x"</span><span class="p">)</span>
+</code></pre>
+
+<p>Add <code>SwiftJWT</code> to your target&rsquo;s dependencies:</p>
+<pre class="highlight swift"><code><span class="o">.</span><span class="nf">target</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"example"</span><span class="p">,</span> <span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span><span class="s">"SwiftJWT"</span><span class="p">]),</span>
+</code></pre>
+<h4 id='import-package' class='heading'>Import package</h4>
 <pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">SwiftJWT</span>
 </code></pre>
-<h3 id='algorithm-support' class='heading'>Algorithm Support</h3>
+<h3 id='cocoapods' class='heading'>Cocoapods</h3>
 
-<p>The supported algorithms are listed above.</p>
-
-<p>In order to check at run time if an algorithm is supported and whether it requires a key or a secret, call:</p>
-<pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isSupported</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Supported</span>
+<p>To include <code>Swift-JWT</code> in a project using CocoaPods, add <code>SwiftJWT</code> to your Podfile:</p>
+<pre class="highlight plaintext"><code>pod 'SwiftJWT'
 </code></pre>
+<h2 id='getting-started' class='heading'>Getting Started</h2>
+<h3 id='the-jwt-model' class='heading'>The JWT model</h3>
 
-<p>where <code>name</code> is a textual representation of an algorithm, e.g., <q>RS256</q> (case insensitive).</p>
+<p>In its compact form, a JSON Web Tokens consist of three sections of Base64Url encoded JSON, separated by dots (.).<br>
+These section are: Headers, Claims and the Signature.
+Therefore, a JWT typically looks like the following: xxxxx.yyyyy.zzzzz</p>
+<h4 id='header' class='heading'>Header</h4>
 
-<p><code>Supported</code> is an enum with the following cases: <code>unsupported</code>, <code>supportedWithKey</code> (RSA falls into this category), and <code>supportedWithSecret</code> (HMAC, which is currently unsupported).</p>
-<h3 id='the-modeling-of-json-web-tokens' class='heading'>The modeling of JSON Web Tokens</h3>
-
-<p>The JWT class models JSON Web Tokens by using a pair of structs, <code><a href="Structs/Header.html">Header</a></code> for the JSON Web Token header and <code><a href="Structs/Claims.html">Claims</a></code> for the JSON Web Token claims.</p>
-<h4 id='header-api' class='heading'>Header API</h4>
-
-<p>The Header struct contains the various fields of the JSON Web Token header. These fields can be accessed and modified using the subscript operator. The subscript is of the type <code><a href="Enums/HeaderKeys.html">HeaderKeys</a></code>.</p>
-<h4 id='claims-api' class='heading'>Claims API</h4>
-
-<p>The Claims struct contains the various fields of the JSON Web Token claims. These fields can be accessed and modified using the subscript operator. The subscript can be either of the type <code><a href="Enums/ClaimKeys.html">ClaimKeys</a></code> for the standard claims or of the type <code>String</code> for any non-standard claims.</p>
-<h3 id='sign-a-jwt' class='heading'>Sign a JWT</h3>
-
-<p>The <code>sign</code> function encodes the header and claims of a JWT instance, creates a signature, and returns a String containing the signed JSON Web Token of the JWT instance.</p>
-
-<p>For example:</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="kt">JWT</span><span class="p">(</span><span class="nv">header</span><span class="p">:</span> <span class="kt">Header</span><span class="p">([</span><span class="o">.</span><span class="nv">typ</span><span class="p">:</span><span class="s">"JWT"</span><span class="p">]),</span> <span class="nv">claims</span><span class="p">:</span> <span class="kt">Claims</span><span class="p">([</span><span class="o">.</span><span class="nv">name</span><span class="p">:</span><span class="s">"Kitura"</span><span class="p">]))</span>
-<span class="k">let</span> <span class="nv">signedJWT</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="nf">sign</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="nf">rs256</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">.</span><span class="n">privateKey</span><span class="p">))</span>
+<p>The Header struct contains the fields of the JSON Web Token header as defined by <a href="https://tools.ietf.org/html/rfc7515#section-4">RFC7515</a>.<br>
+The <q>typ</q> header will default to <q>JWT</q>. The <q>alg</q> header will be set to the algorithm name when you sign the JWT.<br>
+The other Header fields can be set when initializing the Header or by changing them directly on the Header object.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">myHeader</span> <span class="o">=</span> <span class="kt">Header</span><span class="p">(</span><span class="nv">kid</span><span class="p">:</span> <span class="s">"KeyID1"</span><span class="p">)</span>
 </code></pre>
+<h4 id='claims' class='heading'>Claims</h4>
 
-<p><code>signedJWT</code> will be of the form:</p>
-<pre class="highlight plaintext"><code>&lt;encoded header&gt;.&lt;encoded claims&gt;.&lt;signature&gt;
+<p>Claims are statements about an entity (typically, the user) and additional data.
+The Claims are defined by creating a Swift type that conforms to the <code><a href="Protocols/Claims.html">Claims</a></code> protocol. The fields of this type represent the information that will be shared using the JWT.  </p>
+
+<p>A list of recommended claims is defined in <a href="https://tools.ietf.org/html/rfc7519#section-4.1">RFC7519</a>.</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">MyClaims</span><span class="p">:</span> <span class="kt">Claims</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">iss</span><span class="p">:</span> <span class="kt">String</span>
+    <span class="k">let</span> <span class="nv">sub</span><span class="p">:</span> <span class="kt">String</span>
+    <span class="k">let</span> <span class="nv">exp</span><span class="p">:</span> <span class="kt">Date</span>
+    <span class="k">let</span> <span class="nv">admin</span><span class="p">:</span> <span class="kt">Bool</span>
+<span class="p">}</span>
+<span class="k">let</span> <span class="nv">myClaims</span> <span class="o">=</span> <span class="kt">MyClaims</span><span class="p">(</span><span class="nv">iss</span><span class="p">:</span> <span class="s">"Kitura"</span><span class="p">,</span> <span class="nv">sub</span><span class="p">:</span> <span class="s">"John"</span><span class="p">,</span> <span class="nv">exp</span><span class="p">:</span> <span class="kt">Date</span><span class="p">(</span><span class="nv">timeIntervalSinceNow</span><span class="p">:</span> <span class="mi">3600</span><span class="p">),</span> <span class="nv">admin</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
 </code></pre>
+<h5 id='claimsexamples' class='heading'>ClaimsExamples</h5>
 
-<p><strong>Note:</strong> The <code>sign</code> function sets the alg (algorithm) field of the header.</p>
-<h3 id='creating-a-key-to-sign-a-json-web-token' class='heading'>Creating a Key to Sign a JSON Web Token</h3>
+<p>This library includes some example <code><a href="Protocols/Claims.html">Claims</a></code> structs as defined by their online specifications:</p>
 
-<p>To use the <code>sign</code> function, you must pass in the <code>key</code> parameter. This could be the contents of a .key file generated via the following Terminal commands:</p>
+<ul>
+<li><code><a href="Classes/ClaimsStandardJWT.html">ClaimsStandardJWT</a></code> as defined in <a href="https://tools.ietf.org/html/rfc7519#section-4.1">RFC7519</a>.</li>
+<li><code><a href="Classes/ClaimsMicroProfile.html">ClaimsMicroProfile</a></code> as defined <a href="http://microprofile.io/project/eclipse/microprofile-jwt-auth/spec/src/main/asciidoc/interoperability.asciidoc">here</a>.</li>
+<li><code>ClaimsOpenID.swift</code> as defined <a href="https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims">here</a>.</li>
+</ul>
+<h4 id='jwt' class='heading'>JWT</h4>
+
+<p>The JWT struct represents the <code><a href="Structs/Header.html">Header</a></code> and <code><a href="Protocols/Claims.html">Claims</a></code> of a JSON Web Token.<br>
+You can initialize a JWT by decoding a JWT String, or by providing the JWT Header and Claims.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">myJWT</span> <span class="o">=</span> <span class="kt">JWT</span><span class="p">(</span><span class="nv">header</span><span class="p">:</span> <span class="n">myHeader</span><span class="p">,</span> <span class="nv">claims</span><span class="p">:</span> <span class="n">myClaims</span><span class="p">)</span>
+</code></pre>
+<h3 id='signing-and-verifying-json-web-tokens' class='heading'>Signing and Verifying JSON web tokens</h3>
+<h4 id='creating-the-rsa-public-and-private-keys' class='heading'>Creating the RSA public and private keys</h4>
+
+<p>To sign and verify a JWT using an RSA algorithm, you must provide a public and private key. This could be the contents of a .key file generated via the following Terminal commands:</p>
 <pre class="highlight plaintext"><code>$ ssh-keygen -t rsa -b 4096 -f privateKey.key
 # Don't add a passphrase
 $ openssl rsa in privateKey.key -pubout -outform PEM -out privateKey.key.pub
 </code></pre>
 
 <p>This will create a public and private key pair on your system, and the contents of the private key can be passed into a Swift variable using the following code:</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">keyPath</span> <span class="o">=</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">fileURLWithPath</span><span class="p">:</span> <span class="nf">getAbsolutePath</span><span class="p">(</span><span class="nv">relativePath</span><span class="p">:</span> <span class="s">"/path/to/privateKey.key"</span><span class="p">))</span>
-<span class="k">let</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">Data</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">keyPath</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="n">alwaysMapped</span><span class="p">)</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">privateKeyPath</span> <span class="o">=</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">fileURLWithPath</span><span class="p">:</span> <span class="nf">getAbsolutePath</span><span class="p">(</span><span class="nv">relativePath</span><span class="p">:</span> <span class="s">"/path/to/privateKey.key"</span><span class="p">))</span>
+<span class="k">let</span> <span class="nv">privateKey</span><span class="p">:</span> <span class="kt">Data</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">privateKeyPath</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="n">alwaysMapped</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">publicKeyPath</span> <span class="o">=</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">fileURLWithPath</span><span class="p">:</span> <span class="nf">getAbsolutePath</span><span class="p">(</span><span class="nv">relativePath</span><span class="p">:</span> <span class="s">"/path/to/publicKey.key"</span><span class="p">))</span>
+<span class="k">let</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">Data</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">publicKeyPath</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="n">alwaysMapped</span><span class="p">)</span>
+</code></pre>
+<h4 id='sign-a-jwt-using-a-jwtsigner' class='heading'>Sign a JWT using a JWTSigner</h4>
+
+<p>The struct JWTSigner contains the algorithms that can be used to sign a JWT.</p>
+
+<p>Initialize a JWTSigner using the static function corresponding to the desired RSA algorithm:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">jwtSigner</span> <span class="o">=</span> <span class="kt">JWTSigner</span><span class="o">.</span><span class="nf">rs256</span><span class="p">(</span><span class="nv">privateKey</span><span class="p">:</span> <span class="n">privateKey</span><span class="p">)</span>
 </code></pre>
 
-<p>You can now sign the token using <code>jwt.sign()</code> function described above.</p>
-<h3 id='decode-a-json-web-token' class='heading'>Decode a JSON Web Token</h3>
-
-<p>The static function <code>JWT.decode</code> creates an instance of <code><a href="Structs/JWT.html">JWT</a></code> for a String containing a JSON Web Token.</p>
-
-<p>For example:</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="kt">JWT</span><span class="o">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">encodedAndSignedJWT</span><span class="p">)</span>
+<p>To generate a signed JWT string, call the <code>sign</code> function on your JWT instance, passing in a JWTSigner:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">signedJWT</span> <span class="o">=</span> <span class="k">try</span> <span class="n">myJWT</span><span class="o">.</span><span class="nf">sign</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="n">jwtSigner</span><span class="p">)</span>
 </code></pre>
 
-<p><strong>Note:</strong> This function doesn&rsquo;t verify the signature of the token.</p>
-<h3 id='encode-a-json-web-token' class='heading'>Encode a JSON Web Token</h3>
-
-<p>To encode a token without signing it, call encode.</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">encoded</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="nf">encode</span><span class="p">()</span>
+<p>The resulting <code>signedJWT</code> will be a <code>String</code> of the form:</p>
+<pre class="highlight plaintext"><code>&lt;encoded header&gt;.&lt;encoded claims&gt;.&lt;signature&gt;
 </code></pre>
-<h3 id='verify-the-signature-of-a-json-web-token' class='heading'>Verify the signature of a JSON Web Token</h3>
 
-<p>The static function <code>JWT.verify</code> verifies the signature of a JSON Web Token given in String form.</p>
+<p><strong>Note:</strong> The sign function sets the alg (algorithm) field of the header.</p>
+<h4 id='verify-a-jwt-using-jwtverifier' class='heading'>Verify a JWT using JWTVerifier</h4>
 
-<p>For example:</p>
-<pre class="highlight swift"><code><span class="k">if</span> <span class="o">!</span><span class="kt">JWT</span><span class="o">.</span><span class="nf">verify</span><span class="p">(</span><span class="n">encodedAndSignedJWT</span><span class="p">,</span> <span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="nf">rs512</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">.</span><span class="n">publicKey</span><span class="p">))</span> <span class="p">{</span>
-    <span class="nf">print</span><span class="p">(</span><span class="s">"Verification failed"</span><span class="p">)</span>
-<span class="p">}</span>
+<p>The struct JWTVerifier contains the algorithms that can be used to verify a JWT.</p>
+
+<p>Initialize a JWTVerifier using the static function corresponding to the desired RSA algorithm:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">jwtVerifier</span> <span class="o">=</span> <span class="kt">JWTVerifier</span><span class="o">.</span><span class="nf">rs256</span><span class="p">(</span><span class="nv">publicKey</span><span class="p">:</span> <span class="n">publicKey</span><span class="p">)</span>
 </code></pre>
-<h3 id='validate-claims' class='heading'>Validate claims</h3>
 
-<p>The <code>validateClaims</code> function validates the claims of a JWT instance.
-The following claims are validated if they are present in the <code><a href="Structs/Claims.html">Claims</a></code> object:</p>
+<p>To verify a signed JWT string, call the static <code>verify</code> function, passing in your JWT string and the JWTVerifier:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">verified</span> <span class="o">=</span> <span class="kt">JWT</span><span class="o">&lt;</span><span class="kt">MyClaims</span><span class="o">&gt;.</span><span class="nf">verify</span><span class="p">(</span><span class="n">signedJWT</span><span class="p">,</span> <span class="nv">using</span><span class="p">:</span> <span class="n">jwtVerifier</span><span class="p">)</span>
+</code></pre>
+
+<p>The <code>verified</code> field will be a <code>bool</code> that is true if the signature is verified.</p>
+<h4 id='supported-algorithms' class='heading'>Supported Algorithms</h4>
+
+<p>The supported algorithms for signing and verifying JWTs are:</p>
 
 <ul>
-<li>iss (issuer)</li>
-<li>aud (audience)</li>
+<li>RS256 - RSASSA-PKCS1-v1_5 using SHA-256</li>
+<li>RS384 - RSASSA-PKCS1-v1_5 using SHA-384</li>
+<li>RS512 - RSASSA-PKCS1-v1_5 using SHA-512</li>
+<li>HS256 - HMAC using using SHA-256</li>
+<li>HS384 - HMAC using using SHA-384</li>
+<li>HS512 - HMAC using using SHA-512</li>
+<li>none - Don&rsquo;t sign or verify the JWT</li>
+</ul>
+<h3 id='validate-claims' class='heading'>Validate claims</h3>
+
+<p>The <code>validateClaims</code> function validates the Standard Date claims of a JWT instance.
+The following claims are validated if they are present in the <code><a href="Protocols/Claims.html">Claims</a></code> object:</p>
+
+<ul>
 <li>exp (expiration date)</li>
 <li>nbf (not before date)</li>
 <li>iat (issued at date)</li>
 </ul>
 
-<p>Various validations require an input. In these cases, if the claim in question exists and the input is provided, the validation will be performed. Otherwise, the validation is skipped.</p>
-
-<p>The method returns <code><a href="Enums/ValidateClaimsResult.html">ValidateClaimsResult</a></code> - an enum that list the various reasons for validation failure.
-If the validation succeeds <code><a href="Enums/ValidateClaimsResult.html#/s:8SwiftJWT20ValidateClaimsResultO7successA2CmF">ValidateClaimsResult.success</a></code> is returned.</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">validationResult</span> <span class="o">=</span> <span class="nf">validateClaims</span><span class="p">(</span><span class="nv">issuer</span><span class="p">:</span> <span class="n">issuer</span><span class="p">,</span> <span class="nv">audience</span><span class="p">:</span> <span class="n">clientID</span><span class="p">)</span>
+<p>The method returns <code><a href="Structs/ValidateClaimsResult.html">ValidateClaimsResult</a></code> - an struct that list the various reasons for validation failure.
+If the validation succeeds <code><a href="Structs/ValidateClaimsResult.html#/s:8SwiftJWT20ValidateClaimsResultV7successACvpZ">ValidateClaimsResult.success</a></code> is returned.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">validationResult</span> <span class="o">=</span> <span class="n">verified</span><span class="o">.</span><span class="nf">validateClaims</span><span class="p">()</span>
 <span class="k">if</span> <span class="n">validationResult</span> <span class="o">!=</span> <span class="o">.</span><span class="n">success</span> <span class="p">{</span>
-  <span class="nf">print</span><span class="p">(</span><span class="s">"Claims validation failed: "</span><span class="p">,</span> <span class="n">validationResult</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Claims validation failed: "</span><span class="p">,</span> <span class="n">validationResult</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre>
+<h3 id='decode-a-jwt-from-a-jwt-string' class='heading'>Decode a JWT from a JWT string</h3>
+
+<p>A JWT struct can be initialized from a JWT string.  If a JWTVerifier is provided it will be used to verify the signature before initialization</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">newJWT</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">JWT</span><span class="o">&lt;</span><span class="kt">MyClaims</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">jwtString</span><span class="p">:</span> <span class="n">signedJWT</span><span class="p">,</span> <span class="nv">jwtVerifier</span><span class="p">:</span> <span class="n">jwtVerifier</span><span class="p">)</span>
+</code></pre>
+<h3 id='jwtencoder-and-jwtdecoder' class='heading'>JWTEncoder and JWTDecoder</h3>
+
+<p>The JWTEncoder and JWTDecoder classes encode and decode JWT Strings using the same API as JSONEncoder and JSONDecoder:</p>
+<pre class="highlight swift"><code> <span class="k">let</span> <span class="nv">jwtEncoder</span> <span class="o">=</span> <span class="kt">JWTEncoder</span><span class="p">(</span><span class="nv">jwtSigner</span><span class="p">:</span> <span class="n">jwtSigner</span><span class="p">)</span>
+ <span class="k">let</span> <span class="nv">jwtString</span> <span class="o">=</span> <span class="k">try</span> <span class="n">jwtEncoder</span><span class="o">.</span><span class="nf">encodeToString</span><span class="p">(</span><span class="n">myJWT</span><span class="p">)</span>
+
+ <span class="k">let</span> <span class="nv">jwtDecoder</span> <span class="o">=</span> <span class="kt">JWTDecoder</span><span class="p">(</span><span class="nv">jwtVerifier</span><span class="p">:</span> <span class="n">jwtVerifier</span><span class="p">)</span>
+ <span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="k">try</span> <span class="n">jwtDecoder</span><span class="o">.</span><span class="nf">decode</span><span class="p">(</span><span class="kt">JWT</span><span class="o">&lt;</span><span class="kt">MyClaims</span><span class="o">&gt;.</span><span class="k">self</span><span class="p">,</span> <span class="nv">fromString</span><span class="p">:</span> <span class="n">jwtString</span><span class="p">)</span>
+</code></pre>
+
+<p>Because JWTEncoder and JWTDecoder conform to <a href="https://github.com/IBM-Swift/KituraContracts/blob/master/Sources/KituraContracts/Contracts.swift">KituraContract&rsquo;s</a> BodyEncoder and BodyDecoder protocols, they can be used as a <a href="https://developer.ibm.com/swift/2018/09/01/kitura-custom-encoders-and-decoders/">custom coder</a> in Codable routes for sending and receiving JWTs:</p>
+<pre class="highlight swift"><code> <span class="n">router</span><span class="o">.</span><span class="n">encoders</span><span class="p">[</span><span class="kt">MediaType</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="o">.</span><span class="n">application</span><span class="p">,</span> <span class="nv">subType</span><span class="p">:</span> <span class="s">"jwt"</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span> <span class="k">return</span> <span class="n">jwtEncoder</span> <span class="p">}</span>
+ <span class="n">router</span><span class="o">.</span><span class="n">decoders</span><span class="p">[</span><span class="kt">MediaType</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="o">.</span><span class="n">application</span><span class="p">,</span> <span class="nv">subType</span><span class="p">:</span> <span class="s">"jwt"</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span> <span class="k">return</span> <span class="n">jwtDecoder</span> <span class="p">}</span>
+</code></pre>
+
+<p>This allows for the use of JWT&rsquo;s in information exchange. By sending and receiving JWT&rsquo;s you can ensure the sending is who they say they are and verify the content hasn&rsquo;t been tampered with.</p>
+<h2 id='api-documentation' class='heading'>API Documentation</h2>
+
+<p>For more information visit our [API reference](<a href="https://ibm-swift.github.io/Swift-JWT/index.html">https://ibm-swift.github.io/Swift-JWT/index.html</a>.</p>
+<h2 id='community' class='heading'>Community</h2>
+
+<p>We love to talk server-side Swift, and Kitura. Join our <a href="http://swift-at-ibm-slack.mybluemix.net/">Slack</a> to meet the team!</p>
 <h2 id='license' class='heading'>License</h2>
 
-<p>This library is licensed under Apache 2.0. Full license text is available in <a href="LICENSE.txt">LICENSE</a>.</p>
+<p>This library is licensed under Apache 2.0. Full license text is available in <a href="https://github.com/IBM-Swift/Swift-JWT/blob/master/LICENSE">LICENSE</a>.</p>
 
           </div>
         </section>
@@ -252,7 +315,7 @@ If the validation succeeds <code><a href="Enums/ValidateClaimsResult.html#/s:8Sw
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-05-11)</p>
+      <p>&copy; 2018 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-12-10)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

@@ -51,25 +51,30 @@
       <nav class="navigation">
         <ul class="nav-groups">
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/Algorithm.html">Algorithm</a>
+                <a class="nav-group-task-link" href="../Classes/ClaimsMicroProfile.html">ClaimsMicroProfile</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/Algorithm/Supported.html">– Supported</a>
+                <a class="nav-group-task-link" href="../Classes/ClaimsOpenID.html">ClaimsOpenID</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/ClaimKeys.html">ClaimKeys</a>
+                <a class="nav-group-task-link" href="../Classes/ClaimsStandardJWT.html">ClaimsStandardJWT</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/HeaderKeys.html">HeaderKeys</a>
+                <a class="nav-group-task-link" href="../Classes/JWTDecoder.html">JWTDecoder</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/RSAKeyType.html">RSAKeyType</a>
+                <a class="nav-group-task-link" href="../Classes/JWTEncoder.html">JWTEncoder</a>
               </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/ValidateClaimsResult.html">ValidateClaimsResult</a>
+                <a class="nav-group-task-link" href="../Protocols/Claims.html">Claims</a>
               </li>
             </ul>
           </li>
@@ -77,19 +82,25 @@
             <a class="nav-group-name-link" href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/Base64URL.html">Base64URL</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/Claims.html">Claims</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/Hash.html">Hash</a>
+                <a class="nav-group-task-link" href="../Structs/AddressClaim.html">AddressClaim</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Header.html">Header</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/JWT.html">JWT</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/JWTError.html">JWTError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/JWTSigner.html">JWTSigner</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/JWTVerifier.html">JWTVerifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ValidateClaimsResult.html">ValidateClaimsResult</a>
               </li>
             </ul>
           </li>
@@ -102,11 +113,19 @@
             <h1>Header</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Header</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Header</span><span class="p">:</span> <span class="kt">Codable</span></code></pre>
 
                 </div>
               </div>
-            <p>A representation of a JSON Web Token header.</p>
+            <p>A representation of a JSON Web Token header.
+<a href="https://tools.ietf.org/html/rfc7515#section-4.1">https://tools.ietf.org/html/rfc7515#section-4.1</a></p>
+<h3 id='usage-example' class='heading'>Usage Example:</h3>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">MyClaims</span><span class="p">:</span> <span class="kt">Claims</span> <span class="p">{</span>
+   <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span>
+<span class="p">}</span>
+<span class="k">let</span> <span class="nv">myHeader</span> <span class="o">=</span> <span class="kt">Header</span><span class="p">(</span><span class="nv">kid</span><span class="p">:</span> <span class="s">"keyID"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="kt">JWT</span><span class="p">(</span><span class="nv">header</span><span class="p">:</span> <span class="n">myHeader</span><span class="p">,</span> <span class="nv">claims</span><span class="p">:</span> <span class="kt">MyClaims</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Kitura"</span><span class="p">))</span>
+</code></pre>
 
           </div>
         </section>
@@ -118,9 +137,306 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT6HeaderVACs10DictionaryVyAA0C4KeysOypGSgcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT6HeaderVACs10DictionaryVyAA0C4KeysOypGSgcfc">init(_:)</a>
+                    <a name="/s:8SwiftJWT6HeaderV3typSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/typ" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderV3typSSSgvp">typ</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Type Header Parameter</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">typ</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT6HeaderV3algSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/alg" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderV3algSSSgvp">alg</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Algorithm Header Parameter</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">alg</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT6HeaderV3jkuSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/jku" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderV3jkuSSSgvp">jku</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>JSON Web Token Set URL Header Parameter</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">jku</span> <span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT6HeaderV3jwkSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/jwk" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderV3jwkSSSgvp">jwk</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>JSON Web Key Header Parameter</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">jwk</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT6HeaderV3kidSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/kid" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderV3kidSSSgvp">kid</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Key ID Header Parameter</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">kid</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT6HeaderV3x5uSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/x5u" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderV3x5uSSSgvp">x5u</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>X.509 URL Header Parameter</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">x5u</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT6HeaderV3x5cSaySSGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/x5c" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderV3x5cSaySSGSgvp">x5c</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>X.509 Certificate Chain Header Parameter</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">x5c</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT6HeaderV3x5tSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/x5t" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderV3x5tSSSgvp">x5t</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>X.509 Certificate SHA-1 Thumbprint Header Parameter</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">x5t</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT6HeaderV7x5tS256SSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/x5tS256" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderV7x5tS256SSSgvp">x5tS256</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>X.509 Certificate SHA-256 Thumbprint Header Parameter</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">x5tS256</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT6HeaderV3ctySSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/cty" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderV3ctySSSgvp">cty</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Content Type Header Parameter</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">cty</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT6HeaderV4critSaySSGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/crit" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderV4critSaySSGSgvp">crit</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Critical Header Parameter</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">crit</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT6HeaderVACSSSg3typ_AD3jkuAD3jwkAD3kidAD3x5uSaySSGSg3x5cAD3x5tAD0J4S256AD3ctyAK4crittcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(typ:jku:jwk:kid:x5u:x5c:x5t:x5tS256:cty:crit:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT6HeaderVACSSSg3typ_AD3jkuAD3jwkAD3kidAD3x5uSaySSGSg3x5cAD3x5tAD0J4S256AD3ctyAK4crittcfc">init(typ:jku:jwk:kid:x5u:x5c:x5t:x5tS256:cty:crit:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -135,7 +451,18 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">header</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/HeaderKeys.html">HeaderKeys</a></span><span class="p">:</span><span class="kt">Any</span><span class="p">]?</span><span class="o">=</span><span class="kc">nil</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">typ</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="s">"JWT"</span><span class="p">,</span>
+    <span class="nv">jku</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">jwk</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">kid</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">x5u</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">x5c</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">x5t</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">x5tS256</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">cty</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">crit</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -146,12 +473,120 @@
                             <tr>
                               <td>
                                 <code>
-                                <em>header</em>
+                                <em>typ</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>An optional dictionary containing the claims with <code><a href="../Enums/HeaderKeys.html">HeaderKeys</a></code> as keys.</p>
+                                  <p>The Type Header Parameter</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>jku</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The JSON Web Token Set URL Header Parameter</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>jwk</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The JSON Web Key Header Parameter</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>kid</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The Key ID Header Parameter</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>x5u</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The X.509 URL Header Parameter</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>x5c</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The X.509 Certificate SHA-1 Thumbprint Header Parameter</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>x5t</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The X.509 Certificate Chain Header Parameter</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>x5tS256</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>X.509 Certificate SHA-256 Thumbprint Header Parameter</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cty</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The Content Type Header Parameter</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>crit</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The Critical Header Parameter</p>
                                 </div>
                               </td>
                             </tr>
@@ -165,56 +600,6 @@
                     </section>
                   </div>
                 </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:8SwiftJWT6HeaderVypSgAA0C4KeysOcip"></a>
-                    <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT6HeaderVypSgAA0C4KeysOcip">subscript(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Return a header value for the key of type HeaderKeys.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Enums/HeaderKeys.html">HeaderKeys</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>key</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The key.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>The header value for the key.</p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
               </ul>
             </div>
           </div>
@@ -223,7 +608,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-05-11)</p>
+      <p>&copy; 2018 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-12-10)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
