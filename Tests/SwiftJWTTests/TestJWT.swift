@@ -402,6 +402,7 @@ class TestJWT: XCTestCase {
         jwt.claims.sub = "1234567890"
         jwt.claims.name = "John Doe"
         jwt.claims.admin = true
+        jwt.claims.iat = Date(timeIntervalSince1970: 1516239022)
         do {
             let jwtString = try rsaJWTEncoder.encodeToString(jwt)
             let decodedJWTString = try JWT<TestClaims>(jwtString: jwtString)
@@ -424,6 +425,7 @@ class TestJWT: XCTestCase {
         jwt.claims.sub = "1234567890"
         jwt.claims.name = "John Doe"
         jwt.claims.admin = true
+        jwt.claims.iat = Date(timeIntervalSince1970: 1516239022)
         do {
             let decodedJWT = try rsaJWTDecoder.decode(JWT<TestClaims>.self, fromString: rsaEncodedTestClaimJWT)
             jwt.header.alg = "RS256"
