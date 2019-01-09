@@ -26,7 +26,7 @@ let rsaJWTEncoder = JWTEncoder(jwtSigner: .rs256(privateKey: rsaPrivateKey))
 let rsaJWTDecoder = JWTDecoder(jwtVerifier: .rs256(publicKey: rsaPublicKey))
 let certPrivateKey = read(fileName: "cert_private_key")
 let certificate = read(fileName: "certificate")
-let rsaEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.WJHaxAjhLu7wkw2J3B7ZpW-pnX-WEDJuy7l46nHZRWtZrH_4f8724v-4V48UlHtEgQpUXCHyGRyWPgPJCdGIfy2vD5GBoMJ1kdNWQa0UVOajTk0omUIloBPKgo-45m3w15ub-_4bihyZOI8dCK9zk5vjvUGnzdKartNi9AN5kNM"
+let rsaEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTUxNjIzOTAyMn0.HbPVSMBtR3l0zyrHIlGRyXkNECgE0RrQreebA2xuIWhN-64MP29-lf8lg5pWKk3gTrnbOxEpek5AvBNgz4VK34enkzhrrMKonBywvZZ8CQtM5FlArgx5ZQqxjD32B7WCqlDOelly1W2rlFNIopBit-OuKBw1ioxQwzDMLb1Ol3Q"
 let certificateEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.CpnzQLuWGfH5Kba36vg0ZZKBnzwlrIgapFVfBfk_nea-eej84ktHZANqIeolskZopRJ4DQ3oaLtHWEg16-ZsujxmkOdiAIbk0-C4QLOVFLZH78WLZAqkyNLS8rFuK9hloLNwz1j6VVUd1f0SOT-wIRzL0_0VRYqQd1bVcCj7wc7BmXENlOfHY7KGHS-6JX-EClT1DygDSoCmdvBExBf3vx0lwMIbP4ryKkyhOoU13ZfSUt1gpP9nZAfzqfRTPxZc_f7neiAlMlF6SzsedsskRCNegW8cg5e_NuVmZZkj0_bnswXFDMmIaxiPdtOEWkmyEOca-EHSwbO5PgCgXOIrgg"
 // A `TestClaims` encoded using HMAC with "Super Secret Key" from "www.jwt.io"
 let hmacEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.8kIE0ZCq1Vw7aW1kACpgJLcgY2DpTXgO6P5T3cdCuTs"
@@ -520,6 +520,8 @@ class TestJWT: XCTestCase {
             XCTAssertEqual(decoded.claims.sub, "1234567890", "Wrong .sub in decoded")
             XCTAssertEqual(decoded.claims.name, "John Doe", "Wrong .name in decoded")
             XCTAssertEqual(decoded.claims.admin, true, "Wrong .admin in decoded")
+            XCTAssertEqual(decoded.claims.iat, Date(timeIntervalSince1970: 1516239022), "Wrong .iat in decoded")
+            
             
             XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
         }
@@ -548,6 +550,10 @@ class TestJWT: XCTestCase {
         else {
             XCTFail("Failed to decode")
         }
+    }
+    
+    func testDateEncodingStrategy() {
+        
     }
 }
 
