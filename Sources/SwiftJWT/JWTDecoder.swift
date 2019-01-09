@@ -212,8 +212,10 @@ private struct _JWTKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContaine
     // Those types will be a `Header` object and a generic `Claims` object.
     func decode<T : Decodable>(_ type: T.Type, forKey key: Key) throws -> T {
         decoder.codingPath.append(key)
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.dateDecodingStrategy = .secondsSince1970
         if key.stringValue == "header" {
-            let header = try JSONDecoder().decode(Header.self, from: self.header)
+            let header = try jsonDecoder.decode(Header.self, from: self.header)
             decoder.keyID = header.kid
             guard let decodedHeader = header as? T else {
                 throw DecodingError.typeMismatch(T.self, DecodingError.Context(codingPath: codingPath, debugDescription: "Type of header key was not a JWT Header"))
@@ -221,7 +223,7 @@ private struct _JWTKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContaine
             return decodedHeader
         } else
         if key.stringValue == "claims" {
-            return try JSONDecoder().decode(type, from: claims)
+            return try jsonDecoder.decode(type, from: claims)
         } else {
             throw DecodingError.keyNotFound(key, DecodingError.Context(codingPath: codingPath, debugDescription: "value not found for provided key"))
         }

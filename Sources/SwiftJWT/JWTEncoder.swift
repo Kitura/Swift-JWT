@@ -151,6 +151,8 @@ fileprivate class _JWTEncoder: Encoder {
         mutating func encode<T : Encodable>(_ value: T, forKey key: Key) throws {
             self.codingPath.append(key)
             let fieldName = key.stringValue
+            let jsonEncoder = JSONEncoder()
+            jsonEncoder.dateEncodingStrategy = .secondsSince1970
             if fieldName == "header" {
                 guard var _header = value as? Header else {
                     throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to encode into header CodingKey"))
@@ -163,10 +165,10 @@ fileprivate class _JWTEncoder: Encoder {
                     encoder.jwtSigner = keyIDJWTSigner
                 }
                 _header.alg = encoder.jwtSigner?.name
-                let data = try JSONEncoder().encode(_header)
+                let data = try jsonEncoder.encode(_header)
                 encoder.header = data.base64urlEncodedString()
             } else if fieldName == "claims" {
-                let data = try JSONEncoder().encode(value)
+                let data = try jsonEncoder.encode(value)
                 encoder.claims = data.base64urlEncodedString()
             }
         }
