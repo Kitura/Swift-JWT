@@ -551,10 +551,6 @@ class TestJWT: XCTestCase {
             XCTFail("Failed to decode")
         }
     }
-    
-    func testDateEncodingStrategy() {
-        
-    }
 }
 
 func read(fileName: String) -> Data {
