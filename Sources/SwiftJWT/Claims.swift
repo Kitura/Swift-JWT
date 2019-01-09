@@ -76,7 +76,9 @@ public extension Claims {
     }
     
     func encode() throws -> String {
-        let data = try JSONEncoder().encode(self)
+        let jsonEncoder = JSONEncoder()
+        jsonEncoder.dateEncodingStrategy = .secondsSince1970
+        let data = try jsonEncoder.encode(self)
         return data.base64urlEncodedString()
     }
 }
