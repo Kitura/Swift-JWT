@@ -36,7 +36,7 @@ The latest version of Swift-JWT requires **Swift 4.0** or later. You can downloa
 ### Swift Package Manager
 
 #### Add dependencies
-Add the `Swift-JWT` package to the dependencies within your application’s `Package.swift` file. Substitute `"x.x.x"` with the latest `Swift-JWT` [release](https://github.com/IBM-Swift/Kitura-Session/releases).
+Add the `Swift-JWT` package to the dependencies within your application’s `Package.swift` file. Substitute `"x.x.x"` with the latest `Swift-JWT` [release](https://github.com/IBM-Swift/Swift-JWT/releases).
 ```swift
 .package(url: "https://github.com/IBM-Swift/Swift-JWT.git", from: "x.x.x")
 ```
