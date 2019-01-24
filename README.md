@@ -114,7 +114,7 @@ To sign and verify a JWT using an RSA algorithm, you must provide a public and p
 ```
 $ ssh-keygen -t rsa -b 4096 -f privateKey.key
 # Don't add a passphrase
-$ openssl rsa in privateKey.key -pubout -outform PEM -out privateKey.key.pub
+$ openssl rsa -in privateKey.key -pubout -outform PEM -out privateKey.key.pub
 ```
 
 This will create a public and private key pair on your system, and the contents of the private key can be passed into a Swift variable using the following code:
