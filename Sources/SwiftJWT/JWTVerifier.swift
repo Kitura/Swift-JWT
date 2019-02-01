@@ -90,6 +90,11 @@ public struct JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueHMAC(key: key, algorithm: .sha512))
     }
     
+    /// Initialize a JWTVerifier using the ECDSA 256 bits algorithm and the provided certificate.
+    public static func es256(publicKey: Data) -> JWTVerifier {
+        return JWTVerifier(verifierAlgorithm: BlueECDSA(key: publicKey, keyType: .publicKey, algorithm: .sha256))
+    }
+    
     /// Initialize a JWTVerifier that will always return true when verifying the JWT. This is equivelent to using the "none" alg header.
     public static let none = JWTVerifier(verifierAlgorithm: NoneAlgorithm())
 }
