@@ -553,6 +553,30 @@ class TestJWT: XCTestCase {
             XCTFail("Failed to decode")
         }
     }
+    
+    func testValidateClaims() {
+        var jwt = JWT(claims: TestClaims(name:"Kitura"))
+        jwt.claims.exp = Date()
+        XCTAssertEqual(jwt.validateClaims(), .expired, "Validation failed")
+        jwt.claims.exp = nil
+        jwt.claims.iat = Date(timeIntervalSinceNow: 10)
+        XCTAssertEqual(jwt.validateClaims(), .issuedAt, "Validation failed")
+        jwt.claims.iat = nil
+        jwt.claims.nbf = Date(timeIntervalSinceNow: 10)
+        XCTAssertEqual(jwt.validateClaims(), .notBefore, "Validation failed")
+    }
+    
+    func testValidateClaimsLeeway() {
+        var jwt = JWT(claims: TestClaims(name:"Kitura"))
+        jwt.claims.exp = Date()
+        XCTAssertEqual(jwt.validateClaims(leeway: 20), .success, "Validation failed")
+        jwt.claims.exp = nil
+        jwt.claims.iat = Date(timeIntervalSinceNow: 10)
+        XCTAssertEqual(jwt.validateClaims(leeway: 20), .success, "Validation failed")
+        jwt.claims.iat = nil
+        jwt.claims.nbf = Date(timeIntervalSinceNow: 10)
+        XCTAssertEqual(jwt.validateClaims(leeway: 20), .success, "Validation failed")
+    }
 }
 
 func read(fileName: String) -> Data {
