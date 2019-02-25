@@ -186,9 +186,10 @@ The following claims are validated if they are present in the `Claims` object:
 
 The method returns `ValidateClaimsResult` - an struct that list the various reasons for validation failure.
 If the validation succeeds `ValidateClaimsResult.success` is returned.
+The `leeway` parameter is the `TimeInterval` in seconds that the Date can be invalid for but still be accepted to account for clock skew.
 
 ```swift
-let validationResult = verified.validateClaims()
+let validationResult = verified.validateClaims(leeway: 10)
 if validationResult != .success {
     print("Claims validation failed: ", validationResult)
 }
