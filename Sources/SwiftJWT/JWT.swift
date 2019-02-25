@@ -33,6 +33,7 @@ import Foundation
  ```
  */
 
+@available(OSX 10.12, *)
 public struct JWT<T: Claims>: Codable {
     
     /// The JWT header.

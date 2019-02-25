@@ -37,6 +37,7 @@ import KituraContracts
  }
  ```
  */
+@available(OSX 10.12, *)
 public class JWTEncoder: BodyEncoder {
     
     let keyIDToSigner: (String) -> JWTSigner?
@@ -115,6 +116,7 @@ public class JWTEncoder: BodyEncoder {
  ```
  Where encoder is a _JWTEncoder instance, and MyClaims is the user defined object conforming to Claims.
  */
+@available(OSX 10.12, *)
 fileprivate class _JWTEncoder: Encoder {
     
     init(jwtSigner: JWTSigner?, keyIDToSigner: @escaping (String) -> JWTSigner?) {

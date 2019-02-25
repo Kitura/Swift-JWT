@@ -34,6 +34,7 @@ import Foundation
  let verified: Bool = jwt.verify(signedJWT, using: jwtVerifier)
  ```
  */
+@available(OSX 10.12, *)
 public struct JWTVerifier {    
     let verifierAlgorithm: VerifierAlgorithm
     

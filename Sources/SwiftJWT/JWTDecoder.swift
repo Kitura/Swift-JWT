@@ -36,6 +36,7 @@ import KituraContracts
  }
  ```
  */
+@available(OSX 10.12, *)
 public class JWTDecoder: BodyDecoder {
     
     let keyIDToVerifier: (String) -> JWTVerifier?

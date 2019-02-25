@@ -32,6 +32,7 @@ import Foundation
  let signedJWT: String? = try? jwt.sign(using: jwtSigner)
  ```
  */
+@available(OSX 10.12, *)
 public struct JWTSigner {
     
     /// The name of the algorithm that will be set in the "alg" header
