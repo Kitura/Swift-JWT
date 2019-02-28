@@ -78,9 +78,19 @@ public struct JWTSigner {
         return JWTSigner(name: "HS512", signerAlgorithm: BlueHMAC(key: key, algorithm: .sha512))
     }
     
-    /// Initialize a JWTSigner using the ECDSA 512 bits algorithm and the provided privateKey.
+    /// Initialize a JWTSigner using the ECDSA SHA256 algorithm and the provided privateKey.
     public static func es256(privateKey: Data) -> JWTSigner {
-        return JWTSigner(name: "ES256", signerAlgorithm: BlueECDSA(key: privateKey, keyType: .privateKey, algorithm: .sha256))
+        return JWTSigner(name: "ES256", signerAlgorithm: BlueECSigner(key: privateKey, curve: "prime256v1"))
+    }
+    
+    /// Initialize a JWTSigner using the ECDSA SHA384 algorithm and the provided privateKey.
+    public static func es384(privateKey: Data) -> JWTSigner {
+        return JWTSigner(name: "ES384", signerAlgorithm: BlueECSigner(key: privateKey, curve: "secp384r1"))
+    }
+    
+    /// Initialize a JWTSigner using the ECDSA SHA512 algorithm and the provided privateKey.
+    public static func es512(privateKey: Data) -> JWTSigner {
+        return JWTSigner(name: "ES512", signerAlgorithm: BlueECSigner(key: privateKey, curve: "secp521r1"))
     }
     
     /// Initialize a JWTSigner that will not sign the JWT. This is equivelent to using the "none" alg header.

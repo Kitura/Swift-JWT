@@ -14,22 +14,20 @@
  * limitations under the License.
  **/
 
-import CryptorRSA
+import CryptorECC
 import LoggerAPI
 
 import Foundation
 
-class BlueECDSA: SignerAlgorithm, VerifierAlgorithm {
+class BlueECSigner: SignerAlgorithm {
     let name: String = "ECDSA"
     
     private let key: Data
-    private let keyType: RSAKeyType
-    private let algorithm: Data.Algorithm
+    private let curve: String
     
-    init(key: Data, keyType: RSAKeyType?=nil, algorithm: Data.Algorithm) {
+    init(key: Data, curve: String) {
         self.key = key
-        self.keyType = keyType ?? .publicKey
-        self.algorithm = algorithm
+        self.curve = curve
     }
     
     func sign(header: String, claims: String) throws -> String {
@@ -43,21 +41,35 @@ class BlueECDSA: SignerAlgorithm, VerifierAlgorithm {
     }
     
     func sign(_ data: Data) throws -> Data {
-        guard #available(macOS 10.12, iOS 10.0, *) else {
-            Log.error("macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA")
-            throw JWTError.osVersionToLow
-        }
         guard let keyString = String(data: key, encoding: .utf8) else {
             throw JWTError.invalidPrivateKey
         }
-        guard let privateKey = CryptorECDSA.PrivateKey(pemKey: keyString),
-            let signedData = CryptorECDSA.createSignature(data: data, privateKey: privateKey)
-        else {
-            throw JWTError.invalidPrivateKey
+        print("Count: \(keyString.count)")
+        print("keyString: \(keyString)")
+        if #available(OSX 10.13, *) {
+            let privateKey = try ECPrivateKey(key: keyString)
+            guard privateKey.curveId == curve else {
+                throw JWTError.invalidPrivateKey
+            }
+            let signedData = try data.sign(with: privateKey)
+            return signedData.r + signedData.s
+        } else {
+            throw JWTError.osVersionToLow
         }
-        return signedData
+
     }
+}
+
+class BlueECVerifier: VerifierAlgorithm {
     
+    let name: String = "ECDSA"
+    
+    private let key: Data
+    private let curve: String
+    init(key: Data, curve: String) {
+        self.key = key
+        self.curve = curve
+    }
     
     func verify(jwt: String) -> Bool {
         let components = jwt.components(separatedBy: ".")
@@ -74,23 +86,25 @@ class BlueECDSA: SignerAlgorithm, VerifierAlgorithm {
     }
     
     func verify(signature: Data, for data: Data) -> Bool {
-        guard #available(macOS 10.12, iOS 10.0, *) else {
+        guard #available(OSX 10.13, *) else {
             return false
         }
         do {
-            switch keyType {
-            case .privateKey:
-                return false
-            case .publicKey:
-                guard let keyString = String(data: key, encoding: .utf8),
-                    let publicKey = CryptorECDSA.PublicKey(pemKey: keyString)
-                else {
-                    return false
-                }
-                return CryptorECDSA.verifySignature(digestData: data, signatureData: signature, publicKey: publicKey)
-            case .certificate:
+            guard let keyString = String(data: key, encoding: .utf8) else {
                 return false
             }
+            let r = signature.subdata(in: 0 ..< signature.count/2)
+            let s = signature.subdata(in: signature.count/2 ..< signature.count)
+            let signature = try ECSignature(r: r, s: s)
+            let publicKey = try ECPublicKey(key: keyString)
+            guard publicKey.curveId == curve else {
+                return false
+            }
+            return signature.verify(plaintext: data, using: publicKey)
+        }
+        catch {
+            Log.error("Verification failed: \(error)")
+            return false
         }
     }
 }

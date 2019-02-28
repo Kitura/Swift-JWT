@@ -24,6 +24,10 @@ let rsaPrivateKey = read(fileName: "rsa_private_key")
 let rsaPublicKey = read(fileName: "rsa_public_key")
 let ecdsaPrivateKey = read(fileName: "ecdsa_private_key")
 let ecdsaPublicKey = read(fileName: "ecdsa_public_key")
+let ec384PrivateKey = read(fileName: "ec384_private_key")
+let ec384PublicKey = read(fileName: "ec384_public_key")
+let ec512PrivateKey = read(fileName: "ec512_private_key")
+let ec512PublicKey = read(fileName: "ec512_public_key")
 let rsaJWTEncoder = JWTEncoder(jwtSigner: .rs256(privateKey: rsaPrivateKey))
 let rsaJWTDecoder = JWTDecoder(jwtVerifier: .rs256(publicKey: rsaPublicKey))
 let certPrivateKey = read(fileName: "cert_private_key")
@@ -200,7 +204,8 @@ class TestJWT: XCTestCase {
         }
         
         // ECDSA key
-        if let signed = try? jwt.sign(using: .es256(privateKey: ecdsaPrivateKey)) {
+        do {
+            let signed = try jwt.sign(using: .es256(privateKey: ecdsaPrivateKey))
             let ok = JWT<TestClaims>.verify(signed, using: .es256(publicKey: ecdsaPublicKey))
             XCTAssertTrue(ok, "Verification failed")
             
@@ -212,9 +217,8 @@ class TestJWT: XCTestCase {
             else {
                 XCTFail("Failed to decode")
             }
-        }
-        else {
-            XCTFail("Failed to sign")
+        } catch {
+            XCTFail("Failed to sign: \(error)")
         }
     }
     
@@ -282,6 +286,24 @@ class TestJWT: XCTestCase {
         else {
             XCTFail("Failed to sign")
         }
+        
+        // ECDSA key
+        do {
+            let signed = try jwt.sign(using: .es384(privateKey: ec384PrivateKey))
+            let ok = JWT<TestClaims>.verify(signed, using: .es384(publicKey: ec384PublicKey))
+            XCTAssertTrue(ok, "Verification failed")
+            
+            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
+                check(jwt: decoded, algorithm: "ES384")
+                
+                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+            }
+            else {
+                XCTFail("Failed to decode")
+            }
+        } catch {
+            XCTFail("Failed to sign: \(error)")
+        }
     }
     
     func testSignAndVerify512() {
@@ -347,6 +369,24 @@ class TestJWT: XCTestCase {
         }
         else {
             XCTFail("Failed to sign")
+        }
+        
+        // ECDSA key
+        do {
+            let signed = try jwt.sign(using: .es512(privateKey: ec512PrivateKey))
+            let ok = JWT<TestClaims>.verify(signed, using: .es512(publicKey: ec512PublicKey))
+            XCTAssertTrue(ok, "Verification failed")
+            
+            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
+                check(jwt: decoded, algorithm: "ES512")
+                
+                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+            }
+            else {
+                XCTFail("Failed to decode")
+            }
+        } catch {
+            XCTFail("Failed to sign: \(error)")
         }
     }
     
