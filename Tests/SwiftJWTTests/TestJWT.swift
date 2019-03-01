@@ -204,21 +204,23 @@ class TestJWT: XCTestCase {
         }
         
         // ECDSA key
-        do {
-            let signed = try jwt.sign(using: .es256(privateKey: ecdsaPrivateKey))
-            let ok = JWT<TestClaims>.verify(signed, using: .es256(publicKey: ecdsaPublicKey))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "ES256")
+        if #available(OSX 10.13, *) {
+            do {
+                let signed = try jwt.sign(using: .es256(privateKey: ecdsaPrivateKey))
+                let ok = JWT<TestClaims>.verify(signed, using: .es256(publicKey: ecdsaPublicKey))
+                XCTAssertTrue(ok, "Verification failed")
                 
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+                if let decoded = try? JWT<TestClaims>(jwtString: signed) {
+                    check(jwt: decoded, algorithm: "ES256")
+                    
+                    XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+                }
+                else {
+                    XCTFail("Failed to decode")
+                }
+            } catch {
+                XCTFail("Failed to sign: \(error)")
             }
-            else {
-                XCTFail("Failed to decode")
-            }
-        } catch {
-            XCTFail("Failed to sign: \(error)")
         }
     }
     
@@ -288,21 +290,23 @@ class TestJWT: XCTestCase {
         }
         
         // ECDSA key
-        do {
-            let signed = try jwt.sign(using: .es384(privateKey: ec384PrivateKey))
-            let ok = JWT<TestClaims>.verify(signed, using: .es384(publicKey: ec384PublicKey))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "ES384")
+        if #available(OSX 10.13, *) {
+            do {
+                let signed = try jwt.sign(using: .es384(privateKey: ec384PrivateKey))
+                let ok = JWT<TestClaims>.verify(signed, using: .es384(publicKey: ec384PublicKey))
+                XCTAssertTrue(ok, "Verification failed")
                 
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+                if let decoded = try? JWT<TestClaims>(jwtString: signed) {
+                    check(jwt: decoded, algorithm: "ES384")
+                    
+                    XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+                }
+                else {
+                    XCTFail("Failed to decode")
+                }
+            } catch {
+                XCTFail("Failed to sign: \(error)")
             }
-            else {
-                XCTFail("Failed to decode")
-            }
-        } catch {
-            XCTFail("Failed to sign: \(error)")
         }
     }
     
@@ -372,21 +376,23 @@ class TestJWT: XCTestCase {
         }
         
         // ECDSA key
-        do {
-            let signed = try jwt.sign(using: .es512(privateKey: ec512PrivateKey))
-            let ok = JWT<TestClaims>.verify(signed, using: .es512(publicKey: ec512PublicKey))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "ES512")
+        if #available(OSX 10.13, *) {
+            do {
+                let signed = try jwt.sign(using: .es512(privateKey: ec512PrivateKey))
+                let ok = JWT<TestClaims>.verify(signed, using: .es512(publicKey: ec512PublicKey))
+                XCTAssertTrue(ok, "Verification failed")
                 
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+                if let decoded = try? JWT<TestClaims>(jwtString: signed) {
+                    check(jwt: decoded, algorithm: "ES512")
+                    
+                    XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+                }
+                else {
+                    XCTFail("Failed to decode")
+                }
+            } catch {
+                XCTFail("Failed to sign: \(error)")
             }
-            else {
-                XCTFail("Failed to decode")
-            }
-        } catch {
-            XCTFail("Failed to sign: \(error)")
         }
     }
     
@@ -618,23 +624,25 @@ class TestJWT: XCTestCase {
     
     // From jwt.io
     func testJWTUsingECDSA() {
-        let ok = JWT<TestClaims>.verify(ecdsaEncodedTestClaimJWT, using: .es256(publicKey: ecdsaPublicKey))
-        XCTAssertTrue(ok, "Verification failed")
-        
-        if let decoded = try? JWT<TestClaims>(jwtString: ecdsaEncodedTestClaimJWT) {
-            XCTAssertEqual(decoded.header.alg, "ES256", "Wrong .alg in decoded")
-            XCTAssertEqual(decoded.header.typ, "JWT", "Wrong .typ in decoded")
+        if #available(OSX 10.13, *) {
+            let ok = JWT<TestClaims>.verify(ecdsaEncodedTestClaimJWT, using: .es256(publicKey: ecdsaPublicKey))
+            XCTAssertTrue(ok, "Verification failed")
             
-            XCTAssertEqual(decoded.claims.sub, "1234567890", "Wrong .sub in decoded")
-            XCTAssertEqual(decoded.claims.name, "John Doe", "Wrong .name in decoded")
-            XCTAssertEqual(decoded.claims.admin, true, "Wrong .admin in decoded")
-            XCTAssertEqual(decoded.claims.iat, Date(timeIntervalSince1970: 1516239022), "Wrong .iat in decoded")
-            
-            
-            XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-        }
-        else {
-            XCTFail("Failed to decode")
+            if let decoded = try? JWT<TestClaims>(jwtString: ecdsaEncodedTestClaimJWT) {
+                XCTAssertEqual(decoded.header.alg, "ES256", "Wrong .alg in decoded")
+                XCTAssertEqual(decoded.header.typ, "JWT", "Wrong .typ in decoded")
+                
+                XCTAssertEqual(decoded.claims.sub, "1234567890", "Wrong .sub in decoded")
+                XCTAssertEqual(decoded.claims.name, "John Doe", "Wrong .name in decoded")
+                XCTAssertEqual(decoded.claims.admin, true, "Wrong .admin in decoded")
+                XCTAssertEqual(decoded.claims.iat, Date(timeIntervalSince1970: 1516239022), "Wrong .iat in decoded")
+                
+                
+                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+            }
+            else {
+                XCTFail("Failed to decode")
+            }
         }
     }
 }
