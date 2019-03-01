@@ -107,7 +107,7 @@ let myJWT = JWT(header: myHeader, claims: myClaims)
 
 ### Signing and Verifying JSON web tokens
 
-#### Creating the RSA public and private keys
+#### Creating public and private keys
 
 To sign and verify a JWT using an RSA algorithm, you must provide a public and private key. This could be the contents of a .key file generated via the following Terminal commands:
 
@@ -125,6 +125,8 @@ let privateKey: Data = try Data(contentsOf: privateKeyPath, options: alwaysMappe
 let publicKeyPath = URL(fileURLWithPath: getAbsolutePath(relativePath: "/path/to/publicKey.key"))
 let publicKey: Data = try Data(contentsOf: publicKeyPath, options: alwaysMapped)
 ```
+
+For details on creating elliptic curve public and private keys, view the [BlueECC README.txt](https://github.com/IBM-Swift/BlueECC).
 
 #### Sign a JWT using a JWTSigner
 
@@ -175,6 +177,11 @@ The supported algorithms for signing and verifying JWTs are:
 * HS384 - HMAC using using SHA-384
 * HS512 - HMAC using using SHA-512
 * none - Don't sign or verify the JWT
+
+ECDSA is available from  **Swift 4.1**
+* ES256 - ECDSA using using SHA-256 and a P-256 Curve
+* ES384- ECDSA using using SHA-384 and a P-384 Curve
+* ES512 - ECDSA using using SHA-512 and a P-512 Curve
 
 ### Validate claims
 
