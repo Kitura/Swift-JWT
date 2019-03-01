@@ -646,7 +646,8 @@ class TestJWT: XCTestCase {
                 XCTFail("Failed to decode")
             }
         }
-      
+    }
+    
     func testValidateClaims() {
         var jwt = JWT(claims: TestClaims(name:"Kitura"))
         jwt.claims.exp = Date()
