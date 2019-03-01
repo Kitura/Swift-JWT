@@ -30,7 +30,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/IBM-Swift/BlueRSA.git", from: "1.0.24"),
         .package(url: "https://github.com/IBM-Swift/BlueCryptor.git", from: "1.0.0"),
-        .package(url: "https://github.com/IBM-Swift/BlueECC.git", .branch("travisBuild")),
+        .package(url: "https://github.com/IBM-Swift/BlueECC.git", from: "1.0.0"),
         .package(url: "https://github.com/IBM-Swift/LoggerAPI.git", from: "1.7.0"),
         .package(url: "https://github.com/IBM-Swift/KituraContracts.git", from: "1.1.0")
     ],
