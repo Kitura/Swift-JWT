@@ -44,8 +44,6 @@ class BlueECSigner: SignerAlgorithm {
         guard let keyString = String(data: key, encoding: .utf8) else {
             throw JWTError.invalidPrivateKey
         }
-        print("Count: \(keyString.count)")
-        print("keyString: \(keyString)")
         if #available(OSX 10.13, *) {
             let privateKey = try ECPrivateKey(key: keyString)
             guard privateKey.curveId == curve else {
