@@ -112,38 +112,24 @@ public struct JWT<T: Claims>: Codable {
     /// This function checks that the "exp" (expiration time) is in the future
     /// and the "iat" (issued at) and "nbf" (not before) headers are in the past,
     ///
+    /// - Parameter leeway: The time in seconds that the JWT can be invalid but still accepted to account for clock differences.
     /// - Returns: A value of `ValidateClaimsResult`.
-    public func validateClaims() -> ValidateClaimsResult {        
-        if let _ = claims.exp {
-            if let expirationDate = claims.exp {
-                if expirationDate < Date() {
-                    return .expired
-                }
-            }
-            else {
-                return .invalidExpiration
+    public func validateClaims(leeway: TimeInterval = 0) -> ValidateClaimsResult {        
+        if let expirationDate = claims.exp {
+            if expirationDate + leeway < Date() {
+                return .expired
             }
         }
         
-        if let _ = claims.nbf {
-            if let notBeforeDate = claims.nbf {
-                if notBeforeDate > Date() {
-                    return .notBefore
-                }
-            }
-            else {
-                return .invalidNotBefore
+        if let notBeforeDate = claims.nbf {
+            if notBeforeDate > Date() + leeway {
+                return .notBefore
             }
         }
         
-        if let _ = claims.iat {
-            if let issuedAtDate = claims.iat {
-                if issuedAtDate > Date() {
-                    return .issuedAt
-                }
-            }
-            else {
-                return .invalidIssuedAt
+        if let issuedAtDate = claims.iat {
+            if issuedAtDate > Date() + leeway {
+                return .issuedAt
             }
         }
         

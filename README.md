@@ -185,7 +185,7 @@ ECDSA is available from  **Swift 4.1**
 
 ### Validate claims
 
-The `validateClaims` function validates the Standard Date claims of a JWT instance.
+The `validateClaims` function validates the standard `Date` claims of a JWT instance.
 The following claims are validated if they are present in the `Claims` object:
 - exp (expiration date)
 - nbf (not before date)
@@ -193,9 +193,10 @@ The following claims are validated if they are present in the `Claims` object:
 
 The method returns `ValidateClaimsResult` - an struct that list the various reasons for validation failure.
 If the validation succeeds `ValidateClaimsResult.success` is returned.
+The `leeway` parameter is the `TimeInterval` in seconds that a standard `Date` claim will be valid outside of the specified time. This can be used to account for clock skew between issuers and verifiers.
 
 ```swift
-let validationResult = verified.validateClaims()
+let validationResult = verified.validateClaims(leeway: 10)
 if validationResult != .success {
     print("Claims validation failed: ", validationResult)
 }
