@@ -66,19 +66,19 @@ public struct JWTSigner {
     }
     
     /// Initialize a JWTSigner using the RSA 256 bits algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key.
+    /// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
     public static func rs256(privateKey: Data) -> JWTSigner {
         return JWTSigner(name: "RS256", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha256))
     }
     
     /// Initialize a JWTSigner using the RSA 384 bits algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key.
+    /// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
     public static func rs384(privateKey: Data) -> JWTSigner {
         return JWTSigner(name: "RS384", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha384))
     }
     
     /// Initialize a JWTSigner using the RSA 512 bits algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key.
+    /// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
     public static func rs512(privateKey: Data) -> JWTSigner {
         return JWTSigner(name: "RS512", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha512))
     }
@@ -102,21 +102,21 @@ public struct JWTSigner {
     }
     
     /// Initialize a JWTSigner using the ECDSA SHA256 algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key.
+    /// - Parameter privateKey: The UTF8 encoded PEM private key, with either a "BEGIN EC PRIVATE KEY" or "BEGIN PRIVATE KEY" header.
     @available(OSX 10.13, *)
     public static func es256(privateKey: Data) -> JWTSigner {
         return JWTSigner(name: "ES256", signerAlgorithm: BlueECSigner(key: privateKey, curve: .prime256v1))
     }
     
     /// Initialize a JWTSigner using the ECDSA SHA384 algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key.
+    /// - Parameter privateKey: The UTF8 encoded PEM private key, with either a "BEGIN EC PRIVATE KEY" or "BEGIN PRIVATE KEY" header.
     @available(OSX 10.13, *)
     public static func es384(privateKey: Data) -> JWTSigner {
         return JWTSigner(name: "ES384", signerAlgorithm: BlueECSigner(key: privateKey, curve: .secp384r1))
     }
     
     /// Initialize a JWTSigner using the ECDSA SHA512 algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key.
+    /// - Parameter privateKey: The UTF8 encoded PEM private key, with either a "BEGIN EC PRIVATE KEY" or "BEGIN PRIVATE KEY" header.
     @available(OSX 10.13, *)
     public static func es512(privateKey: Data) -> JWTSigner {
         return JWTSigner(name: "ES512", signerAlgorithm: BlueECSigner(key: privateKey, curve: .secp521r1))

@@ -54,37 +54,37 @@ public struct JWTVerifier {
     }
     
     /// Initialize a JWTVerifier using the RSA 256 bits algorithm and the provided publicKey.
-    /// - Parameter publicKey: The UTF8 encoded PEM public key with a "BEGIN PUBLIC KEY" header.
+    /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     public static func rs256(publicKey: Data) -> JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha256))
     }
     
     /// Initialize a JWTVerifier using the RSA 384 bits algorithm and the provided publicKey.
-    /// - Parameter publicKey: The UTF8 encoded PEM public key with a "BEGIN PUBLIC KEY" header.
+    /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     public static func rs384(publicKey: Data) -> JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha384))
     }
     
     /// Initialize a JWTVerifier using the RSA 512 bits algorithm and the provided publicKey.
-    /// - Parameter publicKey: The UTF8 encoded PEM public key with a "BEGIN PUBLIC KEY" header.
+    /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     public static func rs512(publicKey: Data) -> JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha512))
     }
     
     /// Initialize a JWTVerifier using the RSA 256 bits algorithm and the provided certificate.
-    /// - Parameter publicKey: The UTF8 encoded PEM public key with a "BEGIN CERTIFICATE" header.
+    /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN CERTIFICATE" header.
     public static func rs256(certificate: Data) -> JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: certificate, keyType: .certificate, algorithm: .sha256))
     }
     
     /// Initialize a JWTVerifier using the RSA 384 bits algorithm and the provided certificate.
-    /// - Parameter publicKey: The UTF8 encoded PEM public key with a "BEGIN CERTIFICATE" header.
+    /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN CERTIFICATE" header.
     public static func rs384(certificate: Data) -> JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: certificate, keyType: .certificate, algorithm: .sha384))
     }
     
     /// Initialize a JWTVerifier using the RSA 512 bits algorithm and the provided certificate.
-    /// - Parameter publicKey: The UTF8 encoded PEM public key with a "BEGIN CERTIFICATE" header.
+    /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN CERTIFICATE" header.
     public static func rs512(certificate: Data) -> JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: certificate, keyType: .certificate, algorithm: .sha512))
     }
@@ -108,21 +108,21 @@ public struct JWTVerifier {
     }
     
     /// Initialize a JWTVerifier using the ECDSA SHA 256 algorithm and the provided public key.
-    /// - Parameter publicKey: The UTF8 encoded PEM public key.
+    /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     @available(OSX 10.13, *)
     public static func es256(publicKey: Data) -> JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueECVerifier(key: publicKey, curve: .prime256v1))
     }
     
     /// Initialize a JWTVerifier using the ECDSA SHA 384 algorithm and the provided public key.
-    /// - Parameter publicKey: The UTF8 encoded PEM public key.
+    /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     @available(OSX 10.13, *)
     public static func es384(publicKey: Data) -> JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueECVerifier(key: publicKey, curve: .secp384r1))
     }
     
     /// Initialize a JWTVerifier using the ECDSA SHA 512 algorithm and the provided public key.
-    /// - Parameter publicKey: The UTF8 encoded PEM public key.
+    /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     @available(OSX 10.13, *)
     public static func es512(publicKey: Data) -> JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueECVerifier(key: publicKey, curve: .secp521r1))
