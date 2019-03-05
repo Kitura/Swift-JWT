@@ -89,9 +89,6 @@ class BlueECVerifier: VerifierAlgorithm {
     
     // Send the base64URLencoded signature and `header.claims` to BlueECC for verification.
     private func verify(signature: Data, for data: Data) -> Bool {
-        guard #available(OSX 10.13, *) else {
-            return false
-        }
         do {
             guard let keyString = String(data: key, encoding: .utf8) else {
                 return false
