@@ -19,7 +19,6 @@ import Foundation
 
 @testable import SwiftJWT
 
-let hmacKey = "Super Secret Key"
 let rsaPrivateKey = read(fileName: "rsa_private_key")
 let rsaPublicKey = read(fileName: "rsa_public_key")
 let ecdsaPrivateKey = read(fileName: "ecdsa_private_key")
@@ -36,6 +35,7 @@ let rsaEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJuYW1lIjoiS
 let certificateEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.CpnzQLuWGfH5Kba36vg0ZZKBnzwlrIgapFVfBfk_nea-eej84ktHZANqIeolskZopRJ4DQ3oaLtHWEg16-ZsujxmkOdiAIbk0-C4QLOVFLZH78WLZAqkyNLS8rFuK9hloLNwz1j6VVUd1f0SOT-wIRzL0_0VRYqQd1bVcCj7wc7BmXENlOfHY7KGHS-6JX-EClT1DygDSoCmdvBExBf3vx0lwMIbP4ryKkyhOoU13ZfSUt1gpP9nZAfzqfRTPxZc_f7neiAlMlF6SzsedsskRCNegW8cg5e_NuVmZZkj0_bnswXFDMmIaxiPdtOEWkmyEOca-EHSwbO5PgCgXOIrgg"
 // A `TestClaims` encoded using HMAC with "Super Secret Key" from "www.jwt.io"
 let hmacEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.8kIE0ZCq1Vw7aW1kACpgJLcgY2DpTXgO6P5T3cdCuTs"
+// A `TestClaims` encoded using es256 with `ecdsaPrivateKey`
 let ecdsaEncodedTestClaimJWT = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.z1nUPt7mJk5EZBJKrRiCRLSum1B5E5ucaMeuMqxcvnw3a5FnKC-XsR6rvBVdUPRVzWF6L9CHQuSBlDy579SqQA"
 let jwtSigners: [String: JWTSigner] = ["0": .rs256(privateKey: rsaPrivateKey), "1": .rs256(privateKey: certPrivateKey)]
 let jwtVerifiers: [String: JWTVerifier] = ["0": .rs256(publicKey: rsaPublicKey), "1": .rs256(certificate: certificate)]
@@ -109,8 +109,18 @@ class TestJWT: XCTestCase {
     static var allTests: [(String, (TestJWT) -> () throws -> Void)] {
         return [
             ("testSignAndVerify", testSignAndVerify),
-            ("testSignAndVerify384", testSignAndVerify384),
-            ("testSignAndVerify512", testSignAndVerify512),
+            ("testSignAndVerifyRSA", testSignAndVerifyRSA),
+            ("testSignAndVerifyCert", testSignAndVerifyCert),
+            ("testSignAndVerifyHMAC", testSignAndVerifyHMAC),
+            ("testSignAndVerifyECDSA", testSignAndVerifyECDSA),
+            ("testSignAndVerifyRSA384", testSignAndVerifyRSA384),
+            ("testSignAndVerifyCert384", testSignAndVerifyCert384),
+            ("testSignAndVerifyHMAC384", testSignAndVerifyHMAC384),
+            ("testSignAndVerifyECDSA384", testSignAndVerifyECDSA384),
+            ("testSignAndVerifyRSA512", testSignAndVerifyRSA512),
+            ("testSignAndVerifyCert512", testSignAndVerifyCert512),
+            ("testSignAndVerifyHMAC512", testSignAndVerifyHMAC512),
+            ("testSignAndVerifyECDSA512", testSignAndVerifyECDSA512),
             ("testJWTEncoder", testJWTEncoder),
             ("testJWTDecoder", testJWTDecoder),
             ("testJWTCoderCycle", testJWTCoderCycle),
@@ -123,10 +133,123 @@ class TestJWT: XCTestCase {
             ("testMicroProfile", testMicroProfile),
             ("testValidateClaims", testValidateClaims),
             ("testValidateClaimsLeeway", testValidateClaimsLeeway),
-        ]
+            ]
     }
 
     func testSignAndVerify() {
+        do {
+            try signAndVerify(signer: .none, verifier: .none)
+        } catch {
+            XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyRSA() {
+        do {
+            try signAndVerify(signer: .rs256(privateKey: rsaPrivateKey), verifier: .rs256(publicKey: rsaPublicKey))
+        } catch {
+            XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyCert() {
+        do {
+            try signAndVerify(signer: .rs256(privateKey: certPrivateKey), verifier: .rs256(certificate: certificate))
+        } catch {
+            XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyHMAC() {
+        do {
+            let hmacData = "Super Secret Key".data(using: .utf8)!
+            try signAndVerify(signer: .hs256(key: hmacData), verifier: .hs256(key: hmacData))
+        } catch {
+            XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyECDSA() {
+        if #available(OSX 10.13, *) {
+            do {
+                try signAndVerify(signer: .es256(privateKey: ecdsaPrivateKey), verifier: .es256(publicKey: ecdsaPublicKey))
+            } catch {
+                XCTFail("testSignAndVerify failed: \(error)")
+            }
+        }
+    }
+    
+    func testSignAndVerifyRSA384() {
+        do {
+            try signAndVerify(signer: .rs384(privateKey: rsaPrivateKey), verifier: .rs384(publicKey: rsaPublicKey))
+        } catch {
+            XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyCert384() {
+        do {
+            try signAndVerify(signer: .rs384(privateKey: certPrivateKey), verifier: .rs384(certificate: certificate))
+        } catch {
+            XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyHMAC384() {
+        do {
+            let hmacData = "Super Secret Key".data(using: .utf8)!
+            try signAndVerify(signer: .hs384(key: hmacData), verifier: .hs384(key: hmacData))
+        } catch {
+            XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyECDSA384() {
+        if #available(OSX 10.13, *) {
+            do {
+                try signAndVerify(signer: .es384(privateKey: ec384PrivateKey), verifier: .es384(publicKey: ec384PublicKey))
+            } catch {
+                XCTFail("testSignAndVerify failed: \(error)")
+            }
+        }
+    }
+    
+    func testSignAndVerifyRSA512() {
+        do {
+            try signAndVerify(signer: .rs512(privateKey: rsaPrivateKey), verifier: .rs512(publicKey: rsaPublicKey))
+        } catch {
+            XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyCert512() {
+        do {
+            try signAndVerify(signer: .rs512(privateKey: certPrivateKey), verifier: .rs512(certificate: certificate))
+        } catch {
+            XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyHMAC512() {
+        do {
+            let hmacData = "Super Secret Key".data(using: .utf8)!
+            try signAndVerify(signer: .hs512(key: hmacData), verifier: .hs512(key: hmacData))
+        } catch {
+            XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyECDSA512() {
+        if #available(OSX 10.13, *) {
+            do {
+                try signAndVerify(signer: .es512(privateKey: ec512PrivateKey), verifier: .es512(publicKey: ec512PublicKey))
+            } catch {
+                XCTFail("testSignAndVerify failed: \(error)")
+            }
+        }
+    }
+    
+    func signAndVerify(signer: JWTSigner, verifier: JWTVerifier) throws {
         var jwt = JWT(claims: TestClaims(name:"Kitura"))
         jwt.claims.name = "Kitura-JWT"
         XCTAssertEqual(jwt.claims.name, "Kitura-JWT")
@@ -135,269 +258,14 @@ class TestJWT: XCTestCase {
         jwt.claims.iat = Date(timeIntervalSince1970: 1485949565.58463)
         jwt.claims.exp = Date(timeIntervalSince1970: 2485949565.58463)
         jwt.claims.nbf = Date(timeIntervalSince1970: 1485949565.58463)
-        // encode
-        if let encoded = try? jwt.sign(using: .none){
-            if let decoded = try? JWT<TestClaims>(jwtString: encoded) {
-                check(jwt: decoded, algorithm: "none")
-                
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to encode")
-        }
-       
-        // public key
-        if let signed = try? jwt.sign(using: .rs256(privateKey: rsaPrivateKey)) {
-            let ok = JWT<TestClaims>.verify(signed, using: .rs256(publicKey: rsaPublicKey))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "RS256")
-                
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to sign")
-        }
-        
-        // certificate
-        if let signed = try? jwt.sign(using: .rs256(privateKey: certPrivateKey)) {
-            let ok = JWT<TestClaims>.verify(signed, using: .rs256(certificate: certificate))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "RS256")
-                
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to sign")
-        }
-        
-        // HMAC key
-        if let hmacData = hmacKey.data(using: .utf8),
-            let signed = try? jwt.sign(using: .hs256(key: hmacData))
-        {
-            let ok = JWT<TestClaims>.verify(signed, using: .hs256(key: hmacData))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "HS256")
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to sign")
-        }
-        
-        // ECDSA key
-        if #available(OSX 10.13, *) {
-            do {
-                let signed = try jwt.sign(using: .es256(privateKey: ecdsaPrivateKey))
-                let ok = JWT<TestClaims>.verify(signed, using: .es256(publicKey: ecdsaPublicKey))
-                XCTAssertTrue(ok, "Verification failed")
-                
-                if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                    check(jwt: decoded, algorithm: "ES256")
-                    
-                    XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-                }
-                else {
-                    XCTFail("Failed to decode")
-                }
-            } catch {
-                XCTFail("Failed to sign: \(error)")
-            }
-        }
+        let signed = try jwt.sign(using: signer)
+        let ok = JWT<TestClaims>.verify(signed, using: verifier)
+        XCTAssertTrue(ok, "Verification failed")
+        let decoded = try JWT<TestClaims>(jwtString: signed)
+        check(jwt: decoded, algorithm: signer.name)
+        XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
     }
-    
-    func testSignAndVerify384() {
-        var jwt = JWT(claims: TestClaims(name:"Kitura"))
-        jwt.claims.name = "Kitura-JWT"
-        XCTAssertEqual(jwt.claims.name, "Kitura-JWT")
-        jwt.claims.iss = "issuer"
-        jwt.claims.aud = ["clientID"]
-        jwt.claims.iat = Date(timeIntervalSince1970: 1485949565.58463)
-        jwt.claims.exp = Date(timeIntervalSince1970: 2485949565.58463)
-        jwt.claims.nbf = Date(timeIntervalSince1970: 1485949565.58463)
-        
-        // public key
-        if let signed = try? jwt.sign(using: .rs384(privateKey: rsaPrivateKey)) {
-            let ok = JWT<TestClaims>.verify(signed, using: .rs384(publicKey: rsaPublicKey))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "RS384")
-                
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to sign")
-        }
-        
-        // certificate
-        if let signed = try? jwt.sign(using: .rs384(privateKey: certPrivateKey)) {
-            let ok = JWT<TestClaims>.verify(signed, using: .rs384(certificate: certificate))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "RS384")
-                
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to sign")
-        }
-        
-        // HMAC key
-        if let hmacData = hmacKey.data(using: .utf8),
-            let signed = try? jwt.sign(using: .hs384(key: hmacData))
-        {
-            let ok = JWT<TestClaims>.verify(signed, using: .hs384(key: hmacData))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "HS384")
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to sign")
-        }
-        
-        // ECDSA key
-        if #available(OSX 10.13, *) {
-            do {
-                let signed = try jwt.sign(using: .es384(privateKey: ec384PrivateKey))
-                let ok = JWT<TestClaims>.verify(signed, using: .es384(publicKey: ec384PublicKey))
-                XCTAssertTrue(ok, "Verification failed")
-                
-                if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                    check(jwt: decoded, algorithm: "ES384")
-                    
-                    XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-                }
-                else {
-                    XCTFail("Failed to decode")
-                }
-            } catch {
-                XCTFail("Failed to sign: \(error)")
-            }
-        }
-    }
-    
-    func testSignAndVerify512() {
-        var jwt = JWT(claims: TestClaims(name:"Kitura"))
-        jwt.claims.name = "Kitura-JWT"
-        XCTAssertEqual(jwt.claims.name, "Kitura-JWT")
-        jwt.claims.iss = "issuer"
-        jwt.claims.aud = ["clientID"]
-        jwt.claims.iat = Date(timeIntervalSince1970: 1485949565.58463)
-        jwt.claims.exp = Date(timeIntervalSince1970: 2485949565.58463)
-        jwt.claims.nbf = Date(timeIntervalSince1970: 1485949565.58463)
-        
-        // public key
-        if let signed = try? jwt.sign(using: .rs512(privateKey: rsaPrivateKey)) {
-            let ok = JWT<TestClaims>.verify(signed, using: .rs512(publicKey: rsaPublicKey))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "RS512")
-                
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to sign")
-        }
-        
-        // certificate
-        if let signed = try? jwt.sign(using: .rs512(privateKey: certPrivateKey)) {
-            let ok = JWT<TestClaims>.verify(signed, using: .rs512(certificate: certificate))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "RS512")
-                
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to sign")
-        }
-        
-        // HMAC key
-        if let hmacData = hmacKey.data(using: .utf8),
-            let signed = try? jwt.sign(using: .hs512(key: hmacData))
-        {
-            let ok = JWT<TestClaims>.verify(signed, using: .hs512(key: hmacData))
-            XCTAssertTrue(ok, "Verification failed")
-            
-            if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                check(jwt: decoded, algorithm: "HS512")
-                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-            }
-            else {
-                XCTFail("Failed to decode")
-            }
-        }
-        else {
-            XCTFail("Failed to sign")
-        }
-        
-        // ECDSA key
-        if #available(OSX 10.13, *) {
-            do {
-                let signed = try jwt.sign(using: .es512(privateKey: ec512PrivateKey))
-                let ok = JWT<TestClaims>.verify(signed, using: .es512(publicKey: ec512PublicKey))
-                XCTAssertTrue(ok, "Verification failed")
-                
-                if let decoded = try? JWT<TestClaims>(jwtString: signed) {
-                    check(jwt: decoded, algorithm: "ES512")
-                    
-                    XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-                }
-                else {
-                    XCTFail("Failed to decode")
-                }
-            } catch {
-                XCTFail("Failed to sign: \(error)")
-            }
-        }
-    }
-    
+
     func check(jwt: JWT<TestClaims>, algorithm: String) {
 
         XCTAssertEqual(jwt.header.alg, algorithm, "Wrong .alg in decoded")
@@ -603,7 +471,7 @@ class TestJWT: XCTestCase {
     }
     
     func testJWTUsingHMAC() {
-        guard let hmacData = hmacKey.data(using: .utf8) else {
+        guard let hmacData = "Super Secret Key".data(using: .utf8) else {
             return XCTFail("Failed to convert hmacKey to Data")
         }
         let ok = JWT<TestClaims>.verify(hmacEncodedTestClaimJWT, using: .hs256(key: hmacData))
@@ -624,7 +492,7 @@ class TestJWT: XCTestCase {
         }
     }
     
-    // From jwt.io
+    // Test using a JWT generated from jwt.io using es256 with `ecdsaPrivateKey` for interoperability.
     func testJWTUsingECDSA() {
         if #available(OSX 10.13, *) {
             let ok = JWT<TestClaims>.verify(ecdsaEncodedTestClaimJWT, using: .es256(publicKey: ecdsaPublicKey))

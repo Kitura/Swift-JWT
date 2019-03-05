@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corporation 2018
+ * Copyright IBM Corporation 2019
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,23 @@
 
 import CryptorECC
 import LoggerAPI
-
 import Foundation
 
+// Class for ECDSA signing using BlueECC
+@available(OSX 10.13, *)
 class BlueECSigner: SignerAlgorithm {
     let name: String = "ECDSA"
     
     private let key: Data
-    private let curve: String
+    private let curve: EllipticCurve
     
-    init(key: Data, curve: String) {
+    // Initialize a signer using .utf8 encoded PEM private key.
+    init(key: Data, curve: EllipticCurve) {
         self.key = key
         self.curve = curve
     }
     
+    // Sign the header and claims to produce a signed JWT String
     func sign(header: String, claims: String) throws -> String {
         let unsignedJWT = header + "." + claims
         guard let unsignedData = unsignedJWT.data(using: .utf8) else {
@@ -40,35 +43,36 @@ class BlueECSigner: SignerAlgorithm {
         return header + "." + claims + "." + signatureString
     }
     
-    func sign(_ data: Data) throws -> Data {
+    // send utf8 encoded `header.claims` to BlueECC for signing
+    private func sign(_ data: Data) throws -> Data {
         guard let keyString = String(data: key, encoding: .utf8) else {
             throw JWTError.invalidPrivateKey
         }
-        if #available(OSX 10.13, *) {
-            let privateKey = try ECPrivateKey(key: keyString)
-            guard privateKey.curveId == curve else {
-                throw JWTError.invalidPrivateKey
-            }
-            let signedData = try data.sign(with: privateKey)
-            return signedData.r + signedData.s
-        } else {
-            throw JWTError.osVersionToLow
+        let privateKey = try ECPrivateKey(key: keyString)
+        guard privateKey.curve == curve else {
+            throw JWTError.invalidPrivateKey
         }
-
+        let signedData = try data.sign(with: privateKey)
+        return signedData.r + signedData.s
     }
 }
 
+// Class for ECDSA verifying using BlueECC
+@available(OSX 10.13, *)
 class BlueECVerifier: VerifierAlgorithm {
     
     let name: String = "ECDSA"
     
     private let key: Data
-    private let curve: String
-    init(key: Data, curve: String) {
+    private let curve: EllipticCurve
+    
+    // Initialize a verifier using .utf8 encoded PEM public key.
+    init(key: Data, curve: EllipticCurve) {
         self.key = key
         self.curve = curve
     }
     
+    // Verify a signed JWT String
     func verify(jwt: String) -> Bool {
         let components = jwt.components(separatedBy: ".")
         if components.count == 3 {
@@ -83,7 +87,8 @@ class BlueECVerifier: VerifierAlgorithm {
         }
     }
     
-    func verify(signature: Data, for data: Data) -> Bool {
+    // Send the base64URLencoded signature and `header.claims` to BlueECC for verification.
+    private func verify(signature: Data, for data: Data) -> Bool {
         guard #available(OSX 10.13, *) else {
             return false
         }
@@ -95,7 +100,7 @@ class BlueECVerifier: VerifierAlgorithm {
             let s = signature.subdata(in: signature.count/2 ..< signature.count)
             let signature = try ECSignature(r: r, s: s)
             let publicKey = try ECPublicKey(key: keyString)
-            guard publicKey.curveId == curve else {
+            guard publicKey.curve == curve else {
                 return false
             }
             return signature.verify(plaintext: data, using: publicKey)
