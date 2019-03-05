@@ -144,7 +144,7 @@
 <h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
 <h4 id='add-dependencies' class='heading'>Add dependencies</h4>
 
-<p>Add the <code>Swift-JWT</code> package to the dependencies within your application’s <code>Package.swift</code> file. Substitute <code>&quot;x.x.x&quot;</code> with the latest <code>Swift-JWT</code> <a href="https://github.com/IBM-Swift/Kitura-Session/releases">release</a>.</p>
+<p>Add the <code>Swift-JWT</code> package to the dependencies within your application’s <code>Package.swift</code> file. Substitute <code>&quot;x.x.x&quot;</code> with the latest <code>Swift-JWT</code> <a href="https://github.com/IBM-Swift/Swift-JWT/releases">release</a>.</p>
 <pre class="highlight swift"><code><span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/IBM-Swift/Swift-JWT.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"x.x.x"</span><span class="p">)</span>
 </code></pre>
 
@@ -202,12 +202,12 @@ You can initialize a JWT by decoding a JWT String, or by providing the JWT Heade
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">myJWT</span> <span class="o">=</span> <span class="kt">JWT</span><span class="p">(</span><span class="nv">header</span><span class="p">:</span> <span class="n">myHeader</span><span class="p">,</span> <span class="nv">claims</span><span class="p">:</span> <span class="n">myClaims</span><span class="p">)</span>
 </code></pre>
 <h3 id='signing-and-verifying-json-web-tokens' class='heading'>Signing and Verifying JSON web tokens</h3>
-<h4 id='creating-the-rsa-public-and-private-keys' class='heading'>Creating the RSA public and private keys</h4>
+<h4 id='creating-public-and-private-keys' class='heading'>Creating public and private keys</h4>
 
 <p>To sign and verify a JWT using an RSA algorithm, you must provide a public and private key. This could be the contents of a .key file generated via the following Terminal commands:</p>
 <pre class="highlight plaintext"><code>$ ssh-keygen -t rsa -b 4096 -f privateKey.key
 # Don't add a passphrase
-$ openssl rsa in privateKey.key -pubout -outform PEM -out privateKey.key.pub
+$ openssl rsa -in privateKey.key -pubout -outform PEM -out privateKey.key.pub
 </code></pre>
 
 <p>This will create a public and private key pair on your system, and the contents of the private key can be passed into a Swift variable using the following code:</p>
@@ -216,6 +216,8 @@ $ openssl rsa in privateKey.key -pubout -outform PEM -out privateKey.key.pub
 <span class="k">let</span> <span class="nv">publicKeyPath</span> <span class="o">=</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">fileURLWithPath</span><span class="p">:</span> <span class="nf">getAbsolutePath</span><span class="p">(</span><span class="nv">relativePath</span><span class="p">:</span> <span class="s">"/path/to/publicKey.key"</span><span class="p">))</span>
 <span class="k">let</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">Data</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">publicKeyPath</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="n">alwaysMapped</span><span class="p">)</span>
 </code></pre>
+
+<p>For details on creating elliptic curve public and private keys, view the <a href="https://github.com/IBM-Swift/BlueECC">BlueECC README.txt</a>.</p>
 <h4 id='sign-a-jwt-using-a-jwtsigner' class='heading'>Sign a JWT using a JWTSigner</h4>
 
 <p>The struct JWTSigner contains the algorithms that can be used to sign a JWT.</p>
@@ -257,11 +259,16 @@ $ openssl rsa in privateKey.key -pubout -outform PEM -out privateKey.key.pub
 <li>HS256 - HMAC using using SHA-256</li>
 <li>HS384 - HMAC using using SHA-384</li>
 <li>HS512 - HMAC using using SHA-512</li>
+<li>ES256 - ECDSA using using SHA-256 and a P-256 curve</li>
+<li>ES384 - ECDSA using using SHA-384 and a P-384 curve</li>
+<li>ES512 - ECDSA using using SHA-512 and a P-521 curve</li>
 <li>none - Don&rsquo;t sign or verify the JWT</li>
 </ul>
+
+<p>Note: ECDSA algorithms require a minimum Swift version of 4.1.</p>
 <h3 id='validate-claims' class='heading'>Validate claims</h3>
 
-<p>The <code>validateClaims</code> function validates the Standard Date claims of a JWT instance.
+<p>The <code>validateClaims</code> function validates the standard <code>Date</code> claims of a JWT instance.
 The following claims are validated if they are present in the <code><a href="Protocols/Claims.html">Claims</a></code> object:</p>
 
 <ul>
@@ -271,8 +278,9 @@ The following claims are validated if they are present in the <code><a href="Pro
 </ul>
 
 <p>The method returns <code><a href="Structs/ValidateClaimsResult.html">ValidateClaimsResult</a></code> - an struct that list the various reasons for validation failure.
-If the validation succeeds <code><a href="Structs/ValidateClaimsResult.html#/s:8SwiftJWT20ValidateClaimsResultV7successACvpZ">ValidateClaimsResult.success</a></code> is returned.</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">validationResult</span> <span class="o">=</span> <span class="n">verified</span><span class="o">.</span><span class="nf">validateClaims</span><span class="p">()</span>
+If the validation succeeds <code><a href="Structs/ValidateClaimsResult.html#/s:8SwiftJWT20ValidateClaimsResultV7successACvpZ">ValidateClaimsResult.success</a></code> is returned.
+The <code>leeway</code> parameter is the <code>TimeInterval</code> in seconds that a standard <code>Date</code> claim will be valid outside of the specified time. This can be used to account for clock skew between issuers and verifiers.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">validationResult</span> <span class="o">=</span> <span class="n">verified</span><span class="o">.</span><span class="nf">validateClaims</span><span class="p">(</span><span class="nv">leeway</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">validationResult</span> <span class="o">!=</span> <span class="o">.</span><span class="n">success</span> <span class="p">{</span>
     <span class="nf">print</span><span class="p">(</span><span class="s">"Claims validation failed: "</span><span class="p">,</span> <span class="n">validationResult</span><span class="p">)</span>
 <span class="p">}</span>
@@ -300,7 +308,7 @@ If the validation succeeds <code><a href="Structs/ValidateClaimsResult.html#/s:8
 <p>This allows for the use of JWT&rsquo;s in information exchange. By sending and receiving JWT&rsquo;s you can ensure the sending is who they say they are and verify the content hasn&rsquo;t been tampered with.</p>
 <h2 id='api-documentation' class='heading'>API Documentation</h2>
 
-<p>For more information visit our [API reference](<a href="https://ibm-swift.github.io/Swift-JWT/index.html">https://ibm-swift.github.io/Swift-JWT/index.html</a>.</p>
+<p>For more information visit our <a href="https://ibm-swift.github.io/Swift-JWT/index.html">API reference</a>.</p>
 <h2 id='community' class='heading'>Community</h2>
 
 <p>We love to talk server-side Swift, and Kitura. Join our <a href="http://swift-at-ibm-slack.mybluemix.net/">Slack</a> to meet the team!</p>
@@ -315,7 +323,7 @@ If the validation succeeds <code><a href="Structs/ValidateClaimsResult.html#/s:8
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-12-10)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-03-05)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

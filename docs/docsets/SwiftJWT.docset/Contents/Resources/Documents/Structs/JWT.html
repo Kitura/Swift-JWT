@@ -191,9 +191,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT0B0VACyxGAA6HeaderV6header_x6claimstcfc"></a>
+                    <a name="/s:8SwiftJWT0B0V6header6claimsACyxGAA6HeaderV_xtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(header:claims:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT0B0VACyxGAA6HeaderV6header_x6claimstcfc">init(header:claims:)</a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V6header6claimsACyxGAA6HeaderV_xtcfc">init(header:claims:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -253,9 +253,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT0B0VACyxGSS9jwtString_AA11JWTVerifierV8verifiertKcfc"></a>
+                    <a name="/s:8SwiftJWT0B0V9jwtString8verifierACyxGSS_AA11JWTVerifierVtKcfc"></a>
                     <a name="//apple_ref/swift/Method/init(jwtString:verifier:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT0B0VACyxGSS9jwtString_AA11JWTVerifierV8verifiertKcfc">init(jwtString:verifier:)</a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V9jwtString8verifierACyxGSS_AA11JWTVerifierVtKcfc">init(jwtString:verifier:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -265,7 +265,7 @@
                       <div class="abstract">
                         <p>Initialize a <code>JWT</code> instance from a JWT String.
 The signature will be verified using the provided JWTVerifier.
-The time based standard JWT claims will be verified with <code><a href="../Structs/JWT.html#/s:8SwiftJWT0B0V14validateClaimsAA08ValidateD6ResultVyF">validateClaims()</a></code>.
+The time based standard JWT claims will be verified with <code>validateClaims()</code>.
 If the string is not a valid JWT, or the verification fails, the initializer returns nil.</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
@@ -333,9 +333,9 @@ If the string is not a valid JWT, or the verification fails, the initializer ret
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT0B0V4signSSAA9JWTSignerV5using_tKF"></a>
+                    <a name="/s:8SwiftJWT0B0V4sign5usingSSAA9JWTSignerV_tKF"></a>
                     <a name="//apple_ref/swift/Method/sign(using:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT0B0V4signSSAA9JWTSignerV5using_tKF">sign(using:)</a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V4sign5usingSSAA9JWTSignerV_tKF">sign(using:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -384,9 +384,9 @@ If the string is not a valid JWT, or the verification fails, the initializer ret
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT0B0V6verifySbSS_AA11JWTVerifierV5usingtFZ"></a>
+                    <a name="/s:8SwiftJWT0B0V6verify_5usingSbSS_AA11JWTVerifierVtFZ"></a>
                     <a name="//apple_ref/swift/Method/verify(_:using:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT0B0V6verifySbSS_AA11JWTVerifierV5usingtFZ">verify(_:using:)</a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V6verify_5usingSbSS_AA11JWTVerifierVtFZ">verify(_:using:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -434,9 +434,9 @@ If the string is not a valid JWT, or the verification fails, the initializer ret
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT0B0V14validateClaimsAA08ValidateD6ResultVyF"></a>
-                    <a name="//apple_ref/swift/Method/validateClaims()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT0B0V14validateClaimsAA08ValidateD6ResultVyF">validateClaims()</a>
+                    <a name="/s:8SwiftJWT0B0V14validateClaims6leewayAA08ValidateD6ResultVSd_tF"></a>
+                    <a name="//apple_ref/swift/Method/validateClaims(leeway:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT0B0V14validateClaims6leewayAA08ValidateD6ResultVSd_tF">validateClaims(leeway:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -453,9 +453,28 @@ and the <q>iat</q> (issued at) and <q>nbf</q> (not before) headers are in the pa
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">validateClaims</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/ValidateClaimsResult.html">ValidateClaimsResult</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">validateClaims</span><span class="p">(</span><span class="nv">leeway</span><span class="p">:</span> <span class="kt">TimeInterval</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/ValidateClaimsResult.html">ValidateClaimsResult</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>leeway</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The time in seconds that the JWT can be invalid but still accepted to account for clock differences.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                       <div>
                         <h4>Return Value</h4>
@@ -472,7 +491,7 @@ and the <q>iat</q> (issued at) and <q>nbf</q> (not before) headers are in the pa
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-12-10)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-03-05)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

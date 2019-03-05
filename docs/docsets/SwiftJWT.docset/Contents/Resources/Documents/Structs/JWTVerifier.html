@@ -117,14 +117,23 @@
 
                 </div>
               </div>
-            <p>A struct that will be used to verify the signature of a JWT is valid for the provided <code><a href="../Structs/Header.html">Header</a></code> and <code><a href="../Protocols/Claims.html">Claims</a></code>.</p>
+            <p>A struct that will be used to verify the signature of a JWT is valid for the provided <code><a href="../Structs/Header.html">Header</a></code> and <code><a href="../Protocols/Claims.html">Claims</a></code>.
+For RSA and ECDSA, the provided key should be a .utf8 encoded PEM String.</p>
 <h3 id='usage-example' class='heading'>Usage Example:</h3>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">signedJWT</span> <span class="o">=</span> <span class="s">"&lt;SignedJWTString&gt;"</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">pemString</span> <span class="o">=</span> <span class="s">"""
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDdlatRjRjogo3WojgGHFHYLugd
+UWAY9iR3fy4arWNA1KoS8kVw33cJibXr8bvwUAUparCwlvdbH6dvEOfou0/gCFQs
+HUfQrSDv+MuSUMAe8jzKE4qW+jK+xQU9a03GUnKHkkle+Q0pX/g6jXZ7r1/xAK5D
+o2kQ+X5xK9cipRgEKwIDAQAB
+-----END PUBLIC KEY-----
+"""</span>
+<span class="k">let</span> <span class="nv">signedJWT</span> <span class="o">=</span> <span class="s">"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS2l0dXJhIn0.o2Rv_w1W6qfkldgb6FwzC3tAFEzo7WyYcLyykijCEqDbW8A7TwoFev85KGo_Bi7eNaSgZ6Q8jgkA31r8EDQWtSRg3_o5Zlq-ZCndyVeibgbyM2BMVUGcGzkUD2ikARfnb6GNGHr2waVeFSDehTN8WTLl0mGFxUE6wx5ZugR7My0"</span>
 <span class="kd">struct</span> <span class="kt">MyClaims</span><span class="p">:</span> <span class="kt">Claims</span> <span class="p">{</span>
    <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span>
 <span class="p">}</span>
 <span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="kt">JWT</span><span class="p">(</span><span class="nv">claims</span><span class="p">:</span> <span class="kt">MyClaims</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Kitura"</span><span class="p">))</span>
-<span class="k">let</span> <span class="nv">publicKey</span> <span class="o">=</span> <span class="s">"&lt;PublicKey&gt;"</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span><span class="o">!</span>
+<span class="k">let</span> <span class="nv">publicKey</span> <span class="o">=</span> <span class="n">pemString</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span><span class="o">!</span>
 <span class="k">let</span> <span class="nv">jwtVerifier</span> <span class="o">=</span> <span class="kt">JWTVerifier</span><span class="o">.</span><span class="nf">rs256</span><span class="p">(</span><span class="nv">publicKey</span><span class="p">:</span> <span class="n">publicKey</span><span class="p">)</span>
 <span class="k">let</span> <span class="nv">verified</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="nf">verify</span><span class="p">(</span><span class="n">signedJWT</span><span class="p">,</span> <span class="nv">using</span><span class="p">:</span> <span class="n">jwtVerifier</span><span class="p">)</span>
 </code></pre>
@@ -139,9 +148,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT11JWTVerifierV5rs256AC10Foundation4DataV9publicKey_tFZ"></a>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5rs2569publicKeyAC10Foundation4DataV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/rs256(publicKey:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs256AC10Foundation4DataV9publicKey_tFZ">rs256(publicKey:)</a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs2569publicKeyAC10Foundation4DataV_tFZ">rs256(publicKey:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -160,15 +169,34 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF8 encoded PEM public key, with a <q>BEGIN PUBLIC KEY</q> header.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT11JWTVerifierV5rs384AC10Foundation4DataV9publicKey_tFZ"></a>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5rs3849publicKeyAC10Foundation4DataV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/rs384(publicKey:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs384AC10Foundation4DataV9publicKey_tFZ">rs384(publicKey:)</a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs3849publicKeyAC10Foundation4DataV_tFZ">rs384(publicKey:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -187,15 +215,34 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF8 encoded PEM public key, with a <q>BEGIN PUBLIC KEY</q> header.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT11JWTVerifierV5rs512AC10Foundation4DataV9publicKey_tFZ"></a>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5rs5129publicKeyAC10Foundation4DataV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/rs512(publicKey:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs512AC10Foundation4DataV9publicKey_tFZ">rs512(publicKey:)</a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs5129publicKeyAC10Foundation4DataV_tFZ">rs512(publicKey:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -214,15 +261,34 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF8 encoded PEM public key, with a <q>BEGIN PUBLIC KEY</q> header.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT11JWTVerifierV5rs256AC10Foundation4DataV11certificate_tFZ"></a>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5rs25611certificateAC10Foundation4DataV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/rs256(certificate:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs256AC10Foundation4DataV11certificate_tFZ">rs256(certificate:)</a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs25611certificateAC10Foundation4DataV_tFZ">rs256(certificate:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -241,15 +307,34 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF8 encoded PEM public key, with a <q>BEGIN CERTIFICATE</q> header.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT11JWTVerifierV5rs384AC10Foundation4DataV11certificate_tFZ"></a>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5rs38411certificateAC10Foundation4DataV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/rs384(certificate:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs384AC10Foundation4DataV11certificate_tFZ">rs384(certificate:)</a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs38411certificateAC10Foundation4DataV_tFZ">rs384(certificate:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -268,15 +353,34 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF8 encoded PEM public key, with a <q>BEGIN CERTIFICATE</q> header.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT11JWTVerifierV5rs512AC10Foundation4DataV11certificate_tFZ"></a>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5rs51211certificateAC10Foundation4DataV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/rs512(certificate:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs512AC10Foundation4DataV11certificate_tFZ">rs512(certificate:)</a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5rs51211certificateAC10Foundation4DataV_tFZ">rs512(certificate:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -295,15 +399,34 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF8 encoded PEM public key, with a <q>BEGIN CERTIFICATE</q> header.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT11JWTVerifierV5hs256AC10Foundation4DataV3key_tFZ"></a>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5hs2563keyAC10Foundation4DataV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/hs256(key:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5hs256AC10Foundation4DataV3key_tFZ">hs256(key:)</a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5hs2563keyAC10Foundation4DataV_tFZ">hs256(key:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -322,15 +445,34 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HMAC symmetric password data.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT11JWTVerifierV5hs384AC10Foundation4DataV3key_tFZ"></a>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5hs3843keyAC10Foundation4DataV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/hs384(key:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5hs384AC10Foundation4DataV3key_tFZ">hs384(key:)</a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5hs3843keyAC10Foundation4DataV_tFZ">hs384(key:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -349,15 +491,34 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HMAC symmetric password data.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT11JWTVerifierV5hs512AC10Foundation4DataV3key_tFZ"></a>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5hs5123keyAC10Foundation4DataV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/hs512(key:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5hs512AC10Foundation4DataV3key_tFZ">hs512(key:)</a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5hs5123keyAC10Foundation4DataV_tFZ">hs512(key:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -375,6 +536,163 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">hs512</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">JWTVerifier</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HMAC symmetric password data.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5es2569publicKeyAC10Foundation4DataV_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/es256(publicKey:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5es2569publicKeyAC10Foundation4DataV_tFZ">es256(publicKey:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize a JWTVerifier using the ECDSA SHA 256 algorithm and the provided public key.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">es256</span><span class="p">(</span><span class="nv">publicKey</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">JWTVerifier</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF8 encoded PEM public key, with a <q>BEGIN PUBLIC KEY</q> header.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5es3849publicKeyAC10Foundation4DataV_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/es384(publicKey:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5es3849publicKeyAC10Foundation4DataV_tFZ">es384(publicKey:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize a JWTVerifier using the ECDSA SHA 384 algorithm and the provided public key.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">es384</span><span class="p">(</span><span class="nv">publicKey</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">JWTVerifier</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF8 encoded PEM public key, with a <q>BEGIN PUBLIC KEY</q> header.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT11JWTVerifierV5es5129publicKeyAC10Foundation4DataV_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/es512(publicKey:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT11JWTVerifierV5es5129publicKeyAC10Foundation4DataV_tFZ">es512(publicKey:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize a JWTVerifier using the ECDSA SHA 512 algorithm and the provided public key.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">es512</span><span class="p">(</span><span class="nv">publicKey</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">JWTVerifier</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF8 encoded PEM public key, with a <q>BEGIN PUBLIC KEY</q> header.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -414,7 +732,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-12-10)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-03-05)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

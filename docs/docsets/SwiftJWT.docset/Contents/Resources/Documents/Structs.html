@@ -304,15 +304,33 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A struct that will be used to sign the JWT <code><a href="Structs/Header.html">Header</a></code> and <code><a href="Protocols/Claims.html">Claims</a></code> and generate a signed JWT.</p>
+                        <p>A struct that will be used to sign the JWT <code><a href="Structs/Header.html">Header</a></code> and <code><a href="Protocols/Claims.html">Claims</a></code> and generate a signed JWT.
+For RSA and ECDSA, the provided key should be a .utf8 encoded PEM String.</p>
 <h3 id='usage-example' class='heading'>Usage Example:</h3>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">privateKey</span> <span class="o">=</span> <span class="s">"&lt;PrivateKey&gt;"</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span><span class="o">!</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">pemString</span> <span class="o">=</span> <span class="s">"""
+-----BEGIN RSA PRIVATE KEY-----
+MIICWwIBAAKBgQDdlatRjRjogo3WojgGHFHYLugdUWAY9iR3fy4arWNA1KoS8kVw
+33cJibXr8bvwUAUparCwlvdbH6dvEOfou0/gCFQsHUfQrSDv+MuSUMAe8jzKE4qW
++jK+xQU9a03GUnKHkkle+Q0pX/g6jXZ7r1/xAK5Do2kQ+X5xK9cipRgEKwIDAQAB
+AoGAD+onAtVye4ic7VR7V50DF9bOnwRwNXrARcDhq9LWNRrRGElESYYTQ6EbatXS
+3MCyjjX2eMhu/aF5YhXBwkppwxg+EOmXeh+MzL7Zh284OuPbkglAaGhV9bb6/5Cp
+uGb1esyPbYW+Ty2PC0GSZfIXkXs76jXAu9TOBvD0ybc2YlkCQQDywg2R/7t3Q2OE
+2+yo382CLJdrlSLVROWKwb4tb2PjhY4XAwV8d1vy0RenxTB+K5Mu57uVSTHtrMK0
+GAtFr833AkEA6avx20OHo61Yela/4k5kQDtjEf1N0LfI+BcWZtxsS3jDM3i1Hp0K
+Su5rsCPb8acJo5RO26gGVrfAsDcIXKC+bQJAZZ2XIpsitLyPpuiMOvBbzPavd4gY
+6Z8KWrfYzJoI/Q9FuBo6rKwl4BFoToD7WIUS+hpkagwWiz+6zLoX1dbOZwJACmH5
+fSSjAkLRi54PKJ8TFUeOP15h9sQzydI8zJU+upvDEKZsZc/UhT/SySDOxQ4G/523
+Y0sz/OZtSWcol/UMgQJALesy++GdvoIDLfJX5GBQpuFgFenRiRDabxrE9MNUZ2aP
+FaFp+DyAe+b4nDwuJaW2LURbr8AEZga7oQj0uYxcYw==
+-----END RSA PRIVATE KEY-----
+"""</span>
+<span class="k">let</span> <span class="nv">privateKey</span> <span class="o">=</span> <span class="n">pemString</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span><span class="o">!</span>
 <span class="k">let</span> <span class="nv">jwtSigner</span> <span class="o">=</span> <span class="kt">JWTSigner</span><span class="o">.</span><span class="nf">rs256</span><span class="p">(</span><span class="nv">privateKey</span><span class="p">:</span> <span class="n">privateKey</span><span class="p">)</span>
 <span class="kd">struct</span> <span class="kt">MyClaims</span><span class="p">:</span> <span class="kt">Claims</span> <span class="p">{</span>
    <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span>
 <span class="p">}</span>
 <span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="kt">JWT</span><span class="p">(</span><span class="nv">claims</span><span class="p">:</span> <span class="kt">MyClaims</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Kitura"</span><span class="p">))</span>
-<span class="k">let</span> <span class="nv">signedJWT</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">jwt</span><span class="o">.</span><span class="nf">sign</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="n">jwtSigner</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">signedJWT</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">jwt</span><span class="o">.</span><span class="nf">sign</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="n">jwtSigner</span><span class="p">)</span>
 </code></pre>
 
                         <a href="Structs/JWTSigner.html" class="slightly-smaller">See more</a>
@@ -352,14 +370,23 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A struct that will be used to verify the signature of a JWT is valid for the provided <code><a href="Structs/Header.html">Header</a></code> and <code><a href="Protocols/Claims.html">Claims</a></code>.</p>
+                        <p>A struct that will be used to verify the signature of a JWT is valid for the provided <code><a href="Structs/Header.html">Header</a></code> and <code><a href="Protocols/Claims.html">Claims</a></code>.
+For RSA and ECDSA, the provided key should be a .utf8 encoded PEM String.</p>
 <h3 id='usage-example' class='heading'>Usage Example:</h3>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">signedJWT</span> <span class="o">=</span> <span class="s">"&lt;SignedJWTString&gt;"</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">pemString</span> <span class="o">=</span> <span class="s">"""
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDdlatRjRjogo3WojgGHFHYLugd
+UWAY9iR3fy4arWNA1KoS8kVw33cJibXr8bvwUAUparCwlvdbH6dvEOfou0/gCFQs
+HUfQrSDv+MuSUMAe8jzKE4qW+jK+xQU9a03GUnKHkkle+Q0pX/g6jXZ7r1/xAK5D
+o2kQ+X5xK9cipRgEKwIDAQAB
+-----END PUBLIC KEY-----
+"""</span>
+<span class="k">let</span> <span class="nv">signedJWT</span> <span class="o">=</span> <span class="s">"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS2l0dXJhIn0.o2Rv_w1W6qfkldgb6FwzC3tAFEzo7WyYcLyykijCEqDbW8A7TwoFev85KGo_Bi7eNaSgZ6Q8jgkA31r8EDQWtSRg3_o5Zlq-ZCndyVeibgbyM2BMVUGcGzkUD2ikARfnb6GNGHr2waVeFSDehTN8WTLl0mGFxUE6wx5ZugR7My0"</span>
 <span class="kd">struct</span> <span class="kt">MyClaims</span><span class="p">:</span> <span class="kt">Claims</span> <span class="p">{</span>
    <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span>
 <span class="p">}</span>
 <span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="kt">JWT</span><span class="p">(</span><span class="nv">claims</span><span class="p">:</span> <span class="kt">MyClaims</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Kitura"</span><span class="p">))</span>
-<span class="k">let</span> <span class="nv">publicKey</span> <span class="o">=</span> <span class="s">"&lt;PublicKey&gt;"</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span><span class="o">!</span>
+<span class="k">let</span> <span class="nv">publicKey</span> <span class="o">=</span> <span class="n">pemString</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span><span class="o">!</span>
 <span class="k">let</span> <span class="nv">jwtVerifier</span> <span class="o">=</span> <span class="kt">JWTVerifier</span><span class="o">.</span><span class="nf">rs256</span><span class="p">(</span><span class="nv">publicKey</span><span class="p">:</span> <span class="n">publicKey</span><span class="p">)</span>
 <span class="k">let</span> <span class="nv">verified</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="nf">verify</span><span class="p">(</span><span class="n">signedJWT</span><span class="p">,</span> <span class="nv">using</span><span class="p">:</span> <span class="n">jwtVerifier</span><span class="p">)</span>
 </code></pre>
@@ -426,7 +453,7 @@ problems that may occur during claims validation and indicate that the validatio
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2018-12-10)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-03-05)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
