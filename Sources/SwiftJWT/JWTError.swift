@@ -52,4 +52,12 @@ public struct JWTError: Error, Equatable {
     public static func == (lhs: JWTError, rhs: JWTError) -> Bool {
         return lhs.internalError == rhs.internalError
     }
+
+    /// Function to enable pattern matching against generic Errors.
+    public static func ~= (lhs: JWTError, rhs: Error) -> Bool {
+        guard let rhs = rhs as? JWTError else {
+            return false
+        }
+        return lhs == rhs
+    }
 }
