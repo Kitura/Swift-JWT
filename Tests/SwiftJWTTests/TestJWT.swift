@@ -133,7 +133,8 @@ class TestJWT: XCTestCase {
             ("testMicroProfile", testMicroProfile),
             ("testValidateClaims", testValidateClaims),
             ("testValidateClaimsLeeway", testValidateClaimsLeeway),
-            ]
+            ("testErrorPattenMatching", testErrorPattenMatching),
+        ]
     }
 
     func testSignAndVerify() {
@@ -538,6 +539,16 @@ class TestJWT: XCTestCase {
         jwt.claims.iat = nil
         jwt.claims.nbf = Date(timeIntervalSinceNow: 10)
         XCTAssertEqual(jwt.validateClaims(leeway: 20), .success, "Validation failed")
+    }
+    
+    func testErrorPattenMatching() {
+        do {
+            let _ = try JWT<TestClaims>(jwtString: "InvalidString",  verifier: .rs256(publicKey: rsaPublicKey))
+        } catch JWTError.invalidJWTString {
+            // Caught correct error
+        } catch {
+            XCTFail("Incorrect error thrown: \(error)")
+        }
     }
 }
 
