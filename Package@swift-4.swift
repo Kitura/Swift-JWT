@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:4.0
 
 /**
  * Copyright IBM Corporation 2018-2019
@@ -39,4 +39,3 @@ let package = Package(
         .testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
 	]
 )
-

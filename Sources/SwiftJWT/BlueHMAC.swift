@@ -47,7 +47,11 @@ class BlueHMAC: SignerAlgorithm, VerifierAlgorithm {
         guard let hmac = HMAC(using: algorithm, key: key).update(data: data)?.final() else {
             throw JWTError.invalidPrivateKey
         }
+        #if swift(>=5.0)
+        return Data(hmac)
+        #else 
         return Data(bytes: hmac)
+        #endif
     }
     
     
