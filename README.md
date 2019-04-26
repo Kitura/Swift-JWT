@@ -112,7 +112,7 @@ let myJWT = JWT(header: myHeader, claims: myClaims)
 To sign and verify a JWT using an RSA algorithm, you must provide a public and private key. This could be the contents of a .key file generated via the following Terminal commands:
 
 ```
-$ ssh-keygen -t rsa -b 4096 -f privateKey.key
+$ ssh-keygen -t rsa -b 4096 -m PEM -f privateKey.key
 # Don't add a passphrase
 $ openssl rsa -in privateKey.key -pubout -outform PEM -out privateKey.key.pub
 ```
