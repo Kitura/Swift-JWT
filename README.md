@@ -207,7 +207,7 @@ if validationResult != .success {
 A JWT struct can be initialized from a JWT string.  If a JWTVerifier is provided it will be used to verify the signature before initialization
 
 ```swift
-let newJWT = try JWT<MyClaims>(jwtString: signedJWT, jwtVerifier: jwtVerifier)
+let newJWT = try JWT<MyClaims>(jwtString: signedJWT, verifier: jwtVerifier)
 ```
 
 ### JWTEncoder and JWTDecoder
