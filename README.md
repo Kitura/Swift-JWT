@@ -121,9 +121,9 @@ This will create a public and private key pair on your system, and the contents 
 
 ```swift
 let privateKeyPath = URL(fileURLWithPath: getAbsolutePath(relativePath: "/path/to/privateKey.key"))
-let privateKey: Data = try Data(contentsOf: privateKeyPath, options: alwaysMapped)
+let privateKey: Data = try Data(contentsOf: privateKeyPath, options: .alwaysMapped)
 let publicKeyPath = URL(fileURLWithPath: getAbsolutePath(relativePath: "/path/to/publicKey.key"))
-let publicKey: Data = try Data(contentsOf: publicKeyPath, options: alwaysMapped)
+let publicKey: Data = try Data(contentsOf: publicKeyPath, options: .alwaysMapped)
 ```
 
 For details on creating elliptic curve public and private keys, view the [BlueECC README.txt](https://github.com/IBM-Swift/BlueECC).
