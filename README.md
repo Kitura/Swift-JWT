@@ -112,7 +112,7 @@ let myJWT = JWT(header: myHeader, claims: myClaims)
 To sign and verify a JWT using an RSA algorithm, you must provide a public and private key. This could be the contents of a .key file generated via the following Terminal commands:
 
 ```
-$ ssh-keygen -t rsa -b 4096 -f privateKey.key
+$ ssh-keygen -t rsa -b 4096 -m PEM -f privateKey.key
 # Don't add a passphrase
 $ openssl rsa -in privateKey.key -pubout -outform PEM -out privateKey.key.pub
 ```
@@ -207,7 +207,7 @@ if validationResult != .success {
 A JWT struct can be initialized from a JWT string.  If a JWTVerifier is provided it will be used to verify the signature before initialization
 
 ```swift
-let newJWT = try JWT<MyClaims>(jwtString: signedJWT, jwtVerifier: jwtVerifier)
+let newJWT = try JWT<MyClaims>(jwtString: signedJWT, verifier: jwtVerifier)
 ```
 
 ### JWTEncoder and JWTDecoder
