@@ -25,11 +25,13 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
     private let key: Data
     private let keyType: RSAKeyType
     private let algorithm: Data.Algorithm
+    private let usePSS: Bool
     
-    init(key: Data, keyType: RSAKeyType?=nil, algorithm: Data.Algorithm) {
+    init(key: Data, keyType: RSAKeyType?=nil, algorithm: Data.Algorithm, usePSS: Bool = false) {
         self.key = key
         self.keyType = keyType ?? .publicKey
         self.algorithm = algorithm
+        self.usePSS = usePSS
     }
     
     func sign(header: String, claims: String) throws -> String {
@@ -52,7 +54,7 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
         }
         let privateKey = try CryptorRSA.createPrivateKey(withPEM: keyString)
         let myPlaintext = CryptorRSA.createPlaintext(with: data)
-        guard let signedData = try myPlaintext.signed(with: privateKey, algorithm: algorithm) else {
+        guard let signedData = try myPlaintext.signed(with: privateKey, algorithm: algorithm, usePSS: usePSS) else {
             throw JWTError.invalidPrivateKey
         }
         return signedData.data
@@ -92,7 +94,7 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
             }
             let myPlaintext = CryptorRSA.createPlaintext(with: data)
             let signedData = CryptorRSA.createSigned(with: signature)
-            return try myPlaintext.verify(with: publicKey, signature: signedData, algorithm: algorithm)
+            return try myPlaintext.verify(with: publicKey, signature: signedData, algorithm: algorithm, usePSS: usePSS)
         }
         catch {
             Log.error("Verification failed: \(error)") 
