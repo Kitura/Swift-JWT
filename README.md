@@ -179,9 +179,12 @@ The supported algorithms for signing and verifying JWTs are:
 * ES256 - ECDSA using using SHA-256 and a P-256 curve
 * ES384 - ECDSA using using SHA-384 and a P-384 curve
 * ES512 - ECDSA using using SHA-512 and a P-521 curve
+* PS256 - RSA-PSS using SHA-256
+* PS384 - RSA-PSS using SHA-384
+* PS512 - RSA-PSS using SHA-512
 * none - Don't sign or verify the JWT
 
-Note: ECDSA algorithms require a minimum Swift version of 4.1.
+Note: ECDSA and RSA-PSS algorithms require a minimum Swift version of 4.1.
 
 ### Validate claims
 

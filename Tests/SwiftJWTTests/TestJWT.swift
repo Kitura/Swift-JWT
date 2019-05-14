@@ -31,7 +31,8 @@ let rsaJWTEncoder = JWTEncoder(jwtSigner: .rs256(privateKey: rsaPrivateKey))
 let rsaJWTDecoder = JWTDecoder(jwtVerifier: .rs256(publicKey: rsaPublicKey))
 let certPrivateKey = read(fileName: "cert_private_key")
 let certificate = read(fileName: "certificate")
-let rsaEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTUxNjIzOTAyMn0.HbPVSMBtR3l0zyrHIlGRyXkNECgE0RrQreebA2xuIWhN-64MP29-lf8lg5pWKk3gTrnbOxEpek5AvBNgz4VK34enkzhrrMKonBywvZZ8CQtM5FlArgx5ZQqxjD32B7WCqlDOelly1W2rlFNIopBit-OuKBw1ioxQwzDMLb1Ol3Q"
+let rsaEncodedTestClaimJWT = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.pOeiYYHuxBu27llpKrLfHX-tt0Cr41m3hn7d1_CPl7dRMksQRJC5U7AM2CkF8uyObwAKg88orK6eHlOQ0x2C4gDoG7WmgszpthOB6ZUTUPj_FNsn3z4fM8sFx3wON7jtRRSuULH13f-RjLoIFhY_VuqVhla3ybjnfbwjcsd8EqDumdFN6La5D0KugCgvuH51JaEjdHfwXkxkRsynmhv3jCpvRbUbforfEnDjyAImez2hd0Pnb3Vtqr-21z1vFWqqRiz_K-qSiO5NTaO1VbLg7SOYBB9hMAD-_6R2ZZh0JvFP7hycCftRIxTSDd5r0I9sQh9iqurVq03_h0ZjS9BwJQ"
+let rsaPSSEncodedTestClaimJWT = "eyJhbGciOiJQUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.gytxKF6HsfRI-dmyS0KsVoGquSWHTbosqmgBM_8UnTBZd56ThVdxZSTZzkVE0kS6SZdN7iogLiPqWzvGac0orTkf3XMbxecpHiO8b_BywIqrXhXcz84NFxrq5s8KL_LB8Cs9ro_5xmptp_fNtCedg9leju7VUzrEZP0hyTG_dlar2t7SWY47JD3rlgdaXEfkGgSuDgOO2CzBzqlbP7DUxTQ6OwI8RMNWAxeCalvWTgNQkb1DAy_2JKaga4zDnieUHMd2c_8iSt6SS9dLkxl4nih_2IjHJc73Qcg4Epx5CrhJXWg5CmKoTFDVgpMBGXJRIxT5qpAAx4qvRzlNgJVM2A"
 let certificateEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.CpnzQLuWGfH5Kba36vg0ZZKBnzwlrIgapFVfBfk_nea-eej84ktHZANqIeolskZopRJ4DQ3oaLtHWEg16-ZsujxmkOdiAIbk0-C4QLOVFLZH78WLZAqkyNLS8rFuK9hloLNwz1j6VVUd1f0SOT-wIRzL0_0VRYqQd1bVcCj7wc7BmXENlOfHY7KGHS-6JX-EClT1DygDSoCmdvBExBf3vx0lwMIbP4ryKkyhOoU13ZfSUt1gpP9nZAfzqfRTPxZc_f7neiAlMlF6SzsedsskRCNegW8cg5e_NuVmZZkj0_bnswXFDMmIaxiPdtOEWkmyEOca-EHSwbO5PgCgXOIrgg"
 // A `TestClaims` encoded using HMAC with "Super Secret Key" from "www.jwt.io"
 let hmacEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.8kIE0ZCq1Vw7aW1kACpgJLcgY2DpTXgO6P5T3cdCuTs"
@@ -110,14 +111,17 @@ class TestJWT: XCTestCase {
         return [
             ("testSignAndVerify", testSignAndVerify),
             ("testSignAndVerifyRSA", testSignAndVerifyRSA),
+            ("testSignAndVerifyRSAPSS", testSignAndVerifyRSAPSS),
             ("testSignAndVerifyCert", testSignAndVerifyCert),
             ("testSignAndVerifyHMAC", testSignAndVerifyHMAC),
             ("testSignAndVerifyECDSA", testSignAndVerifyECDSA),
             ("testSignAndVerifyRSA384", testSignAndVerifyRSA384),
+            ("testSignAndVerifyRSAPSS384", testSignAndVerifyRSAPSS384),
             ("testSignAndVerifyCert384", testSignAndVerifyCert384),
             ("testSignAndVerifyHMAC384", testSignAndVerifyHMAC384),
             ("testSignAndVerifyECDSA384", testSignAndVerifyECDSA384),
             ("testSignAndVerifyRSA512", testSignAndVerifyRSA512),
+            ("testSignAndVerifyRSAPSS512", testSignAndVerifyRSAPSS512),
             ("testSignAndVerifyCert512", testSignAndVerifyCert512),
             ("testSignAndVerifyHMAC512", testSignAndVerifyHMAC512),
             ("testSignAndVerifyECDSA512", testSignAndVerifyECDSA512),
@@ -128,6 +132,7 @@ class TestJWT: XCTestCase {
             ("testJWTDecoderKeyID", testJWTDecoderKeyID),
             ("testJWTCoderCycleKeyID", testJWTCoderCycleKeyID),
             ("testJWT", testJWT),
+            ("testJWTRSAPSS", testJWTRSAPSS),
             ("testJWTUsingHMAC", testJWTUsingHMAC),
             ("testJWTUsingECDSA", testJWTUsingECDSA),
             ("testMicroProfile", testMicroProfile),
@@ -150,6 +155,16 @@ class TestJWT: XCTestCase {
             try signAndVerify(signer: .rs256(privateKey: rsaPrivateKey), verifier: .rs256(publicKey: rsaPublicKey))
         } catch {
             XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyRSAPSS() {
+        if #available(OSX 10.13, *) {
+            do {
+                try signAndVerify(signer: .ps256(privateKey: rsaPrivateKey), verifier: .ps256(publicKey: rsaPublicKey))
+            } catch {
+                XCTFail("testSignAndVerify failed: \(error)")
+            }
         }
     }
     
@@ -188,6 +203,16 @@ class TestJWT: XCTestCase {
         }
     }
     
+    func testSignAndVerifyRSAPSS384() {
+        if #available(OSX 10.13, *) {
+            do {
+                try signAndVerify(signer: .ps384(privateKey: rsaPrivateKey), verifier: .ps384(publicKey: rsaPublicKey))
+            } catch {
+                XCTFail("testSignAndVerify failed: \(error)")
+            }
+        }
+    }
+    
     func testSignAndVerifyCert384() {
         do {
             try signAndVerify(signer: .rs384(privateKey: certPrivateKey), verifier: .rs384(certificate: certificate))
@@ -220,6 +245,16 @@ class TestJWT: XCTestCase {
             try signAndVerify(signer: .rs512(privateKey: rsaPrivateKey), verifier: .rs512(publicKey: rsaPublicKey))
         } catch {
             XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyRSAPSS512() {
+        if #available(OSX 10.13, *) {
+            do {
+                try signAndVerify(signer: .ps512(privateKey: rsaPrivateKey), verifier: .ps512(publicKey: rsaPublicKey))
+            } catch {
+                XCTFail("testSignAndVerify failed: \(error)")
+            }
         }
     }
     
@@ -468,6 +503,30 @@ class TestJWT: XCTestCase {
         }
         else {
             XCTFail("Failed to decode")
+        }
+    }
+    
+    // From jwt.io
+    func testJWTRSAPSS() {
+        if #available(OSX 10.13, *) {
+            let ok = JWT<TestClaims>.verify(rsaPSSEncodedTestClaimJWT, using: .ps256(publicKey: rsaPublicKey))
+            XCTAssertTrue(ok, "Verification failed")
+            
+            if let decoded = try? JWT<TestClaims>(jwtString: rsaPSSEncodedTestClaimJWT) {
+                XCTAssertEqual(decoded.header.alg, "PS256", "Wrong .alg in decoded")
+                XCTAssertEqual(decoded.header.typ, "JWT", "Wrong .typ in decoded")
+                
+                XCTAssertEqual(decoded.claims.sub, "1234567890", "Wrong .sub in decoded")
+                XCTAssertEqual(decoded.claims.name, "John Doe", "Wrong .name in decoded")
+                XCTAssertEqual(decoded.claims.admin, true, "Wrong .admin in decoded")
+                XCTAssertEqual(decoded.claims.iat, Date(timeIntervalSince1970: 1516239022), "Wrong .iat in decoded")
+                
+                
+                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+            }
+            else {
+                XCTFail("Failed to decode")
+            }
         }
     }
     
