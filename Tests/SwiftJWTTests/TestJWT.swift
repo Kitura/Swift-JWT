@@ -31,8 +31,8 @@ let rsaJWTEncoder = JWTEncoder(jwtSigner: .rs256(privateKey: rsaPrivateKey))
 let rsaJWTDecoder = JWTDecoder(jwtVerifier: .rs256(publicKey: rsaPublicKey))
 let certPrivateKey = read(fileName: "cert_private_key")
 let certificate = read(fileName: "certificate")
-let rsaEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTUxNjIzOTAyMn0.HbPVSMBtR3l0zyrHIlGRyXkNECgE0RrQreebA2xuIWhN-64MP29-lf8lg5pWKk3gTrnbOxEpek5AvBNgz4VK34enkzhrrMKonBywvZZ8CQtM5FlArgx5ZQqxjD32B7WCqlDOelly1W2rlFNIopBit-OuKBw1ioxQwzDMLb1Ol3Q"
-let rsaPSSEncodedTestClaimJWT = "eyJhbGciOiJQUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.DOfeHpVUsym3n0xuF2EWqYh9y8kf1DGYxWV7w-R7LTsn_ukD46WpJZQB-juwHOjeJajV_5lZHv-9MgSZvAhL8uCVBYfAwmOEfT9ytxgMegkDedjZDr4anRTMDbt0myw-teToC77sHuUyChF7D4tscgRB3LF1qr-_YZDGv9DP-Qc"
+let rsaEncodedTestClaimJWT = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.pOeiYYHuxBu27llpKrLfHX-tt0Cr41m3hn7d1_CPl7dRMksQRJC5U7AM2CkF8uyObwAKg88orK6eHlOQ0x2C4gDoG7WmgszpthOB6ZUTUPj_FNsn3z4fM8sFx3wON7jtRRSuULH13f-RjLoIFhY_VuqVhla3ybjnfbwjcsd8EqDumdFN6La5D0KugCgvuH51JaEjdHfwXkxkRsynmhv3jCpvRbUbforfEnDjyAImez2hd0Pnb3Vtqr-21z1vFWqqRiz_K-qSiO5NTaO1VbLg7SOYBB9hMAD-_6R2ZZh0JvFP7hycCftRIxTSDd5r0I9sQh9iqurVq03_h0ZjS9BwJQ"
+let rsaPSSEncodedTestClaimJWT = "eyJhbGciOiJQUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.gytxKF6HsfRI-dmyS0KsVoGquSWHTbosqmgBM_8UnTBZd56ThVdxZSTZzkVE0kS6SZdN7iogLiPqWzvGac0orTkf3XMbxecpHiO8b_BywIqrXhXcz84NFxrq5s8KL_LB8Cs9ro_5xmptp_fNtCedg9leju7VUzrEZP0hyTG_dlar2t7SWY47JD3rlgdaXEfkGgSuDgOO2CzBzqlbP7DUxTQ6OwI8RMNWAxeCalvWTgNQkb1DAy_2JKaga4zDnieUHMd2c_8iSt6SS9dLkxl4nih_2IjHJc73Qcg4Epx5CrhJXWg5CmKoTFDVgpMBGXJRIxT5qpAAx4qvRzlNgJVM2A"
 let certificateEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.CpnzQLuWGfH5Kba36vg0ZZKBnzwlrIgapFVfBfk_nea-eej84ktHZANqIeolskZopRJ4DQ3oaLtHWEg16-ZsujxmkOdiAIbk0-C4QLOVFLZH78WLZAqkyNLS8rFuK9hloLNwz1j6VVUd1f0SOT-wIRzL0_0VRYqQd1bVcCj7wc7BmXENlOfHY7KGHS-6JX-EClT1DygDSoCmdvBExBf3vx0lwMIbP4ryKkyhOoU13ZfSUt1gpP9nZAfzqfRTPxZc_f7neiAlMlF6SzsedsskRCNegW8cg5e_NuVmZZkj0_bnswXFDMmIaxiPdtOEWkmyEOca-EHSwbO5PgCgXOIrgg"
 // A `TestClaims` encoded using HMAC with "Super Secret Key" from "www.jwt.io"
 let hmacEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.8kIE0ZCq1Vw7aW1kACpgJLcgY2DpTXgO6P5T3cdCuTs"
@@ -250,51 +250,8 @@ class TestJWT: XCTestCase {
     
     func testSignAndVerifyRSAPSS512() {
         if #available(OSX 10.13, *) {
-            // RSAPSS512 requires at least a 2048 bit RSA key.
-            let rsa2048PrivKey = 
-            """
-            -----BEGIN RSA PRIVATE KEY-----
-            MIIEpgIBAAKCAQEArY09Owko87BYqQKBYeUHjq5mlvL23cPPxmLKzEoo16FD3ud30
-            VsuabM6FGds6YrULfBQnJrAkuLHrZtFVDQPNKsZ0Ui6721c5EEw0GDJ+NXgbej+g6
-            gAsJ7xedmLPLIHO40QSV64mYjTh/73TZzF/dXJaGWSAwan+fsRls0Ltn2xdw8htgA
-            IKzH0zrEMBVFpW7RroTx5qdZAQVNB7b5S/iucBDy5pvMAre3tJ30mhpt0tZtLOL7t
-            pphhjf4FRnHS/VHb8wN6mrUu4r+7v2ZpfzJwQbkDBjxzyCl0iDGQoQo0dMUIuE0yu
-            i9ur9+9L5gEREuDPMRXNPIwh/dgMEWo7QIDAQABAoIBAQCb0SsgTeEOqU1wsGcpVU
-            +rsrk43Xr3ME7jdt9M+2gf8RHWl0rkFFFfZSLIHvOR2qsVc6VsdSRgvGs6WyWrq/H
-            a/6N2Wy46uJ2l8UG6VKwBVUTiaUXZPoUgDhQPqllwbQZBWS0+MmTatBX3C9tNO2wn
-            skHaERc+0EMQFXJ9Sisx87yA8RlhhuEaNXqxaQzTohHSvrpoHMqkjx0RsFD9py414
-            KlYRKCiMyI8xkWa9FkvyYB+wwmmQwRcoxBgucpyuOWunGdqF/Hxs8b6d9qWJ66d2e
-            N1F9JCSS7cAH1CIRTxkZTH4qrxE5iMl8LuB3Xe1Qw7s60BPmmuGB4HmLKtwQShAoG
-            BAOFr5MEmhyuY1EdmCaxlEYLakBu4xux+WBXQ533VgHrSO6Hlk1b36AEzV0hIBWEW
-            8BViSQv0SOyDGPG4EhfLe6KPA2dz7ZwTl+WrZtalDYJGRytSCyI9/cNh6s1adG8zO
-            MW+Na7sq5lqXMCGnHeN6rb/zO6aiModQBHEIVUicTcHAoGBAMUYFs5T88kuD3swLo
-            itToe0wdKlN4ytPi9O+8hZknn2wiP81rvunhrNWwK0ixIYrUkVR/o9sDBoNTVGZ+2
-            0Ts3cmTFTr0/9L+eFzj1YbogtXHQaaDLhiLeMAynmSe0ItlxCafTgNUZVN3JN1XD5
-            ByiCRqTVAAUM1BK5J/eao89rAoGBAL05+u8AzpsUUa4Vw60Jsmdr3WjH9YR0krDNi
-            mWhIZb4f8JpmwN4WzMWzAALJSjZPnRU6wiz6btQWVIfuGBtGb3d23euYxmPgQT0mw
-            E30F05bWi6GEqIS0sGGTqE4hSupMup3hqW5X2FQZMD7LiXUx6HIJpy8rznTO8c+vY
-            iUXNlAoGBAKRyMe0bPOfZp48YJ2tgdoph9eokcdHNZnogg5Gpsr5Sda+DMUOCl6Yz
-            O0FplDOYJVU6DWEsgUoSWHrH8MTzUWEQMz1l3nt1+7dH/ElQ9IBooKA6vD/fz6udh
-            bI68+lzAHy/6RoozCqPxYB4kqL9FMzmzbyP/8E27+djV4aPHyhbAoGBAKAKeLgkmn
-            slJA1JlN28MfSdPhxe83wowB/w9mjpl+IDwY4X27sd9M//uWCKm/i5Sp88JJtNrgs
-            4Uu0GZ1PGb1/3A0Kj0ZZ/2u8f5OpsZl2x05w8inkqXgWsXd5XOVfAXoDiLoouMlkP
-            sWBKUgg4LGfIA7Jnzi38sonojtb2Iz+y
-            -----END RSA PRIVATE KEY-----
-            """
-            let rsa2048PubKey = 
-            """
-            -----BEGIN RSA PUBLIC KEY-----
-            MIIBCgKCAQEArY09Owko87BYqQKBYeUHjq5mlvL23cPPxmLKzEoo16FD3ud30Vsua
-            bM6FGds6YrULfBQnJrAkuLHrZtFVDQPNKsZ0Ui6721c5EEw0GDJ+NXgbej+g6gAsJ
-            7xedmLPLIHO40QSV64mYjTh/73TZzF/dXJaGWSAwan+fsRls0Ltn2xdw8htgAIKzH
-            0zrEMBVFpW7RroTx5qdZAQVNB7b5S/iucBDy5pvMAre3tJ30mhpt0tZtLOL7tpphh
-            jf4FRnHS/VHb8wN6mrUu4r+7v2ZpfzJwQbkDBjxzyCl0iDGQoQo0dMUIuE0yui9ur
-            9+9L5gEREuDPMRXNPIwh/dgMEWo7QIDAQAB
-            -----END RSA PUBLIC KEY-----
-            """
             do {
-                try signAndVerify(signer: .ps512(privateKey: Data(rsa2048PrivKey.utf8)),
-                                  verifier: .ps512(publicKey: Data(rsa2048PubKey.utf8)))
+                try signAndVerify(signer: .ps512(privateKey: rsaPrivateKey), verifier: .ps512(publicKey: rsaPublicKey))
             } catch {
                 XCTFail("testSignAndVerify failed: \(error)")
             }
