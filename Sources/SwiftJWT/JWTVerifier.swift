@@ -101,6 +101,13 @@ public struct JWTVerifier {
         return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha384, usePSS: true))
     }
     
+    /// Initialize a JWTVerifier using the RSA-PSS 512 bits algorithm and the provided publicKey.
+    /// This verifier requires at least a 2048 bit RSA key.
+    /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
+    public static func ps512(publicKey: Data) -> JWTVerifier {
+        return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha512, usePSS: true))
+    }
+    
     /// Initialize a JWTSigner using the HMAC 256 bits algorithm and the provided privateKey.
     /// - Parameter key: The HMAC symmetric password data.
     public static func hs256(key: Data) -> JWTVerifier {

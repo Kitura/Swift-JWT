@@ -95,6 +95,13 @@ public struct JWTSigner {
         return JWTSigner(name: "PS384", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha384, usePSS: true))
     }
     
+    /// Initialize a JWTSigner using the RSA-PSS 512 bits algorithm and the provided privateKey.
+    /// This signer requires at least a 2048 bit RSA key.
+    /// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
+    public static func ps512(privateKey: Data) -> JWTSigner {
+        return JWTSigner(name: "PS512", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha512, usePSS: true))
+    }
+    
     /// Initialize a JWTSigner using the HMAC 256 bits algorithm and the provided privateKey.
     /// - Parameter key: The HMAC symmetric password data.
     public static func hs256(key: Data) -> JWTSigner {

@@ -16,6 +16,7 @@
 
 import XCTest
 import Foundation
+import CryptorRSA
 
 @testable import SwiftJWT
 
@@ -116,10 +117,12 @@ class TestJWT: XCTestCase {
             ("testSignAndVerifyHMAC", testSignAndVerifyHMAC),
             ("testSignAndVerifyECDSA", testSignAndVerifyECDSA),
             ("testSignAndVerifyRSA384", testSignAndVerifyRSA384),
+            ("testSignAndVerifyRSAPSS384", testSignAndVerifyRSAPSS384),
             ("testSignAndVerifyCert384", testSignAndVerifyCert384),
             ("testSignAndVerifyHMAC384", testSignAndVerifyHMAC384),
             ("testSignAndVerifyECDSA384", testSignAndVerifyECDSA384),
             ("testSignAndVerifyRSA512", testSignAndVerifyRSA512),
+            ("testSignAndVerifyRSAPSS512", testSignAndVerifyRSAPSS512),
             ("testSignAndVerifyCert512", testSignAndVerifyCert512),
             ("testSignAndVerifyHMAC512", testSignAndVerifyHMAC512),
             ("testSignAndVerifyECDSA512", testSignAndVerifyECDSA512),
@@ -130,6 +133,7 @@ class TestJWT: XCTestCase {
             ("testJWTDecoderKeyID", testJWTDecoderKeyID),
             ("testJWTCoderCycleKeyID", testJWTCoderCycleKeyID),
             ("testJWT", testJWT),
+            ("testJWTRSAPSS", testJWTRSAPSS),
             ("testJWTUsingHMAC", testJWTUsingHMAC),
             ("testJWTUsingECDSA", testJWTUsingECDSA),
             ("testMicroProfile", testMicroProfile),
@@ -156,10 +160,12 @@ class TestJWT: XCTestCase {
     }
     
     func testSignAndVerifyRSAPSS() {
-        do {
-            try signAndVerify(signer: .ps256(privateKey: rsaPrivateKey), verifier: .ps256(publicKey: rsaPublicKey))
-        } catch {
-            XCTFail("testSignAndVerify failed: \(error)")
+        if #available(OSX 10.13, *) {
+            do {
+                try signAndVerify(signer: .ps256(privateKey: rsaPrivateKey), verifier: .ps256(publicKey: rsaPublicKey))
+            } catch {
+                XCTFail("testSignAndVerify failed: \(error)")
+            }
         }
     }
     
@@ -199,10 +205,12 @@ class TestJWT: XCTestCase {
     }
     
     func testSignAndVerifyRSAPSS384() {
-        do {
-            try signAndVerify(signer: .ps384(privateKey: rsaPrivateKey), verifier: .ps384(publicKey: rsaPublicKey))
-        } catch {
-            XCTFail("testSignAndVerify failed: \(error)")
+        if #available(OSX 10.13, *) {
+            do {
+                try signAndVerify(signer: .ps384(privateKey: rsaPrivateKey), verifier: .ps384(publicKey: rsaPublicKey))
+            } catch {
+                XCTFail("testSignAndVerify failed: \(error)")
+            }
         }
     }
     
@@ -238,6 +246,59 @@ class TestJWT: XCTestCase {
             try signAndVerify(signer: .rs512(privateKey: rsaPrivateKey), verifier: .rs512(publicKey: rsaPublicKey))
         } catch {
             XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyRSAPSS512() {
+        if #available(OSX 10.13, *) {
+            // RSAPSS512 requires at least a 2048 bit RSA key.
+            let rsa2048PrivKey = 
+            """
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEpgIBAAKCAQEArY09Owko87BYqQKBYeUHjq5mlvL23cPPxmLKzEoo16FD3ud30
+            VsuabM6FGds6YrULfBQnJrAkuLHrZtFVDQPNKsZ0Ui6721c5EEw0GDJ+NXgbej+g6
+            gAsJ7xedmLPLIHO40QSV64mYjTh/73TZzF/dXJaGWSAwan+fsRls0Ltn2xdw8htgA
+            IKzH0zrEMBVFpW7RroTx5qdZAQVNB7b5S/iucBDy5pvMAre3tJ30mhpt0tZtLOL7t
+            pphhjf4FRnHS/VHb8wN6mrUu4r+7v2ZpfzJwQbkDBjxzyCl0iDGQoQo0dMUIuE0yu
+            i9ur9+9L5gEREuDPMRXNPIwh/dgMEWo7QIDAQABAoIBAQCb0SsgTeEOqU1wsGcpVU
+            +rsrk43Xr3ME7jdt9M+2gf8RHWl0rkFFFfZSLIHvOR2qsVc6VsdSRgvGs6WyWrq/H
+            a/6N2Wy46uJ2l8UG6VKwBVUTiaUXZPoUgDhQPqllwbQZBWS0+MmTatBX3C9tNO2wn
+            skHaERc+0EMQFXJ9Sisx87yA8RlhhuEaNXqxaQzTohHSvrpoHMqkjx0RsFD9py414
+            KlYRKCiMyI8xkWa9FkvyYB+wwmmQwRcoxBgucpyuOWunGdqF/Hxs8b6d9qWJ66d2e
+            N1F9JCSS7cAH1CIRTxkZTH4qrxE5iMl8LuB3Xe1Qw7s60BPmmuGB4HmLKtwQShAoG
+            BAOFr5MEmhyuY1EdmCaxlEYLakBu4xux+WBXQ533VgHrSO6Hlk1b36AEzV0hIBWEW
+            8BViSQv0SOyDGPG4EhfLe6KPA2dz7ZwTl+WrZtalDYJGRytSCyI9/cNh6s1adG8zO
+            MW+Na7sq5lqXMCGnHeN6rb/zO6aiModQBHEIVUicTcHAoGBAMUYFs5T88kuD3swLo
+            itToe0wdKlN4ytPi9O+8hZknn2wiP81rvunhrNWwK0ixIYrUkVR/o9sDBoNTVGZ+2
+            0Ts3cmTFTr0/9L+eFzj1YbogtXHQaaDLhiLeMAynmSe0ItlxCafTgNUZVN3JN1XD5
+            ByiCRqTVAAUM1BK5J/eao89rAoGBAL05+u8AzpsUUa4Vw60Jsmdr3WjH9YR0krDNi
+            mWhIZb4f8JpmwN4WzMWzAALJSjZPnRU6wiz6btQWVIfuGBtGb3d23euYxmPgQT0mw
+            E30F05bWi6GEqIS0sGGTqE4hSupMup3hqW5X2FQZMD7LiXUx6HIJpy8rznTO8c+vY
+            iUXNlAoGBAKRyMe0bPOfZp48YJ2tgdoph9eokcdHNZnogg5Gpsr5Sda+DMUOCl6Yz
+            O0FplDOYJVU6DWEsgUoSWHrH8MTzUWEQMz1l3nt1+7dH/ElQ9IBooKA6vD/fz6udh
+            bI68+lzAHy/6RoozCqPxYB4kqL9FMzmzbyP/8E27+djV4aPHyhbAoGBAKAKeLgkmn
+            slJA1JlN28MfSdPhxe83wowB/w9mjpl+IDwY4X27sd9M//uWCKm/i5Sp88JJtNrgs
+            4Uu0GZ1PGb1/3A0Kj0ZZ/2u8f5OpsZl2x05w8inkqXgWsXd5XOVfAXoDiLoouMlkP
+            sWBKUgg4LGfIA7Jnzi38sonojtb2Iz+y
+            -----END RSA PRIVATE KEY-----
+            """
+            let rsa2048PubKey = 
+            """
+            -----BEGIN RSA PUBLIC KEY-----
+            MIIBCgKCAQEArY09Owko87BYqQKBYeUHjq5mlvL23cPPxmLKzEoo16FD3ud30Vsua
+            bM6FGds6YrULfBQnJrAkuLHrZtFVDQPNKsZ0Ui6721c5EEw0GDJ+NXgbej+g6gAsJ
+            7xedmLPLIHO40QSV64mYjTh/73TZzF/dXJaGWSAwan+fsRls0Ltn2xdw8htgAIKzH
+            0zrEMBVFpW7RroTx5qdZAQVNB7b5S/iucBDy5pvMAre3tJ30mhpt0tZtLOL7tpphh
+            jf4FRnHS/VHb8wN6mrUu4r+7v2ZpfzJwQbkDBjxzyCl0iDGQoQo0dMUIuE0yui9ur
+            9+9L5gEREuDPMRXNPIwh/dgMEWo7QIDAQAB
+            -----END RSA PUBLIC KEY-----
+            """
+            do {
+                try signAndVerify(signer: .ps512(privateKey: Data(rsa2048PrivKey.utf8)),
+                                  verifier: .ps512(publicKey: Data(rsa2048PubKey.utf8)))
+            } catch {
+                XCTFail("testSignAndVerify failed: \(error)")
+            }
         }
     }
     
@@ -491,23 +552,25 @@ class TestJWT: XCTestCase {
     
     // From jwt.io
     func testJWTRSAPSS() {
-        let ok = JWT<TestClaims>.verify(rsaPSSEncodedTestClaimJWT, using: .ps256(publicKey: rsaPublicKey))
-        XCTAssertTrue(ok, "Verification failed")
-        
-        if let decoded = try? JWT<TestClaims>(jwtString: rsaPSSEncodedTestClaimJWT) {
-            XCTAssertEqual(decoded.header.alg, "PS256", "Wrong .alg in decoded")
-            XCTAssertEqual(decoded.header.typ, "JWT", "Wrong .typ in decoded")
+        if #available(OSX 10.13, *) {
+            let ok = JWT<TestClaims>.verify(rsaPSSEncodedTestClaimJWT, using: .ps256(publicKey: rsaPublicKey))
+            XCTAssertTrue(ok, "Verification failed")
             
-            XCTAssertEqual(decoded.claims.sub, "1234567890", "Wrong .sub in decoded")
-            XCTAssertEqual(decoded.claims.name, "John Doe", "Wrong .name in decoded")
-            XCTAssertEqual(decoded.claims.admin, true, "Wrong .admin in decoded")
-            XCTAssertEqual(decoded.claims.iat, Date(timeIntervalSince1970: 1516239022), "Wrong .iat in decoded")
-            
-            
-            XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-        }
-        else {
-            XCTFail("Failed to decode")
+            if let decoded = try? JWT<TestClaims>(jwtString: rsaPSSEncodedTestClaimJWT) {
+                XCTAssertEqual(decoded.header.alg, "PS256", "Wrong .alg in decoded")
+                XCTAssertEqual(decoded.header.typ, "JWT", "Wrong .typ in decoded")
+                
+                XCTAssertEqual(decoded.claims.sub, "1234567890", "Wrong .sub in decoded")
+                XCTAssertEqual(decoded.claims.name, "John Doe", "Wrong .name in decoded")
+                XCTAssertEqual(decoded.claims.admin, true, "Wrong .admin in decoded")
+                XCTAssertEqual(decoded.claims.iat, Date(timeIntervalSince1970: 1516239022), "Wrong .iat in decoded")
+                
+                
+                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+            }
+            else {
+                XCTFail("Failed to decode")
+            }
         }
     }
     
