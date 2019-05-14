@@ -16,7 +16,6 @@
 
 import XCTest
 import Foundation
-import CryptorRSA
 
 @testable import SwiftJWT
 
