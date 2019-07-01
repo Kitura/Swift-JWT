@@ -21,6 +21,8 @@ import Foundation
 
 let rsaPrivateKey = read(fileName: "rsa_private_key")
 let rsaPublicKey = read(fileName: "rsa_public_key")
+let rsaDERPrivateKey = read(fileName: "privateRSA.der")
+let rsaDERPublicKey = read(fileName: "publicRSA.der")
 let ecdsaPrivateKey = read(fileName: "ecdsa_private_key")
 let ecdsaPublicKey = read(fileName: "ecdsa_public_key")
 let ec384PrivateKey = read(fileName: "ec384_private_key")
@@ -153,6 +155,14 @@ class TestJWT: XCTestCase {
     func testSignAndVerifyRSA() {
         do {
             try signAndVerify(signer: .rs256(privateKey: rsaPrivateKey), verifier: .rs256(publicKey: rsaPublicKey))
+        } catch {
+            XCTFail("testSignAndVerify failed: \(error)")
+        }
+    }
+    
+    func testSignAndVerifyRSADERKey() {
+        do {
+            try signAndVerify(signer: .rs256(privateKey: rsaDERPrivateKey), verifier: .rs256(publicKey: rsaDERPublicKey))
         } catch {
             XCTFail("testSignAndVerify failed: \(error)")
         }

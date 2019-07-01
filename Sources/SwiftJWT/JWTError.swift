@@ -27,7 +27,7 @@ public struct JWTError: Error, Equatable {
     private let internalError: InternalError
     
     private enum InternalError {
-        case invalidJWTString, failedVerification, osVersionToLow, invalidPrivateKey, invalidData, invalidKeyID
+        case invalidJWTString, failedVerification, osVersionToLow, invalidPrivateKey, invalidData, invalidKeyID, missingPEMHeaders
     }
     
     /// Error when an invalid JWT String is provided
@@ -47,6 +47,8 @@ public struct JWTError: Error, Equatable {
     
     /// Error when the KeyID field `kid` in the JWT header fails to generate a JWTSigner or JWTVerifier
     public static let invalidKeyID = JWTError(localizedDescription: "The JWT KeyID `kid` header failed to generate a JWTSigner/JWTVerifier", internalError: .invalidKeyID)
+    
+    public static let missingPEMHeaders = JWTError(localizedDescription: "The provided key did not have the expected PEM headers/footers. (e.g. -----BEGIN PRIVATE KEY-----)", internalError: .missingPEMHeaders)
     
     /// Function to check if JWTErrors are equal. Required for equatable protocol.
     public static func == (lhs: JWTError, rhs: JWTError) -> Bool {

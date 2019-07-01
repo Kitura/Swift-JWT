@@ -49,10 +49,22 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
             Log.error("macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA")
             throw JWTError.osVersionToLow
         }
-        guard let keyString = String(data: key, encoding: .utf8) else {
-            throw JWTError.invalidPrivateKey
+        // Convert PEM format to DER
+        let keyDer: Data
+        if let keyString = String(data: key, encoding: .utf8) {
+            let strippedKey = String(keyString.filter { !" \n\t\r".contains($0) })
+            var pemComponents = strippedKey.components(separatedBy: "-----")
+            guard pemComponents.count >= 5 else {
+                throw JWTError.missingPEMHeaders
+            }
+            guard let der = Data(base64Encoded: pemComponents[2]) else {
+                throw JWTError.invalidPrivateKey
+            }
+            keyDer = der
+        } else {
+            keyDer = key
         }
-        let privateKey = try CryptorRSA.createPrivateKey(withPEM: keyString)
+        let privateKey = try CryptorRSA.createPrivateKey(with: keyDer)
         let myPlaintext = CryptorRSA.createPlaintext(with: data)
         guard let signedData = try myPlaintext.signed(with: privateKey, algorithm: algorithm, usePSS: usePSS) else {
             throw JWTError.invalidPrivateKey
@@ -85,10 +97,22 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
             case .privateKey:
                 return false
             case .publicKey:
-                guard let keyString = String(data: key, encoding: .utf8) else {
-                    return false
+                // Convert PEM format to DER
+                let keyDer: Data
+                if let keyString = String(data: key, encoding: .utf8) {
+                    let strippedKey = String(keyString.filter { !" \n\t\r".contains($0) })
+                    var pemComponents = strippedKey.components(separatedBy: "-----")
+                    guard pemComponents.count >= 5 else {
+                        return false
+                    }
+                    guard let der = Data(base64Encoded: pemComponents[2]) else {
+                        return false
+                    }
+                    keyDer = der
+                } else {
+                    keyDer = key
                 }
-                publicKey = try CryptorRSA.createPublicKey(withPEM: keyString)
+                publicKey = try CryptorRSA.createPublicKey(with: keyDer)
             case .certificate:
                 publicKey = try CryptorRSA.createPublicKey(extractingFrom: key)
             }
