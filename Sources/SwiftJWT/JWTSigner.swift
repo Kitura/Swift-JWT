@@ -122,7 +122,7 @@ public struct JWTSigner {
     
     /// Initialize a JWTSigner using the ECDSA SHA256 algorithm and the provided privateKey.
     /// - Parameter privateKey: The UTF8 encoded PEM private key, with either a "BEGIN EC PRIVATE KEY" or "BEGIN PRIVATE KEY" header.
-	@available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *)
+    @available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *)
     public static func es256(privateKey: Data) -> JWTSigner {
         return JWTSigner(name: "ES256", signerAlgorithm: BlueECSigner(key: privateKey, curve: .prime256v1))
     }
