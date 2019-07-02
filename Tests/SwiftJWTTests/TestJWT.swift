@@ -186,7 +186,7 @@ class TestJWT: XCTestCase {
     }
     
     func testSignAndVerifyECDSA() {
-        if #available(OSX 10.13, *) {
+        if #available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *) {
             do {
                 try signAndVerify(signer: .es256(privateKey: ecdsaPrivateKey), verifier: .es256(publicKey: ecdsaPublicKey))
             } catch {
@@ -231,7 +231,7 @@ class TestJWT: XCTestCase {
     }
     
     func testSignAndVerifyECDSA384() {
-        if #available(OSX 10.13, *) {
+        if #available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *) {
             do {
                 try signAndVerify(signer: .es384(privateKey: ec384PrivateKey), verifier: .es384(publicKey: ec384PublicKey))
             } catch {
@@ -249,7 +249,7 @@ class TestJWT: XCTestCase {
     }
     
     func testSignAndVerifyRSAPSS512() {
-        if #available(OSX 10.13, *) {
+        if #available(OSX 10.13, iOS 11, *) {
             do {
                 try signAndVerify(signer: .ps512(privateKey: rsaPrivateKey), verifier: .ps512(publicKey: rsaPublicKey))
             } catch {
@@ -276,7 +276,7 @@ class TestJWT: XCTestCase {
     }
     
     func testSignAndVerifyECDSA512() {
-        if #available(OSX 10.13, *) {
+        if #available(OSX 10.13, iOS 11, tvOS 11.0, *) {
             do {
                 try signAndVerify(signer: .es512(privateKey: ec512PrivateKey), verifier: .es512(publicKey: ec512PublicKey))
             } catch {
@@ -554,7 +554,7 @@ class TestJWT: XCTestCase {
     
     // Test using a JWT generated from jwt.io using es256 with `ecdsaPrivateKey` for interoperability.
     func testJWTUsingECDSA() {
-        if #available(OSX 10.13, *) {
+        if #available(OSX 10.13, iOS 11, tvOS 11.0, *) {
             let ok = JWT<TestClaims>.verify(ecdsaEncodedTestClaimJWT, using: .es256(publicKey: ecdsaPublicKey))
             XCTAssertTrue(ok, "Verification failed")
             
