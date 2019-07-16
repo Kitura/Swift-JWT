@@ -53,7 +53,7 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
         let keyDer: Data
         if let keyString = String(data: key, encoding: .utf8) {
             let strippedKey = String(keyString.filter { !" \n\t\r".contains($0) })
-            var pemComponents = strippedKey.components(separatedBy: "-----")
+            let pemComponents = strippedKey.components(separatedBy: "-----")
             guard pemComponents.count >= 5 else {
                 throw JWTError.missingPEMHeaders
             }
@@ -101,7 +101,7 @@ class BlueRSA: SignerAlgorithm, VerifierAlgorithm {
                 let keyDer: Data
                 if let keyString = String(data: key, encoding: .utf8) {
                     let strippedKey = String(keyString.filter { !" \n\t\r".contains($0) })
-                    var pemComponents = strippedKey.components(separatedBy: "-----")
+                    let pemComponents = strippedKey.components(separatedBy: "-----")
                     guard pemComponents.count >= 5 else {
                         return false
                     }
