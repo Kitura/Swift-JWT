@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "SwiftJWT"
-  s.version      = "3.5.0"
+  s.version      = "3.5.3"
   s.summary      = "An implementation of JSON Web Token using Swift."
   s.homepage     = "https://github.com/IBM-Swift/Swift-JWT"
   s.license      = { :type => "Apache License, Version 2.0" }
