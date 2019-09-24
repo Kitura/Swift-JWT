@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Protocols  Reference</title>
+    <title>Extensions  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Section/Protocols" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Section/Extensions" class="dashAnchor"></a>
 
-    <a title="Protocols  Reference"></a>
+    <a title="Extensions  Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -44,7 +44,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="index.html">SwiftJWT Reference</a>
       <img class="carat" src="img/carat.png" />
-      Protocols  Reference
+      Extensions  Reference
     </p>
 
     <div class="content-wrapper">
@@ -118,8 +118,8 @@
 
         <section class="section">
           <div class="section-content">
-            <h1>Protocols</h1>
-            <p>The following protocols are available globally.</p>
+            <h1>Extensions</h1>
+            <p>The following extensions are available globally.</p>
 
           </div>
         </section>
@@ -127,20 +127,13 @@
         <section class="section">
           <div class="section-content">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Claims"></a>
-                <a name="//apple_ref/swift/Section/Claims" class="dashAnchor"></a>
-                <a href="#/Claims">
-                  <h3 class="section-name">Claims</h3>
-                </a>
-              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT6ClaimsP"></a>
-                    <a name="//apple_ref/swift/Protocol/Claims" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT6ClaimsP">Claims</a>
+                    <a name="/s:10Foundation4DataV"></a>
+                    <a name="//apple_ref/swift/Extension/Data" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10Foundation4DataV">Data</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -148,24 +141,15 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A protocol for representing the claims on a JSON web token.
- <a href="https://tools.ietf.org/html/rfc7519#section-4.1">https://tools.ietf.org/html/rfc7519#section-4.1</a></p>
-<h3 id='usage-example' class='heading'>Usage Example:</h3>
-<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">AdminClaims</span><span class="p">:</span> <span class="kt">Claims</span> <span class="p">{</span>
-    <span class="k">var</span> <span class="nv">sub</span><span class="p">:</span> <span class="kt">String</span>
-    <span class="k">var</span> <span class="nv">isAdmin</span><span class="p">:</span> <span class="kt">Bool</span>
-    <span class="k">var</span> <span class="nv">exp</span><span class="p">:</span> <span class="kt">Date</span><span class="p">?</span>
-<span class="p">}</span>
- <span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="kt">JWT</span><span class="p">(</span><span class="nv">claims</span><span class="p">:</span> <span class="kt">AdminClaims</span><span class="p">(</span><span class="nv">sub</span><span class="p">:</span> <span class="s">"Kitura"</span><span class="p">,</span> <span class="nv">isAdmin</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">exp</span><span class="p">:</span> <span class="kt">Date</span><span class="p">(</span><span class="nv">timeIntervalSinceNow</span><span class="p">:</span> <span class="mi">3600</span><span class="p">)))</span>
-</code></pre>
+                        <p>Convenience extensions to <code>Data</code> for converting to and from base64url encoding.</p>
 
-                        <a href="Protocols/Claims.html" class="slightly-smaller">See more</a>
+                        <a href="Extensions/Data.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Claims</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">Encodable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">Data</span> <span class="p">:</span> <span class="kt">ReferenceConvertible</span><span class="p">,</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">RandomAccessCollection</span><span class="p">,</span> <span class="kt">MutableCollection</span><span class="p">,</span> <span class="kt">RangeReplaceableCollection</span><span class="p">,</span> <span class="kt">MutableDataProtocol</span><span class="p">,</span> <span class="kt">ContiguousBytes</span></code></pre>
 
                         </div>
                       </div>

@@ -71,6 +71,14 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Data.html">Data</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -113,7 +121,7 @@
             <h1>JWTDecoder</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">JWTDecoder</span><span class="p">:</span> <span class="kt">BodyDecoder</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">JWTDecoder</span> <span class="p">:</span> <span class="kt">BodyDecoder</span></code></pre>
 
                 </div>
               </div>
@@ -148,9 +156,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT10JWTDecoderCAcA11JWTVerifierV11jwtVerifier_tcfc"></a>
+                    <a name="/s:8SwiftJWT10JWTDecoderC11jwtVerifierAcA11JWTVerifierV_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(jwtVerifier:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderCAcA11JWTVerifierV11jwtVerifier_tcfc">init(jwtVerifier:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC11jwtVerifierAcA11JWTVerifierV_tcfc">init(jwtVerifier:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -198,9 +206,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT10JWTDecoderCAcA11JWTVerifierVSgSSc15keyIDToVerifier_tcfc"></a>
+                    <a name="/s:8SwiftJWT10JWTDecoderC15keyIDToVerifierAcA11JWTVerifierVSgSSc_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(keyIDToVerifier:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderCAcA11JWTVerifierVSgSSc15keyIDToVerifier_tcfc">init(keyIDToVerifier:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC15keyIDToVerifierAcA11JWTVerifierVSgSSc_tcfc">init(keyIDToVerifier:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -259,9 +267,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT10JWTDecoderC6decodexxm_SS10fromStringtKs9DecodableRzlF"></a>
+                    <a name="/s:8SwiftJWT10JWTDecoderC6decode_10fromStringxxm_SStKSeRzlF"></a>
                     <a name="//apple_ref/swift/Method/decode(_:fromString:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC6decodexxm_SS10fromStringtKs9DecodableRzlF">decode(_:fromString:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC6decode_10fromStringxxm_SStKSeRzlF">decode(_:fromString:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -296,7 +304,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">decode</span><span class="o">&lt;</span><span class="kt">T</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">T</span><span class="o">.</span><span class="k">Type</span><span class="p">,</span> <span class="nv">fromString</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">T</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">decode</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">T</span><span class="o">.</span><span class="k">Type</span><span class="p">,</span> <span class="nv">fromString</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">T</span> <span class="k">where</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Decodable</span></code></pre>
 
                         </div>
                       </div>
@@ -341,9 +349,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT10JWTDecoderC6decodexxm_10Foundation4DataV4fromtKs9DecodableRzlF"></a>
+                    <a name="/s:8SwiftJWT10JWTDecoderC6decode_4fromxxm_10Foundation4DataVtKSeRzlF"></a>
                     <a name="//apple_ref/swift/Method/decode(_:from:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC6decodexxm_10Foundation4DataV4fromtKs9DecodableRzlF">decode(_:from:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC6decode_4fromxxm_10Foundation4DataVtKSeRzlF">decode(_:from:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -383,7 +391,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">decode</span><span class="o">&lt;</span><span class="kt">T</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">T</span><span class="o">.</span><span class="k">Type</span><span class="p">,</span> <span class="n">from</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">T</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">decode</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">T</span><span class="o">.</span><span class="k">Type</span><span class="p">,</span> <span class="n">from</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">T</span> <span class="k">where</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Decodable</span></code></pre>
 
                         </div>
                       </div>
@@ -433,8 +441,8 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-03-18)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-09-24)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>
