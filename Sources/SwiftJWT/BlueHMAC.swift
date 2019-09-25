@@ -35,7 +35,7 @@ class BlueHMAC: SignerAlgorithm, VerifierAlgorithm {
             throw JWTError.invalidJWTString
         }
         let signature = try sign(unsignedData)
-        let signatureString = signature.base64urlEncodedString()
+        let signatureString = JWTEncoder.base64urlEncodedString(data: signature)
         return header + "." + claims + "." + signatureString
     }
     
@@ -58,7 +58,7 @@ class BlueHMAC: SignerAlgorithm, VerifierAlgorithm {
     func verify(jwt: String) -> Bool {
         let components = jwt.components(separatedBy: ".")
         if components.count == 3 {
-            guard let signature = Data(base64urlEncoded: components[2]),
+            guard let signature = JWTDecoder.data(base64urlEncoded: components[2]),
                 let jwtData = (components[0] + "." + components[1]).data(using: .utf8)
                 else {
                     return false

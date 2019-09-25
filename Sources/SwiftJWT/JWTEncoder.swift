@@ -166,10 +166,10 @@ fileprivate class _JWTEncoder: Encoder {
                 }
                 _header.alg = encoder.jwtSigner?.name
                 let data = try jsonEncoder.encode(_header)
-                encoder.header = data.base64urlEncodedString()
+                encoder.header = JWTEncoder.base64urlEncodedString(data: data)
             } else if fieldName == "claims" {
                 let data = try jsonEncoder.encode(value)
-                encoder.claims = data.base64urlEncodedString()
+                encoder.claims = JWTEncoder.base64urlEncodedString(data: data)
             }
         }
         

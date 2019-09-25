@@ -65,8 +65,8 @@ public struct JWT<T: Claims>: Codable {
     public init(jwtString: String, verifier: JWTVerifier = .none ) throws {
         let components = jwtString.components(separatedBy: ".")
         guard components.count == 2 || components.count == 3,
-            let headerData = Data(base64urlEncoded: components[0]),
-            let claimsData = Data(base64urlEncoded: components[1])
+            let headerData = JWTDecoder.data(base64urlEncoded: components[0]),
+            let claimsData = JWTDecoder.data(base64urlEncoded: components[1])
         else {
             throw JWTError.invalidJWTString
         }
