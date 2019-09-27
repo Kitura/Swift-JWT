@@ -113,7 +113,7 @@
             <h1>JWTError</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">JWTError</span><span class="p">:</span> <span class="kt">Error</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">JWTError</span> <span class="p">:</span> <span class="kt">Error</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
 
                 </div>
               </div>
@@ -173,7 +173,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidJWTString</span> <span class="o">=</span> <span class="kt">JWTError</span><span class="p">(</span><span class="nv">localizedDescription</span><span class="p">:</span> <span class="s">"Input was not a valid JWT String"</span><span class="p">,</span> <span class="nv">internalError</span><span class="p">:</span> <span class="o">.</span><span class="n">invalidJWTString</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidJWTString</span><span class="p">:</span> <span class="kt">JWTError</span></code></pre>
 
                         </div>
                       </div>
@@ -200,7 +200,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">failedVerification</span> <span class="o">=</span> <span class="kt">JWTError</span><span class="p">(</span><span class="nv">localizedDescription</span><span class="p">:</span> <span class="s">"JWT verifier failed to verify the JWT String signiture"</span><span class="p">,</span> <span class="nv">internalError</span><span class="p">:</span> <span class="o">.</span><span class="n">failedVerification</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">failedVerification</span><span class="p">:</span> <span class="kt">JWTError</span></code></pre>
 
                         </div>
                       </div>
@@ -227,7 +227,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">osVersionToLow</span> <span class="o">=</span> <span class="kt">JWTError</span><span class="p">(</span><span class="nv">localizedDescription</span><span class="p">:</span> <span class="s">"macOS 10.12.0 (Sierra) or higher or iOS 10.0 or higher is required by CryptorRSA"</span><span class="p">,</span> <span class="nv">internalError</span><span class="p">:</span> <span class="o">.</span><span class="n">osVersionToLow</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">osVersionToLow</span><span class="p">:</span> <span class="kt">JWTError</span></code></pre>
 
                         </div>
                       </div>
@@ -254,7 +254,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidPrivateKey</span> <span class="o">=</span> <span class="kt">JWTError</span><span class="p">(</span><span class="nv">localizedDescription</span><span class="p">:</span> <span class="s">"Provided private key could not be used to sign JWT"</span><span class="p">,</span> <span class="nv">internalError</span><span class="p">:</span> <span class="o">.</span><span class="n">invalidPrivateKey</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidPrivateKey</span><span class="p">:</span> <span class="kt">JWTError</span></code></pre>
 
                         </div>
                       </div>
@@ -281,7 +281,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidUTF8Data</span> <span class="o">=</span> <span class="kt">JWTError</span><span class="p">(</span><span class="nv">localizedDescription</span><span class="p">:</span> <span class="s">"Could not decode Data from UTF8 to String"</span><span class="p">,</span> <span class="nv">internalError</span><span class="p">:</span> <span class="o">.</span><span class="n">invalidData</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidUTF8Data</span><span class="p">:</span> <span class="kt">JWTError</span></code></pre>
 
                         </div>
                       </div>
@@ -308,7 +308,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidKeyID</span> <span class="o">=</span> <span class="kt">JWTError</span><span class="p">(</span><span class="nv">localizedDescription</span><span class="p">:</span> <span class="s">"The JWT KeyID `kid` header failed to generate a JWTSigner/JWTVerifier"</span><span class="p">,</span> <span class="nv">internalError</span><span class="p">:</span> <span class="o">.</span><span class="n">invalidKeyID</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidKeyID</span><span class="p">:</span> <span class="kt">JWTError</span></code></pre>
 
                         </div>
                       </div>
@@ -318,9 +318,36 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT8JWTErrorV2eeoiSbAC_ACtFZ"></a>
+                    <a name="/s:8SwiftJWT8JWTErrorV17missingPEMHeadersACvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/missingPEMHeaders" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SwiftJWT8JWTErrorV17missingPEMHeadersACvpZ">missingPEMHeaders</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Error when a PEM string is provided without the expected PEM headers/footers. (e.g. &mdash;&ndash;BEGIN PRIVATE KEY&mdash;&ndash;)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">missingPEMHeaders</span><span class="p">:</span> <span class="kt">JWTError</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SwiftJWT8JWTErrorV2eeoiySbAC_ACtFZ"></a>
                     <a name="//apple_ref/swift/Method/==(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT8JWTErrorV2eeoiSbAC_ACtFZ">==(_:_:)</a>
+                    <a class="token" href="#/s:8SwiftJWT8JWTErrorV2eeoiySbAC_ACtFZ">==(_:_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -345,9 +372,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT8JWTErrorV2teoiSbAC_s5Error_ptFZ"></a>
+                    <a name="/s:8SwiftJWT8JWTErrorV2teoiySbAC_s5Error_ptFZ"></a>
                     <a name="//apple_ref/swift/Method/~=(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT8JWTErrorV2teoiSbAC_s5Error_ptFZ">~=(_:_:)</a>
+                    <a class="token" href="#/s:8SwiftJWT8JWTErrorV2teoiySbAC_s5Error_ptFZ">~=(_:_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -377,8 +404,8 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-03-18)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-09-25)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

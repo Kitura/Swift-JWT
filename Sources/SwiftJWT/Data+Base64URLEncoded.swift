@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corporation 2017
+ * Copyright IBM Corporation 2017-2019
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,35 @@
 
 import Foundation
 
+/// Convenience extension for encoding a `Data` as a base64url-encoded `String`.
+extension JWTEncoder {
 
-extension Data {
-    func base64urlEncodedString() -> String {
-        let result = self.base64EncodedString()
+    /// Returns a `String` representation of this data, encoded in base64url format
+    /// as defined in RFC4648 (https://tools.ietf.org/html/rfc4648).
+    ///
+    /// This is the appropriate format for encoding the header and claims of a JWT.
+    public static func base64urlEncodedString(data: Data) -> String {
+        let result = data.base64EncodedString()
         return result.replacingOccurrences(of: "+", with: "-")
             .replacingOccurrences(of: "/", with: "_")
             .replacingOccurrences(of: "=", with: "")
     }
+}
+
+/// Convenience extension for decoding a `Data` from a base64url-encoded `String`.
+extension JWTDecoder {
     
-    init?(base64urlEncoded: String) {
+    /// Initializes a new `Data` from the base64url-encoded `String` provided. The
+    /// base64url encoding is defined in RFC4648 (https://tools.ietf.org/html/rfc4648).
+    ///
+    /// This is appropriate for reading the header or claims portion of a JWT string.
+    public static func data(base64urlEncoded: String) -> Data? {
         let paddingLength = 4 - base64urlEncoded.count % 4
         let padding = (paddingLength < 4) ? String(repeating: "=", count: paddingLength) : ""
         let base64EncodedString = base64urlEncoded
             .replacingOccurrences(of: "-", with: "+")
             .replacingOccurrences(of: "_", with: "/")
             + padding
-        self.init(base64Encoded: base64EncodedString)
+        return Data(base64Encoded: base64EncodedString)
     }
 }

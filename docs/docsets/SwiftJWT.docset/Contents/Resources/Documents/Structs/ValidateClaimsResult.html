@@ -113,7 +113,7 @@
             <h1>ValidateClaimsResult</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ValidateClaimsResult</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ValidateClaimsResult</span> <span class="p">:</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
 
                 </div>
               </div>
@@ -175,7 +175,7 @@ problems that may occur during claims validation and indicate that the validatio
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">success</span> <span class="o">=</span> <span class="kt">ValidateClaimsResult</span><span class="p">(</span><span class="nv">description</span><span class="p">:</span> <span class="s">"Success"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">success</span><span class="p">:</span> <span class="kt">ValidateClaimsResult</span></code></pre>
 
                         </div>
                       </div>
@@ -202,7 +202,7 @@ problems that may occur during claims validation and indicate that the validatio
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidExpiration</span> <span class="o">=</span> <span class="kt">ValidateClaimsResult</span><span class="p">(</span><span class="nv">description</span><span class="p">:</span> <span class="s">"Invalid Expiration claim"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidExpiration</span><span class="p">:</span> <span class="kt">ValidateClaimsResult</span></code></pre>
 
                         </div>
                       </div>
@@ -229,7 +229,7 @@ problems that may occur during claims validation and indicate that the validatio
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">expired</span> <span class="o">=</span> <span class="kt">ValidateClaimsResult</span><span class="p">(</span><span class="nv">description</span><span class="p">:</span> <span class="s">"Expired token"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">expired</span><span class="p">:</span> <span class="kt">ValidateClaimsResult</span></code></pre>
 
                         </div>
                       </div>
@@ -256,7 +256,7 @@ problems that may occur during claims validation and indicate that the validatio
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidNotBefore</span> <span class="o">=</span> <span class="kt">ValidateClaimsResult</span><span class="p">(</span><span class="nv">description</span><span class="p">:</span> <span class="s">"Invalid Not Before claim"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidNotBefore</span><span class="p">:</span> <span class="kt">ValidateClaimsResult</span></code></pre>
 
                         </div>
                       </div>
@@ -283,7 +283,7 @@ problems that may occur during claims validation and indicate that the validatio
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">notBefore</span> <span class="o">=</span> <span class="kt">ValidateClaimsResult</span><span class="p">(</span><span class="nv">description</span><span class="p">:</span> <span class="s">"Token is not valid yet, Not Before claim is greater than the current time"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">notBefore</span><span class="p">:</span> <span class="kt">ValidateClaimsResult</span></code></pre>
 
                         </div>
                       </div>
@@ -310,7 +310,7 @@ problems that may occur during claims validation and indicate that the validatio
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidIssuedAt</span> <span class="o">=</span> <span class="kt">ValidateClaimsResult</span><span class="p">(</span><span class="nv">description</span><span class="p">:</span> <span class="s">"Invalid Issued At claim"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">invalidIssuedAt</span><span class="p">:</span> <span class="kt">ValidateClaimsResult</span></code></pre>
 
                         </div>
                       </div>
@@ -337,7 +337,7 @@ problems that may occur during claims validation and indicate that the validatio
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">issuedAt</span> <span class="o">=</span> <span class="kt">ValidateClaimsResult</span><span class="p">(</span><span class="nv">description</span><span class="p">:</span> <span class="s">"Issued At claim is greater than the current time"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">issuedAt</span><span class="p">:</span> <span class="kt">ValidateClaimsResult</span></code></pre>
 
                         </div>
                       </div>
@@ -347,9 +347,9 @@ problems that may occur during claims validation and indicate that the validatio
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SwiftJWT20ValidateClaimsResultV2eeoiSbAC_ACtFZ"></a>
+                    <a name="/s:8SwiftJWT20ValidateClaimsResultV2eeoiySbAC_ACtFZ"></a>
                     <a name="//apple_ref/swift/Method/==(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT20ValidateClaimsResultV2eeoiSbAC_ACtFZ">==(_:_:)</a>
+                    <a class="token" href="#/s:8SwiftJWT20ValidateClaimsResultV2eeoiySbAC_ACtFZ">==(_:_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -379,8 +379,8 @@ problems that may occur during claims validation and indicate that the validatio
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-03-18)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-09-25)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

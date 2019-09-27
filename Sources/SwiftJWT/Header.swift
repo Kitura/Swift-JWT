@@ -97,6 +97,6 @@ public struct Header: Codable {
         let jsonEncoder = JSONEncoder()
         jsonEncoder.dateEncodingStrategy = .secondsSince1970
         let data = try jsonEncoder.encode(self)
-        return data.base64urlEncodedString()
+        return JWTEncoder.base64urlEncodedString(data: data)
     }
 }

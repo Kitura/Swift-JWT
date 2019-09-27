@@ -205,16 +205,16 @@ You can initialize a JWT by decoding a JWT String, or by providing the JWT Heade
 <h4 id='creating-public-and-private-keys' class='heading'>Creating public and private keys</h4>
 
 <p>To sign and verify a JWT using an RSA algorithm, you must provide a public and private key. This could be the contents of a .key file generated via the following Terminal commands:</p>
-<pre class="highlight plaintext"><code>$ ssh-keygen -t rsa -b 4096 -f privateKey.key
+<pre class="highlight plaintext"><code>$ ssh-keygen -t rsa -b 4096 -m PEM -f privateKey.key
 # Don't add a passphrase
 $ openssl rsa -in privateKey.key -pubout -outform PEM -out privateKey.key.pub
 </code></pre>
 
 <p>This will create a public and private key pair on your system, and the contents of the private key can be passed into a Swift variable using the following code:</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">privateKeyPath</span> <span class="o">=</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">fileURLWithPath</span><span class="p">:</span> <span class="nf">getAbsolutePath</span><span class="p">(</span><span class="nv">relativePath</span><span class="p">:</span> <span class="s">"/path/to/privateKey.key"</span><span class="p">))</span>
-<span class="k">let</span> <span class="nv">privateKey</span><span class="p">:</span> <span class="kt">Data</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">privateKeyPath</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="n">alwaysMapped</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">privateKey</span><span class="p">:</span> <span class="kt">Data</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">privateKeyPath</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="o">.</span><span class="n">alwaysMapped</span><span class="p">)</span>
 <span class="k">let</span> <span class="nv">publicKeyPath</span> <span class="o">=</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">fileURLWithPath</span><span class="p">:</span> <span class="nf">getAbsolutePath</span><span class="p">(</span><span class="nv">relativePath</span><span class="p">:</span> <span class="s">"/path/to/publicKey.key"</span><span class="p">))</span>
-<span class="k">let</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">Data</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">publicKeyPath</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="n">alwaysMapped</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">Data</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">publicKeyPath</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="o">.</span><span class="n">alwaysMapped</span><span class="p">)</span>
 </code></pre>
 
 <p>For details on creating elliptic curve public and private keys, view the <a href="https://github.com/IBM-Swift/BlueECC">BlueECC README.txt</a>.</p>
@@ -262,10 +262,13 @@ $ openssl rsa -in privateKey.key -pubout -outform PEM -out privateKey.key.pub
 <li>ES256 - ECDSA using using SHA-256 and a P-256 curve</li>
 <li>ES384 - ECDSA using using SHA-384 and a P-384 curve</li>
 <li>ES512 - ECDSA using using SHA-512 and a P-521 curve</li>
+<li>PS256 - RSA-PSS using SHA-256</li>
+<li>PS384 - RSA-PSS using SHA-384</li>
+<li>PS512 - RSA-PSS using SHA-512</li>
 <li>none - Don&rsquo;t sign or verify the JWT</li>
 </ul>
 
-<p>Note: ECDSA algorithms require a minimum Swift version of 4.1.</p>
+<p>Note: ECDSA and RSA-PSS algorithms require a minimum Swift version of 4.1.</p>
 <h3 id='validate-claims' class='heading'>Validate claims</h3>
 
 <p>The <code>validateClaims</code> function validates the standard <code>Date</code> claims of a JWT instance.
@@ -288,7 +291,7 @@ The <code>leeway</code> parameter is the <code>TimeInterval</code> in seconds th
 <h3 id='decode-a-jwt-from-a-jwt-string' class='heading'>Decode a JWT from a JWT string</h3>
 
 <p>A JWT struct can be initialized from a JWT string.  If a JWTVerifier is provided it will be used to verify the signature before initialization</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">newJWT</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">JWT</span><span class="o">&lt;</span><span class="kt">MyClaims</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">jwtString</span><span class="p">:</span> <span class="n">signedJWT</span><span class="p">,</span> <span class="nv">jwtVerifier</span><span class="p">:</span> <span class="n">jwtVerifier</span><span class="p">)</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">newJWT</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">JWT</span><span class="o">&lt;</span><span class="kt">MyClaims</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">jwtString</span><span class="p">:</span> <span class="n">signedJWT</span><span class="p">,</span> <span class="nv">verifier</span><span class="p">:</span> <span class="n">jwtVerifier</span><span class="p">)</span>
 </code></pre>
 <h3 id='jwtencoder-and-jwtdecoder' class='heading'>JWTEncoder and JWTDecoder</h3>
 
@@ -323,8 +326,8 @@ The <code>leeway</code> parameter is the <code>TimeInterval</code> in seconds th
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-03-18)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-09-25)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>
