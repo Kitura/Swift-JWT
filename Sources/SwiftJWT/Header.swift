@@ -62,8 +62,8 @@ public struct Header: Codable {
     /// - Parameter jwk: The JSON Web Key Header Parameter
     /// - Parameter kid: The Key ID Header Parameter
     /// - Parameter x5u: The X.509 URL Header Parameter
-    /// - Parameter x5c: The X.509 Certificate SHA-1 Thumbprint Header Parameter
-    /// - Parameter x5t: The X.509 Certificate Chain Header Parameter
+    /// - Parameter x5c: The X.509 Certificate Chain Header Parameter
+    /// - Parameter x5t: The X.509 Certificate SHA-1 Thumbprint Header Parameter
     /// - Parameter x5tS256: X.509 Certificate SHA-256 Thumbprint Header Parameter
     /// - Parameter cty: The Content Type Header Parameter
     /// - Parameter crit: The Critical Header Parameter
