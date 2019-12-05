@@ -75,7 +75,8 @@ public class JWTDecoder: BodyDecoder {
     public func decode<T : Decodable>(_ type: T.Type, fromString: String) throws -> T {
         // Seperate the JWT into the headers and claims.
         let components = fromString.components(separatedBy: ".")
-        guard let headerData = JWTDecoder.data(base64urlEncoded: components[0]),
+        guard components.count > 1,
+         let headerData = JWTDecoder.data(base64urlEncoded: components[0]),
             let claimsData = JWTDecoder.data(base64urlEncoded: components[1])
         else {
             throw JWTError.invalidJWTString
