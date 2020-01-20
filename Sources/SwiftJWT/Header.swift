@@ -22,6 +22,7 @@ import Foundation
 public protocol HeaderProtocol: Codable {
     /// Algorithm Header Parameter
     var alg: String? { get set }
+    func encode() throws -> String
 }
 public extension HeaderProtocol {
     func encode() throws -> String {
