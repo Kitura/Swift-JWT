@@ -32,7 +32,7 @@ let package = Package(
         .package(url: "https://github.com/Kitura/BlueCryptor.git", from: "1.0.0"),
         .package(url: "https://github.com/Kitura/BlueECC.git", from: "1.1.0"),
         .package(url: "https://github.com/Kitura/LoggerAPI.git", from: "1.7.0"),
-        .package(url: "https://github.com/Kitura/KituraContracts.git", from: "1.1.0")
+        .package(url: "https://github.com/Kitura/KituraContracts.git", from: "1.2.200")
     ],
     targets: [
         .target(name: "SwiftJWT", dependencies: ["CryptorRSA", "LoggerAPI", "KituraContracts", "Cryptor", "CryptorECC"]),
