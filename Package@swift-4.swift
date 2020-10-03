@@ -1,7 +1,7 @@
 // swift-tools-version:4.0
 
 /**
- * Copyright IBM Corporation 2018-2019
+ * Copyright IBM Corporation and the Kitura project authors 2018-2020
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,11 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/IBM-Swift/BlueRSA.git", from: "1.0.24"),
-        .package(url: "https://github.com/IBM-Swift/BlueCryptor.git", from: "1.0.0"),
-        .package(url: "https://github.com/IBM-Swift/BlueECC.git", from: "1.1.0"),
-        .package(url: "https://github.com/IBM-Swift/LoggerAPI.git", from: "1.7.0"),
-        .package(url: "https://github.com/IBM-Swift/KituraContracts.git", from: "1.1.0")
+        .package(url: "https://github.com/Kitura/BlueRSA.git", from: "1.0.200"),
+        .package(url: "https://github.com/Kitura/BlueCryptor.git", from: "1.0.0"),
+        .package(url: "https://github.com/Kitura/BlueECC.git", from: "1.1.0"),
+        .package(url: "https://github.com/Kitura/LoggerAPI.git", from: "1.7.0"),
+        .package(url: "https://github.com/Kitura/KituraContracts.git", from: "1.2.200")
     ],
     targets: [
         .target(name: "SwiftJWT", dependencies: ["CryptorRSA", "LoggerAPI", "KituraContracts", "Cryptor", "CryptorECC"]),
