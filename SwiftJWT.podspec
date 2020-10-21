@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "SwiftJWT"
-  s.version      = "3.5.3"
+  s.version      = "3.6.200"
   s.summary      = "An implementation of JSON Web Token using Swift."
   s.homepage     = "https://github.com/IBM-Swift/Swift-JWT"
   s.license      = { :type => "Apache License, Version 2.0" }
@@ -15,6 +15,6 @@ Pod::Spec.new do |s|
   s.dependency 'BlueRSA', '~> 1.0'
   s.dependency 'BlueECC', '~> 1.1'
   s.dependency 'LoggerAPI', '~> 1.7'
-  s.dependency 'KituraContracts', '~> 1.1'
+  s.dependency 'KituraContracts', '~> 1.2'
   s.dependency 'BlueCryptor', '~> 1.0'
 end
