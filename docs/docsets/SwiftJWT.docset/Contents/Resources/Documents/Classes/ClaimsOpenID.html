@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SwiftJWT Docs
+          SwiftJWT 3.6.200 Docs
         </a>
          (100% documented)
       </p>
@@ -33,7 +33,7 @@
       </p>
     
         <p class="header-col header-col--secondary">
-          <a class="header-link" href="https://github.com/IBM-Swift/Swift-JWT/">
+          <a class="header-link" href="https://github.com/Kitura/Swift-JWT/">
             <img class="header-icon" src="../img/gh.png"/>
             View on GitHub
           </a>
@@ -109,10 +109,11 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             <h1>ClaimsOpenID</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ClaimsOpenID</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Claims.html">Claims</a></span></code></pre>
 
                 </div>
@@ -131,7 +132,7 @@
                     <code>
                     <a name="/s:8SwiftJWT12ClaimsOpenIDC3iss3sub3aud3exp3iat9auth_time5nonce3acr3amr3azp4name06given_Q007family_Q007middle_Q08nickname18preferred_username7profile7picture7website5email14email_verified6gender9birthdate8zoneinfo6locale12phone_number21phone_number_verified7address10updated_atACSS_SSSaySSG10Foundation4DateVA8_A8_SgSSSgA10_A5_SgA10_A10_A10_A10_A10_A10_A10_A10_A10_A10_A10_SbSgA10_A10_A10_A10_A10_A12_AA12AddressClaimVSgA9_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(iss:sub:aud:exp:iat:auth_time:nonce:acr:amr:azp:name:given_name:family_name:middle_name:nickname:preferred_username:profile:picture:website:email:email_verified:gender:birthdate:zoneinfo:locale:phone_number:phone_number_verified:address:updated_at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT12ClaimsOpenIDC3iss3sub3aud3exp3iat9auth_time5nonce3acr3amr3azp4name06given_Q007family_Q007middle_Q08nickname18preferred_username7profile7picture7website5email14email_verified6gender9birthdate8zoneinfo6locale12phone_number21phone_number_verified7address10updated_atACSS_SSSaySSG10Foundation4DateVA8_A8_SgSSSgA10_A5_SgA10_A10_A10_A10_A10_A10_A10_A10_A10_A10_A10_SbSgA10_A10_A10_A10_A10_A12_AA12AddressClaimVSgA9_tcfc">init(iss:sub:aud:exp:iat:auth_time:nonce:acr:amr:azp:name:given_name:family_name:middle_name:nickname:preferred_username:profile:picture:website:email:email_verified:gender:birthdate:zoneinfo:locale:phone_number:phone_number_verified:address:updated_at:)</a>
+                    <a class="token" href="#/s:8SwiftJWT12ClaimsOpenIDC3iss3sub3aud3exp3iat9auth_time5nonce3acr3amr3azp4name06given_Q007family_Q007middle_Q08nickname18preferred_username7profile7picture7website5email14email_verified6gender9birthdate8zoneinfo6locale12phone_number21phone_number_verified7address10updated_atACSS_SSSaySSG10Foundation4DateVA8_A8_SgSSSgA10_A5_SgA10_A10_A10_A10_A10_A10_A10_A10_A10_A10_A10_SbSgA10_A10_A10_A10_A10_A12_AA12AddressClaimVSgA9_tcfc">init(iss:<wbr>sub:<wbr>aud:<wbr>exp:<wbr>iat:<wbr>auth_time:<wbr>nonce:<wbr>acr:<wbr>amr:<wbr>azp:<wbr>name:<wbr>given_name:<wbr>family_name:<wbr>middle_name:<wbr>nickname:<wbr>preferred_username:<wbr>profile:<wbr>picture:<wbr>website:<wbr>email:<wbr>email_verified:<wbr>gender:<wbr>birthdate:<wbr>zoneinfo:<wbr>locale:<wbr>phone_number:<wbr>phone_number_verified:<wbr>address:<wbr>updated_at:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -189,9 +190,11 @@
               <div class="task-name-container">
                 <a name="/ID%20Token"></a>
                 <a name="//apple_ref/swift/Section/ID Token" class="dashAnchor"></a>
-                <a href="#/ID%20Token">
-                  <h3 class="section-name">ID Token</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/ID%20Token"></a>
+                  <h3 class="section-name"><p>ID Token</p>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -396,7 +399,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Authentication Context Class Reference. String specifying an Authentication Context Class Reference value that identifies the Authentication Context Class that the authentication performed satisfied. The value <q>0</q> indicates the End-User authentication did not meet the requirements of ISO/IEC 29115 level 1. Authentications with level 0 SHOULD NOT be used to authorize access to any resource of any monetary value. Parties using this claim will need to agree upon the meanings of the values used, which may be context-specific.</p>
+                        <p>Authentication Context Class Reference. String specifying an Authentication Context Class Reference value that identifies the Authentication Context Class that the authentication performed satisfied. The value &ldquo;0&rdquo; indicates the End-User authentication did not meet the requirements of ISO/IEC 29115 level 1. Authentications with level 0 SHOULD NOT be used to authorize access to any resource of any monetary value. Parties using this claim will need to agree upon the meanings of the values used, which may be context-specific.</p>
 
                       </div>
                       <div class="declaration">
@@ -470,9 +473,11 @@
               <div class="task-name-container">
                 <a name="/Standard%20Claims"></a>
                 <a name="//apple_ref/swift/Section/Standard Claims" class="dashAnchor"></a>
-                <a href="#/Standard%20Claims">
-                  <h3 class="section-name">Standard Claims</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Standard%20Claims"></a>
+                  <h3 class="section-name"><p>Standard Claims</p>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -996,8 +1001,8 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/Kitura/Swift-JWT" target="_blank" rel="external">IBM &amp; Kitura Project Contributors</a>. All rights reserved. (Last updated: 2020-11-25)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

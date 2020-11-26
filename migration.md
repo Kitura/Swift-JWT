@@ -23,7 +23,7 @@ let keyID = header.kid
 ```
 
 ### Claims:
-The JWT `Claims` has been changed to be a protocol. This means that instead of intializing a fixed `Claims` struct with a `[String: Any]` dictionary, you define and intialize your own object that conforms to claims. Alternatively, you can use one of the [example Claims implementations](https://github.com/IBM-Swift/Swift-JWT/tree/master/Sources/SwiftJWT/ClaimsExamples) provided.
+The JWT `Claims` has been changed to be a protocol. This means that instead of intializing a fixed `Claims` struct with a `[String: Any]` dictionary, you define and intialize your own object that conforms to claims. Alternatively, you can use one of the [example Claims implementations](https://github.com/Kitura/Swift-JWT/tree/master/Sources/SwiftJWT/ClaimsExamples) provided.
 
 ```swift
 // Swift-JWT 2.0
@@ -56,7 +56,7 @@ let signer = JWTSigner.rs256(privateKey: privateKey)
 let verifier = JWTVerifier.rs256(publicKey: publicKey)
 ```
 
- - The `isSupported` function has been removed. To see supported Algorithms, check the [README](https://github.com/IBM-Swift/Swift-JWT#supported-algorithms) or inspect the initialisers for `JWTSigner` and `JWTVerifier`.
+ - The `isSupported` function has been removed. To see supported Algorithms, check the [README](https://github.com/Kitura/Swift-JWT#supported-algorithms) or inspect the initialisers for `JWTSigner` and `JWTVerifier`.
 
 ### JWT:
 

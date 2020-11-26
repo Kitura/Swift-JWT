@@ -20,7 +20,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          SwiftJWT Docs
+          SwiftJWT 3.6.200 Docs
         </a>
          (100% documented)
       </p>
@@ -32,7 +32,7 @@
       </p>
     
         <p class="header-col header-col--secondary">
-          <a class="header-link" href="https://github.com/IBM-Swift/Swift-JWT/">
+          <a class="header-link" href="https://github.com/Kitura/Swift-JWT/">
             <img class="header-icon" src="img/gh.png"/>
             View on GitHub
           </a>
@@ -108,20 +108,20 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             
             <p align="center">
 <a href="http://kitura.io/">
-<img src="https://raw.githubusercontent.com/IBM-Swift/Kitura/master/Sources/Kitura/resources/kitura-bird.svg?sanitize=true" height="100" alt="Kitura">
+<img src="https://raw.githubusercontent.com/Kitura/Kitura/master/Sources/Kitura/resources/kitura-bird.svg?sanitize=true" height="100" alt="Kitura">
 </a>
 </p>
 
 <p align="center">
-<a href="https://ibm-swift.github.io/Swift-JWT/index.html">
+<a href="https://kitura.github.io/Swift-JWT/index.html">
 <img src="https://img.shields.io/badge/apidoc-SwiftJWT-1FBCE4.svg?style=flat" alt="APIDoc">
 </a>
-<a href="https://travis-ci.org/IBM-Swift/Swift-JWT">
-<img src="https://travis-ci.org/IBM-Swift/Swift-JWT.svg?branch=master" alt="Build Status - Master">
+<a href="https://travis-ci.org/Kitura/Swift-JWT">
+<img src="https://travis-ci.org/Kitura/Swift-JWT.svg?branch=master" alt="Build Status - Master">
 </a>
 <img src="https://img.shields.io/badge/os-macOS-green.svg?style=flat" alt="macOS">
 <img src="https://img.shields.io/badge/os-linux-green.svg?style=flat" alt="Linux">
@@ -144,8 +144,8 @@
 <h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
 <h4 id='add-dependencies' class='heading'>Add dependencies</h4>
 
-<p>Add the <code>Swift-JWT</code> package to the dependencies within your application’s <code>Package.swift</code> file. Substitute <code>&quot;x.x.x&quot;</code> with the latest <code>Swift-JWT</code> <a href="https://github.com/IBM-Swift/Swift-JWT/releases">release</a>.</p>
-<pre class="highlight swift"><code><span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/IBM-Swift/Swift-JWT.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"x.x.x"</span><span class="p">)</span>
+<p>Add the <code>Swift-JWT</code> package to the dependencies within your application’s <code>Package.swift</code> file. Substitute <code>&quot;x.x.x&quot;</code> with the latest <code>Swift-JWT</code> <a href="https://github.com/Kitura/Swift-JWT/releases">release</a>.</p>
+<pre class="highlight swift"><code><span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/Kitura/Swift-JWT.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"x.x.x"</span><span class="p">)</span>
 </code></pre>
 
 <p>Add <code>SwiftJWT</code> to your target&rsquo;s dependencies:</p>
@@ -168,7 +168,7 @@ Therefore, a JWT typically looks like the following: xxxxx.yyyyy.zzzzz</p>
 <h4 id='header' class='heading'>Header</h4>
 
 <p>The Header struct contains the fields of the JSON Web Token header as defined by <a href="https://tools.ietf.org/html/rfc7515#section-4">RFC7515</a>.<br>
-The <q>typ</q> header will default to <q>JWT</q>. The <q>alg</q> header will be set to the algorithm name when you sign the JWT.<br>
+The &ldquo;typ&rdquo; header will default to &ldquo;JWT&rdquo;. The &ldquo;alg&rdquo; header will be set to the algorithm name when you sign the JWT.<br>
 The other Header fields can be set when initializing the Header or by changing them directly on the Header object.</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">myHeader</span> <span class="o">=</span> <span class="kt">Header</span><span class="p">(</span><span class="nv">kid</span><span class="p">:</span> <span class="s">"KeyID1"</span><span class="p">)</span>
 </code></pre>
@@ -217,7 +217,7 @@ $ openssl rsa -in privateKey.key -pubout -outform PEM -out privateKey.key.pub
 <span class="k">let</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">Data</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">publicKeyPath</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="o">.</span><span class="n">alwaysMapped</span><span class="p">)</span>
 </code></pre>
 
-<p>For details on creating elliptic curve public and private keys, view the <a href="https://github.com/IBM-Swift/BlueECC">BlueECC README.txt</a>.</p>
+<p>For details on creating elliptic curve public and private keys, view the <a href="https://github.com/Kitura/BlueECC">BlueECC README.txt</a>.</p>
 <h4 id='sign-a-jwt-using-a-jwtsigner' class='heading'>Sign a JWT using a JWTSigner</h4>
 
 <p>The struct JWTSigner contains the algorithms that can be used to sign a JWT.</p>
@@ -303,7 +303,7 @@ The <code>leeway</code> parameter is the <code>TimeInterval</code> in seconds th
  <span class="k">let</span> <span class="nv">jwt</span> <span class="o">=</span> <span class="k">try</span> <span class="n">jwtDecoder</span><span class="o">.</span><span class="nf">decode</span><span class="p">(</span><span class="kt">JWT</span><span class="o">&lt;</span><span class="kt">MyClaims</span><span class="o">&gt;.</span><span class="k">self</span><span class="p">,</span> <span class="nv">fromString</span><span class="p">:</span> <span class="n">jwtString</span><span class="p">)</span>
 </code></pre>
 
-<p>Because JWTEncoder and JWTDecoder conform to <a href="https://github.com/IBM-Swift/KituraContracts/blob/master/Sources/KituraContracts/Contracts.swift">KituraContract&rsquo;s</a> BodyEncoder and BodyDecoder protocols, they can be used as a <a href="https://developer.ibm.com/swift/2018/09/01/kitura-custom-encoders-and-decoders/">custom coder</a> in Codable routes for sending and receiving JWTs:</p>
+<p>Because JWTEncoder and JWTDecoder conform to <a href="https://github.com/Kitura/KituraContracts/blob/master/Sources/KituraContracts/Contracts.swift">KituraContract&rsquo;s</a> BodyEncoder and BodyDecoder protocols, they can be used as a <a href="https://developer.ibm.com/swift/2018/09/01/kitura-custom-encoders-and-decoders/">custom coder</a> in Codable routes for sending and receiving JWTs:</p>
 <pre class="highlight swift"><code> <span class="n">router</span><span class="o">.</span><span class="n">encoders</span><span class="p">[</span><span class="kt">MediaType</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="o">.</span><span class="n">application</span><span class="p">,</span> <span class="nv">subType</span><span class="p">:</span> <span class="s">"jwt"</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span> <span class="k">return</span> <span class="n">jwtEncoder</span> <span class="p">}</span>
  <span class="n">router</span><span class="o">.</span><span class="n">decoders</span><span class="p">[</span><span class="kt">MediaType</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="o">.</span><span class="n">application</span><span class="p">,</span> <span class="nv">subType</span><span class="p">:</span> <span class="s">"jwt"</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span> <span class="k">return</span> <span class="n">jwtDecoder</span> <span class="p">}</span>
 </code></pre>
@@ -311,13 +311,13 @@ The <code>leeway</code> parameter is the <code>TimeInterval</code> in seconds th
 <p>This allows for the use of JWT&rsquo;s in information exchange. By sending and receiving JWT&rsquo;s you can ensure the sending is who they say they are and verify the content hasn&rsquo;t been tampered with.</p>
 <h2 id='api-documentation' class='heading'>API Documentation</h2>
 
-<p>For more information visit our <a href="https://ibm-swift.github.io/Swift-JWT/index.html">API reference</a>.</p>
+<p>For more information visit our <a href="https://kitura.github.io/Swift-JWT/index.html">API reference</a>.</p>
 <h2 id='community' class='heading'>Community</h2>
 
 <p>We love to talk server-side Swift, and Kitura. Join our <a href="http://swift-at-ibm-slack.mybluemix.net/">Slack</a> to meet the team!</p>
 <h2 id='license' class='heading'>License</h2>
 
-<p>This library is licensed under Apache 2.0. Full license text is available in <a href="https://github.com/IBM-Swift/Swift-JWT/blob/master/LICENSE">LICENSE</a>.</p>
+<p>This library is licensed under Apache 2.0. Full license text is available in <a href="https://github.com/Kitura/Swift-JWT/blob/master/LICENSE">LICENSE</a>.</p>
 
           </div>
         </section>
@@ -326,8 +326,8 @@ The <code>leeway</code> parameter is the <code>TimeInterval</code> in seconds th
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/Kitura/Swift-JWT" target="_blank" rel="external">IBM &amp; Kitura Project Contributors</a>. All rights reserved. (Last updated: 2020-11-25)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

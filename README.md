@@ -1,16 +1,16 @@
 <p align="center">
 <a href="http://kitura.io/">
-<img src="https://raw.githubusercontent.com/IBM-Swift/Kitura/master/Sources/Kitura/resources/kitura-bird.svg?sanitize=true" height="100" alt="Kitura">
+<img src="https://raw.githubusercontent.com/Kitura/Kitura/master/Sources/Kitura/resources/kitura-bird.svg?sanitize=true" height="100" alt="Kitura">
 </a>
 </p>
 
 
 <p align="center">
-<a href="https://ibm-swift.github.io/Swift-JWT/index.html">
+<a href="https://kitura.github.io/Swift-JWT/index.html">
 <img src="https://img.shields.io/badge/apidoc-SwiftJWT-1FBCE4.svg?style=flat" alt="APIDoc">
 </a>
-<a href="https://travis-ci.org/IBM-Swift/Swift-JWT">
-<img src="https://travis-ci.org/IBM-Swift/Swift-JWT.svg?branch=master" alt="Build Status - Master">
+<a href="https://travis-ci.org/Kitura/Swift-JWT">
+<img src="https://travis-ci.org/Kitura/Swift-JWT.svg?branch=master" alt="Build Status - Master">
 </a>
 <img src="https://img.shields.io/badge/os-macOS-green.svg?style=flat" alt="macOS">
 <img src="https://img.shields.io/badge/os-linux-green.svg?style=flat" alt="Linux">
@@ -36,9 +36,9 @@ The latest version of Swift-JWT requires **Swift 4.0** or later. You can downloa
 ### Swift Package Manager
 
 #### Add dependencies
-Add the `Swift-JWT` package to the dependencies within your application’s `Package.swift` file. Substitute `"x.x.x"` with the latest `Swift-JWT` [release](https://github.com/IBM-Swift/Swift-JWT/releases).
+Add the `Swift-JWT` package to the dependencies within your application’s `Package.swift` file. Substitute `"x.x.x"` with the latest `Swift-JWT` [release](https://github.com/Kitura/Swift-JWT/releases).
 ```swift
-.package(url: "https://github.com/IBM-Swift/Swift-JWT.git", from: "x.x.x")
+.package(url: "https://github.com/Kitura/Swift-JWT.git", from: "x.x.x")
 ```
 Add `SwiftJWT` to your target's dependencies:
 ```swift
@@ -126,7 +126,7 @@ let publicKeyPath = URL(fileURLWithPath: getAbsolutePath(relativePath: "/path/to
 let publicKey: Data = try Data(contentsOf: publicKeyPath, options: .alwaysMapped)
 ```
 
-For details on creating elliptic curve public and private keys, view the [BlueECC README.txt](https://github.com/IBM-Swift/BlueECC).
+For details on creating elliptic curve public and private keys, view the [BlueECC README.txt](https://github.com/Kitura/BlueECC).
 
 #### Sign a JWT using a JWTSigner
 
@@ -225,7 +225,7 @@ The JWTEncoder and JWTDecoder classes encode and decode JWT Strings using the sa
  let jwt = try jwtDecoder.decode(JWT<MyClaims>.self, fromString: jwtString)
 ```
 
-Because JWTEncoder and JWTDecoder conform to [KituraContract's](https://github.com/IBM-Swift/KituraContracts/blob/master/Sources/KituraContracts/Contracts.swift) BodyEncoder and BodyDecoder protocols, they can be used as a [custom coder](https://developer.ibm.com/swift/2018/09/01/kitura-custom-encoders-and-decoders/) in Codable routes for sending and receiving JWTs:
+Because JWTEncoder and JWTDecoder conform to [KituraContract's](https://github.com/Kitura/KituraContracts/blob/master/Sources/KituraContracts/Contracts.swift) BodyEncoder and BodyDecoder protocols, they can be used as a [custom coder](https://developer.ibm.com/swift/2018/09/01/kitura-custom-encoders-and-decoders/) in Codable routes for sending and receiving JWTs:
 
 ```swift
  router.encoders[MediaType(type: .application, subType: "jwt")] = { return jwtEncoder }
@@ -235,11 +235,11 @@ Because JWTEncoder and JWTDecoder conform to [KituraContract's](https://github.c
 This allows for the use of JWT's in information exchange. By sending and receiving JWT's you can ensure the sending is who they say they are and verify the content hasn't been tampered with.
 
 ## API Documentation
-For more information visit our [API reference](https://ibm-swift.github.io/Swift-JWT/index.html).
+For more information visit our [API reference](https://kitura.github.io/Swift-JWT/index.html).
 
 ## Community
 
 We love to talk server-side Swift, and Kitura. Join our [Slack](http://swift-at-ibm-slack.mybluemix.net/) to meet the team!
 
 ## License
-This library is licensed under Apache 2.0. Full license text is available in [LICENSE](https://github.com/IBM-Swift/Swift-JWT/blob/master/LICENSE).
+This library is licensed under Apache 2.0. Full license text is available in [LICENSE](https://github.com/Kitura/Swift-JWT/blob/master/LICENSE).
