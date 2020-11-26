@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SwiftJWT Docs
+          SwiftJWT 3.6.200 Docs
         </a>
          (100% documented)
       </p>
@@ -33,7 +33,7 @@
       </p>
     
         <p class="header-col header-col--secondary">
-          <a class="header-link" href="https://github.com/IBM-Swift/Swift-JWT/">
+          <a class="header-link" href="https://github.com/Kitura/Swift-JWT/">
             <img class="header-icon" src="../img/gh.png"/>
             View on GitHub
           </a>
@@ -109,10 +109,11 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             <h1>JWTDecoder</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">JWTDecoder</span> <span class="p">:</span> <span class="kt">BodyDecoder</span></code></pre>
 
                 </div>
@@ -140,9 +141,11 @@
               <div class="task-name-container">
                 <a name="/Initializers"></a>
                 <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
-                <a href="#/Initializers">
-                  <h3 class="section-name">Initializers</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Initializers"></a>
+                  <h3 class="section-name"><p>Initializers</p>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -150,7 +153,7 @@
                     <code>
                     <a name="/s:8SwiftJWT10JWTDecoderC11jwtVerifierAcA11JWTVerifierV_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(jwtVerifier:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC11jwtVerifierAcA11JWTVerifierV_tcfc">init(jwtVerifier:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC11jwtVerifierAcA11JWTVerifierV_tcfc">init(jwtVerifier:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -200,7 +203,7 @@
                     <code>
                     <a name="/s:8SwiftJWT10JWTDecoderC15keyIDToVerifierAcA11JWTVerifierVSgSSc_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(keyIDToVerifier:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC15keyIDToVerifierAcA11JWTVerifierVSgSSc_tcfc">init(keyIDToVerifier:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC15keyIDToVerifierAcA11JWTVerifierVSgSSc_tcfc">init(keyIDToVerifier:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -231,7 +234,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>The function that will generate the <code><a href="../Structs/JWTVerifier.html">JWTVerifier</a></code> using the <q>kid</q> header.</p>
+                                  <p>The function that will generate the <code><a href="../Structs/JWTVerifier.html">JWTVerifier</a></code> using the &ldquo;kid&rdquo; header.</p>
                                 </div>
                               </td>
                             </tr>
@@ -251,9 +254,11 @@
               <div class="task-name-container">
                 <a name="/Decode"></a>
                 <a name="//apple_ref/swift/Section/Decode" class="dashAnchor"></a>
-                <a href="#/Decode">
-                  <h3 class="section-name">Decode</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Decode"></a>
+                  <h3 class="section-name"><p>Decode</p>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -261,7 +266,7 @@
                     <code>
                     <a name="/s:8SwiftJWT10JWTDecoderC6decode_10fromStringxxm_SStKSeRzlF"></a>
                     <a name="//apple_ref/swift/Method/decode(_:fromString:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC6decode_10fromStringxxm_SStKSeRzlF">decode(_:fromString:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC6decode_10fromStringxxm_SStKSeRzlF">decode(_:<wbr>fromString:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -274,18 +279,15 @@
     <p class="aside-title">Throws</p>
     <code><a href="../Structs/JWTError.html#/s:8SwiftJWT8JWTErrorV16invalidJWTStringACvpZ">JWTError.invalidJWTString</a></code> if the provided String is not in the form mandated by the JWT specification.
 
-</div>
-<div class="aside aside-throws">
+</div><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <code><a href="../Structs/JWTError.html#/s:8SwiftJWT8JWTErrorV12invalidKeyIDACvpZ">JWTError.invalidKeyID</a></code> if the KeyID <code>kid</code> header fails to generate a jwtVerifier.
 
-</div>
-<div class="aside aside-throws">
+</div><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <code><a href="../Structs/JWTError.html#/s:8SwiftJWT8JWTErrorV18failedVerificationACvpZ">JWTError.failedVerification</a></code> if the <code><a href="../Structs/JWTVerifier.html">JWTVerifier</a></code> fails to verify the decoded String.
 
-</div>
-<div class="aside aside-throws">
+</div><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <code>DecodingError</code> if the decoder fails to decode the String as the provided type.
 
@@ -343,7 +345,7 @@
                     <code>
                     <a name="/s:8SwiftJWT10JWTDecoderC6decode_4fromxxm_10Foundation4DataVtKSeRzlF"></a>
                     <a name="//apple_ref/swift/Method/decode(_:from:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC6decode_4fromxxm_10Foundation4DataVtKSeRzlF">decode(_:from:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC6decode_4fromxxm_10Foundation4DataVtKSeRzlF">decode(_:<wbr>from:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -356,23 +358,19 @@
     <p class="aside-title">Throws</p>
     <code><a href="../Structs/JWTError.html#/s:8SwiftJWT8JWTErrorV15invalidUTF8DataACvpZ">JWTError.invalidUTF8Data</a></code> if the provided Data can&rsquo;t be decoded to a String.
 
-</div>
-<div class="aside aside-throws">
+</div><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <code><a href="../Structs/JWTError.html#/s:8SwiftJWT8JWTErrorV16invalidJWTStringACvpZ">JWTError.invalidJWTString</a></code> if the provided String is not in the form mandated by the JWT specification.
 
-</div>
-<div class="aside aside-throws">
+</div><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <code><a href="../Structs/JWTError.html#/s:8SwiftJWT8JWTErrorV12invalidKeyIDACvpZ">JWTError.invalidKeyID</a></code> if the KeyID <code>kid</code> header fails to generate a <code><a href="../Structs/JWTVerifier.html">JWTVerifier</a></code>.
 
-</div>
-<div class="aside aside-throws">
+</div><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <code><a href="../Structs/JWTError.html#/s:8SwiftJWT8JWTErrorV18failedVerificationACvpZ">JWTError.failedVerification</a></code> if the <code><a href="../Structs/JWTVerifier.html">JWTVerifier</a></code> fails to verify the decoded String.
 
-</div>
-<div class="aside aside-throws">
+</div><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <code>DecodingError</code> if the decoder fails to decode the String as the provided type.
 
@@ -425,16 +423,12 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
                     <a name="/s:8SwiftJWT10JWTDecoderC4data16base64urlEncoded10Foundation4DataVSgSS_tFZ"></a>
                     <a name="//apple_ref/swift/Method/data(base64urlEncoded:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC4data16base64urlEncoded10Foundation4DataVSgSS_tFZ">data(base64urlEncoded:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTDecoderC4data16base64urlEncoded10Foundation4DataVSgSS_tFZ">data(base64urlEncoded:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -467,8 +461,8 @@ base64url encoding is defined in RFC4648 (<a href="https://tools.ietf.org/html/r
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/Kitura/Swift-JWT" target="_blank" rel="external">IBM &amp; Kitura Project Contributors</a>. All rights reserved. (Last updated: 2020-11-25)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

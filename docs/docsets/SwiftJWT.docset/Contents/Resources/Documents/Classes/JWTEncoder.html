@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SwiftJWT Docs
+          SwiftJWT 3.6.200 Docs
         </a>
          (100% documented)
       </p>
@@ -33,7 +33,7 @@
       </p>
     
         <p class="header-col header-col--secondary">
-          <a class="header-link" href="https://github.com/IBM-Swift/Swift-JWT/">
+          <a class="header-link" href="https://github.com/Kitura/Swift-JWT/">
             <img class="header-icon" src="../img/gh.png"/>
             View on GitHub
           </a>
@@ -109,10 +109,11 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             <h1>JWTEncoder</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">JWTEncoder</span> <span class="p">:</span> <span class="kt">BodyEncoder</span></code></pre>
 
                 </div>
@@ -141,9 +142,11 @@
               <div class="task-name-container">
                 <a name="/Initializers"></a>
                 <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
-                <a href="#/Initializers">
-                  <h3 class="section-name">Initializers</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Initializers"></a>
+                  <h3 class="section-name"><p>Initializers</p>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -151,7 +154,7 @@
                     <code>
                     <a name="/s:8SwiftJWT10JWTEncoderC9jwtSignerAcA9JWTSignerV_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(jwtSigner:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTEncoderC9jwtSignerAcA9JWTSignerV_tcfc">init(jwtSigner:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTEncoderC9jwtSignerAcA9JWTSignerV_tcfc">init(jwtSigner:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -201,7 +204,7 @@
                     <code>
                     <a name="/s:8SwiftJWT10JWTEncoderC13keyIDToSignerAcA9JWTSignerVSgSSc_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(keyIDToSigner:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTEncoderC13keyIDToSignerAcA9JWTSignerVSgSSc_tcfc">init(keyIDToSigner:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTEncoderC13keyIDToSignerAcA9JWTSignerVSgSSc_tcfc">init(keyIDToSigner:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -252,9 +255,11 @@
               <div class="task-name-container">
                 <a name="/Encode"></a>
                 <a name="//apple_ref/swift/Section/Encode" class="dashAnchor"></a>
-                <a href="#/Encode">
-                  <h3 class="section-name">Encode</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Encode"></a>
+                  <h3 class="section-name"><p>Encode</p>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -262,7 +267,7 @@
                     <code>
                     <a name="/s:8SwiftJWT10JWTEncoderC6encodey10Foundation4DataVxKSERzlF"></a>
                     <a name="//apple_ref/swift/Method/encode(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTEncoderC6encodey10Foundation4DataVxKSERzlF">encode(_:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTEncoderC6encodey10Foundation4DataVxKSERzlF">encode(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -275,13 +280,11 @@
     <p class="aside-title">Throws</p>
     <code><a href="../Structs/JWTError.html#/s:8SwiftJWT8JWTErrorV15invalidUTF8DataACvpZ">JWTError.invalidUTF8Data</a></code> if the provided Data can&rsquo;t be decoded to a String.
 
-</div>
-<div class="aside aside-throws">
+</div><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <code><a href="../Structs/JWTError.html#/s:8SwiftJWT8JWTErrorV12invalidKeyIDACvpZ">JWTError.invalidKeyID</a></code> if the KeyID <code>kid</code> header fails to generate a jwtSigner.
 
-</div>
-<div class="aside aside-throws">
+</div><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <code>EncodingError</code> if the encoder fails to encode the object as Data.
 
@@ -327,7 +330,7 @@
                     <code>
                     <a name="/s:8SwiftJWT10JWTEncoderC14encodeToStringySSxKSERzlF"></a>
                     <a name="//apple_ref/swift/Method/encodeToString(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTEncoderC14encodeToStringySSxKSERzlF">encodeToString(_:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTEncoderC14encodeToStringySSxKSERzlF">encodeToString(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -340,8 +343,7 @@
     <p class="aside-title">Throws</p>
     <code><a href="../Structs/JWTError.html#/s:8SwiftJWT8JWTErrorV12invalidKeyIDACvpZ">JWTError.invalidKeyID</a></code> if the KeyID <code>kid</code> header fails to generate a jwtSigner.
 
-</div>
-<div class="aside aside-throws">
+</div><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <code>EncodingError</code> if the encoder fails to encode the object as Data.
 
@@ -382,16 +384,12 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
                     <a name="/s:8SwiftJWT10JWTEncoderC22base64urlEncodedString4dataSS10Foundation4DataV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/base64urlEncodedString(data:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT10JWTEncoderC22base64urlEncodedString4dataSS10Foundation4DataV_tFZ">base64urlEncodedString(data:)</a>
+                    <a class="token" href="#/s:8SwiftJWT10JWTEncoderC22base64urlEncodedString4dataSS10Foundation4DataV_tFZ">base64urlEncodedString(data:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -424,8 +422,8 @@ as defined in RFC4648 (<a href="https://tools.ietf.org/html/rfc4648">https://too
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/Kitura/Swift-JWT" target="_blank" rel="external">IBM &amp; Kitura Project Contributors</a>. All rights reserved. (Last updated: 2020-11-25)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

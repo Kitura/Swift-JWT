@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          SwiftJWT Docs
+          SwiftJWT 3.6.200 Docs
         </a>
          (100% documented)
       </p>
@@ -33,7 +33,7 @@
       </p>
     
         <p class="header-col header-col--secondary">
-          <a class="header-link" href="https://github.com/IBM-Swift/Swift-JWT/">
+          <a class="header-link" href="https://github.com/Kitura/Swift-JWT/">
             <img class="header-icon" src="../img/gh.png"/>
             View on GitHub
           </a>
@@ -109,10 +109,11 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             <h1>ClaimsStandardJWT</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ClaimsStandardJWT</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Claims.html">Claims</a></span></code></pre>
 
                 </div>
@@ -131,7 +132,7 @@
                     <code>
                     <a name="/s:8SwiftJWT014ClaimsStandardB0C3iss3sub3aud3exp3nbf3iat3jtiACSSSg_AKSaySSGSg10Foundation4DateVSgA2qKtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(iss:sub:aud:exp:nbf:iat:jti:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SwiftJWT014ClaimsStandardB0C3iss3sub3aud3exp3nbf3iat3jtiACSSSg_AKSaySSGSg10Foundation4DateVSgA2qKtcfc">init(iss:sub:aud:exp:nbf:iat:jti:)</a>
+                    <a class="token" href="#/s:8SwiftJWT014ClaimsStandardB0C3iss3sub3aud3exp3nbf3iat3jtiACSSSg_AKSaySSGSg10Foundation4DateVSgA2qKtcfc">init(iss:<wbr>sub:<wbr>aud:<wbr>exp:<wbr>nbf:<wbr>iat:<wbr>jti:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -174,9 +175,9 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <q>iss</q> (issuer) claim identifies the principal that issued the
+                        <p>The &ldquo;iss&rdquo; (issuer) claim identifies the principal that issued the
 JWT.  The processing of this claim is generally application specific.
-The <q>iss</q> value is a case-sensitive.</p>
+The &ldquo;iss&rdquo; value is a case-sensitive.</p>
 
                       </div>
                       <div class="declaration">
@@ -203,12 +204,12 @@ The <q>iss</q> value is a case-sensitive.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <q>sub</q> (subject) claim identifies the principal that is the
+                        <p>The &ldquo;sub&rdquo; (subject) claim identifies the principal that is the
 subject of the JWT.  The claims in a JWT are normally statements
 about the subject.  The subject value MUST either be scoped to be
 locally unique in the context of the issuer or be globally unique.
 The processing of this claim is generally application specific.  The
-<q>sub</q> value is case-sensitive.</p>
+&ldquo;sub&rdquo; value is case-sensitive.</p>
 
                       </div>
                       <div class="declaration">
@@ -235,13 +236,13 @@ The processing of this claim is generally application specific.  The
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <q>aud</q> (audience) claim identifies the recipients that the JWT is
+                        <p>The &ldquo;aud&rdquo; (audience) claim identifies the recipients that the JWT is
 intended for.  Each principal intended to process the JWT MUST
 identify itself with a value in the audience claim.  If the principal
 processing the claim does not identify itself with a value in the
-<q>aud</q> claim when this claim is present, then the JWT MUST be
+&ldquo;aud&rdquo; claim when this claim is present, then the JWT MUST be
 rejected. The interpretation of audience values is generally application specific.
-The <q>aud</q> value is case-sensitive.</p>
+The &ldquo;aud&rdquo; value is case-sensitive.</p>
 
                       </div>
                       <div class="declaration">
@@ -268,10 +269,10 @@ The <q>aud</q> value is case-sensitive.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <q>exp</q> (expiration time) claim identifies the expiration time on
+                        <p>The &ldquo;exp&rdquo; (expiration time) claim identifies the expiration time on
 or after which the JWT MUST NOT be accepted for processing.  The
-processing of the <q>exp</q> claim requires that the current date/time
-MUST be before the expiration date/time listed in the <q>exp</q> claim.
+processing of the &ldquo;exp&rdquo; claim requires that the current date/time
+MUST be before the expiration date/time listed in the &ldquo;exp&rdquo; claim.
 Implementers MAY provide for some small leeway, usually no more than
 a few minutes, to account for clock skew.</p>
 
@@ -300,10 +301,10 @@ a few minutes, to account for clock skew.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <q>nbf</q> (not before) claim identifies the time before which the JWT
-MUST NOT be accepted for processing.  The processing of the <q>nbf</q>
+                        <p>The &ldquo;nbf&rdquo; (not before) claim identifies the time before which the JWT
+MUST NOT be accepted for processing.  The processing of the &ldquo;nbf&rdquo;
 claim requires that the current date/time MUST be after or equal to
-the not-before date/time listed in the <q>nbf</q> claim.  Implementers MAY
+the not-before date/time listed in the &ldquo;nbf&rdquo; claim.  Implementers MAY
 provide for some small leeway, usually no more than a few minutes, to
 account for clock skew.</p>
 
@@ -332,7 +333,7 @@ account for clock skew.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <q>iat</q> (issued at) claim identifies the time at which the JWT was
+                        <p>The &ldquo;iat&rdquo; (issued at) claim identifies the time at which the JWT was
 issued.  This claim can be used to determine the age of the JWT.</p>
 
                       </div>
@@ -360,13 +361,13 @@ issued.  This claim can be used to determine the age of the JWT.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <q>jti</q> (JWT ID) claim provides a unique identifier for the JWT.
+                        <p>The &ldquo;jti&rdquo; (JWT ID) claim provides a unique identifier for the JWT.
 The identifier value MUST be assigned in a manner that ensures that
 there is a negligible probability that the same value will be
 accidentally assigned to a different data object; if the application
 uses multiple issuers, collisions MUST be prevented among values
-produced by different issuers as well.  The <q>jti</q> claim can be used
-to prevent the JWT from being replayed.  The <q>jti</q> value is case-
+produced by different issuers as well.  The &ldquo;jti&rdquo; claim can be used
+to prevent the JWT from being replayed.  The &ldquo;jti&rdquo; value is case-
 sensitive</p>
 
                       </div>
@@ -389,8 +390,8 @@ sensitive</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/IBM-Swift/Swift-JWT" target="_blank" rel="external">IBM</a>. All rights reserved. (Last updated: 2019-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/Kitura/Swift-JWT" target="_blank" rel="external">IBM &amp; Kitura Project Contributors</a>. All rights reserved. (Last updated: 2020-11-25)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>
