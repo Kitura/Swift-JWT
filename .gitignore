@@ -6,3 +6,4 @@ Packages
 SwiftJWT.xcodeproj
 *.DS_Store
 Package.resolved
+.swiftpm
