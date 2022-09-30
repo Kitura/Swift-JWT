@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.2
 
 /**
  * Copyright IBM Corporation and the Kitura project authors 2018-2020
@@ -18,6 +18,9 @@
 
 import PackageDescription
 
+
+let targetDependencies: [Target.Dependency]
+
 let package = Package(
     name: "SwiftJWT",
     products: [
@@ -28,15 +31,22 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/Kitura/BlueRSA.git", from: "1.0.200"),
-        .package(url: "https://github.com/Kitura/BlueCryptor.git", from: "2.0.1"),
-        .package(url: "https://github.com/Kitura/BlueECC.git", from: "1.1.0"),
-        .package(url: "https://github.com/Kitura/LoggerAPI.git", from: "1.7.0"),
-        .package(url: "https://github.com/Kitura/KituraContracts.git", from: "1.2.200")
+        .package(name: "CryptorRSA", url: "https://github.com/Kitura/BlueRSA.git", from: "1.0.200"),
+        .package(name: "Cryptor", url: "https://github.com/Kitura/BlueCryptor.git", from: "2.0.1"),
+        .package(name: "CryptorECC", url: "https://github.com/Kitura/BlueECC.git", from: "1.2.200"),
+        .package(url: "https://github.com/Kitura/LoggerAPI.git", from: "2.0.0"),
+        .package(url: "https://github.com/Kitura/KituraContracts.git", from: "2.0.1")
     ],
     targets: [
-        .target(name: "SwiftJWT", dependencies: ["CryptorRSA", "LoggerAPI", "KituraContracts", "Cryptor", "CryptorECC"]),
+        .target(name: "SwiftJWT", dependencies: [
+            "LoggerAPI",
+            "KituraContracts",
+            "CryptorRSA",
+            "Cryptor",
+            "CryptorECC",
+        ]),
         .testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
 	]
 )
+
 

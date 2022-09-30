@@ -29,7 +29,7 @@ For more information on JSON Web Tokens, their use cases and how they work, we r
 **Reminder:** JWTs sent as JWS do **not** encrypt data, so never send anything sensitive or confidential in a JWT. This library does not currently support JWE.
 
 ## Swift version
-The latest version of Swift-JWT requires **Swift 4.0** or later. You can download this version of the Swift binaries by following this [link](https://swift.org/download/). Compatibility with other Swift versions is not guaranteed.
+The latest version of Swift-JWT requires **Swift 5.2** or later. You can download this version of the Swift binaries by following this [link](https://swift.org/download/). Compatibility with other Swift versions is not guaranteed.
 
 ## Usage
 
