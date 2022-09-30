@@ -18,6 +18,23 @@
 
 import PackageDescription
 
+
+let targetDependencies: [Target.Dependency]
+#if swift(>=5.5)
+targetDependencies = [
+    .product(name: "CryptorRSA", package: "BlueRSA"),
+    .product(name: "Cryptor", package: "BlueCryptor"),
+    .product(name: "CryptorECC", package: "BlueECC"),
+]
+#else
+targetDependencies = [
+    "CryptorRSA",
+    "Cryptor",
+    "CryptorECC",
+]
+#endif
+
+
 let package = Package(
     name: "SwiftJWT",
     products: [
@@ -36,12 +53,9 @@ let package = Package(
     ],
     targets: [
         .target(name: "SwiftJWT", dependencies: [
-            .product(name: "CryptorRSA", package: "BlueRSA"),
             "LoggerAPI",
             "KituraContracts",
-            .product(name: "Cryptor", package: "BlueCryptor"),
-            .product(name: "CryptorECC", package: "BlueECC"),
-        ]),
+        ] + targetDependencies),
         .testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
 	]
 )
