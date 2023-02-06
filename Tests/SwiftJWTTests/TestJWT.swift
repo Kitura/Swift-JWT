@@ -141,6 +141,7 @@ class TestJWT: XCTestCase {
             ("testValidateClaims", testValidateClaims),
             ("testValidateClaimsLeeway", testValidateClaimsLeeway),
             ("testErrorPattenMatching", testErrorPattenMatching),
+            ("testTypeErasedErrorLocalizedDescription", testTypeErasedErrorLocalizedDescription),
         ]
     }
 
@@ -618,6 +619,11 @@ class TestJWT: XCTestCase {
         } catch {
             XCTFail("Incorrect error thrown: \(error)")
         }
+    }
+    
+    func testTypeErasedErrorLocalizedDescription() {
+        let error = JWTError.invalidJWTString
+        XCTAssertEqual((error as Error).localizedDescription, error.errorDescription)
     }
 }
 
