@@ -43,108 +43,108 @@ import Foundation
  ```
  */
 public struct JWTVerifier {    
-    let verifierAlgorithm: VerifierAlgorithm
+    private let verifierAlgorithm: VerifierAlgorithm
     
-    init(verifierAlgorithm: VerifierAlgorithm) {
+    internal init(verifierAlgorithm: VerifierAlgorithm) {
         self.verifierAlgorithm = verifierAlgorithm
     }
-    
-    func verify(jwt: String) -> Bool {
+
+    internal func verify(jwt: String) -> Bool {
         return verifierAlgorithm.verify(jwt: jwt)
     }
     
     /// Initialize a JWTVerifier using the RSA 256 bits algorithm and the provided publicKey.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     public static func rs256(publicKey: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha256))
+        preconditionFailure("not implemented")
     }
     
     /// Initialize a JWTVerifier using the RSA 384 bits algorithm and the provided publicKey.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     public static func rs384(publicKey: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha384))
+        preconditionFailure("not implemented")
     }
     
     /// Initialize a JWTVerifier using the RSA 512 bits algorithm and the provided publicKey.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     public static func rs512(publicKey: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha512))
+        preconditionFailure("not implemented")
     }
     
     /// Initialize a JWTVerifier using the RSA 256 bits algorithm and the provided certificate.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN CERTIFICATE" header.
     public static func rs256(certificate: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueRSA(key: certificate, keyType: .certificate, algorithm: .sha256))
+        preconditionFailure("not implemented")
     }
     
     /// Initialize a JWTVerifier using the RSA 384 bits algorithm and the provided certificate.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN CERTIFICATE" header.
     public static func rs384(certificate: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueRSA(key: certificate, keyType: .certificate, algorithm: .sha384))
+        preconditionFailure("not implemented")
     }
     
     /// Initialize a JWTVerifier using the RSA 512 bits algorithm and the provided certificate.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN CERTIFICATE" header.
     public static func rs512(certificate: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueRSA(key: certificate, keyType: .certificate, algorithm: .sha512))
+        preconditionFailure("not implemented")
     }
     
     /// Initialize a JWTVerifier using the RSA-PSS 256 bits algorithm and the provided publicKey.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     public static func ps256(publicKey: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha256, usePSS: true))
+        preconditionFailure("not implemented")
     }
     
     /// Initialize a JWTVerifier using the RSA-PSS 384 bits algorithm and the provided publicKey.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     public static func ps384(publicKey: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha384, usePSS: true))
+        preconditionFailure("not implemented")
     }
     
     /// Initialize a JWTVerifier using the RSA-PSS 512 bits algorithm and the provided publicKey.
     /// This verifier requires at least a 2048 bit RSA key.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     public static func ps512(publicKey: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueRSA(key: publicKey, keyType: .publicKey, algorithm: .sha512, usePSS: true))
+        preconditionFailure("not implemented")
     }
     
     /// Initialize a JWTSigner using the HMAC 256 bits algorithm and the provided privateKey.
     /// - Parameter key: The HMAC symmetric password data.
     public static func hs256(key: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueHMAC(key: key, algorithm: .sha256))
+        JWTVerifier(verifierAlgorithm: SwiftCryptoHMAC(key: key, algorithm: .hs256))
     }
     
     /// Initialize a JWTSigner using the HMAC 384 bits algorithm and the provided privateKey.
     /// - Parameter key: The HMAC symmetric password data.
     public static func hs384(key: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueHMAC(key: key, algorithm: .sha384))
+        JWTVerifier(verifierAlgorithm: SwiftCryptoHMAC(key: key, algorithm: .hs384))
     }
     
     /// Initialize a JWTSigner using the HMAC 512 bits algorithm and the provided privateKey.
     /// - Parameter key: The HMAC symmetric password data.
     public static func hs512(key: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueHMAC(key: key, algorithm: .sha512))
+        JWTVerifier(verifierAlgorithm: SwiftCryptoHMAC(key: key, algorithm: .hs512))
     }
     
     /// Initialize a JWTVerifier using the ECDSA SHA 256 algorithm and the provided public key.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     @available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *)
     public static func es256(publicKey: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueECVerifier(key: publicKey, curve: .prime256v1))
+        JWTVerifier(verifierAlgorithm: SwiftCryptoECDSA(key: publicKey, algorithm: .es256))
     }
     
     /// Initialize a JWTVerifier using the ECDSA SHA 384 algorithm and the provided public key.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     @available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *)
     public static func es384(publicKey: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueECVerifier(key: publicKey, curve: .secp384r1))
+        JWTVerifier(verifierAlgorithm: SwiftCryptoECDSA(key: publicKey, algorithm: .es384))
     }
     
     /// Initialize a JWTVerifier using the ECDSA SHA 512 algorithm and the provided public key.
     /// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
     @available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *)
     public static func es512(publicKey: Data) -> JWTVerifier {
-        return JWTVerifier(verifierAlgorithm: BlueECVerifier(key: publicKey, curve: .secp521r1))
+        JWTVerifier(verifierAlgorithm: SwiftCryptoECDSA(key: publicKey, algorithm: .es512))
     }
     
     /// Initialize a JWTVerifier that will always return true when verifying the JWT. This is equivelent to using the "none" alg header.
