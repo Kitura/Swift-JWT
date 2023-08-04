@@ -37,7 +37,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-crypto.git", .upToNextMajor(from: "2.0.0")),
         .package(url: "https://github.com/Kitura/LoggerAPI.git", from: "2.0.0"),
-        .package(url: "https://github.com/Kitura/KituraContracts.git", from: "2.0.1")
+        .package(url: "https://github.com/Kitura/KituraContracts.git", from: "2.0.1"),
+        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.50.4"),
     ],
     targets: [
         .target(name: "SwiftJWT", dependencies: [

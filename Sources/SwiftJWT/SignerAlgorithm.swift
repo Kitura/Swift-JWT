@@ -15,6 +15,6 @@
  **/
 
 protocol SignerAlgorithm {
-    /// A function to sign the header and claims of a JSON web token and return a signed JWT string.
-    func sign(header: String, claims: String) throws -> String
+	/// A function to sign the header and claims of a JSON web token and return a signed JWT string.
+	func sign(header: String, claims: String) throws -> String
 }

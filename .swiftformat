@@ -1,0 +1,26 @@
+--swiftversion 5.7
+
+# format options
+--commas inline
+--patternlet inline
+--nospaceoperators ...,..<
+--stripunusedargs closure-only
+
+--binarygrouping none
+--decimalgrouping 3,4
+--hexgrouping none
+--octalgrouping none
+
+--ifdef no-indent
+--indent tabs
+--tabwidth 4
+
+--wraparguments preserve
+--wrapcollections before-first
+--wrapparameters before-first
+
+# file options
+--exclude Frameworks
+
+# rules
+--disable emptyBraces,modifierOrder,wrapMultilineStatementBraces

@@ -19,14 +19,13 @@ import Foundation
 /// An EncryptionAlgorithm representing an alg of "none" in a JWT.
 /// Using this algorithm means the header and claims will not be signed or verified.
 struct NoneAlgorithm: VerifierAlgorithm, SignerAlgorithm {
-    
-    let name: String = "none"
-    
-    func sign(header: String, claims: String) -> String {
-        return header + "." + claims
-    }
-    
-    func verify(jwt: String) -> Bool {
-        return true
-    }
+	let name: String = "none"
+
+	func sign(header: String, claims: String) -> String {
+		header + "." + claims
+	}
+
+	func verify(jwt _: String) -> Bool {
+		true
+	}
 }
