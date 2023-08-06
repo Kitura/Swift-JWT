@@ -43,7 +43,7 @@ extension SwiftCryptoHMAC {
 
 	private func verify(signature: Data, for data: Data) -> Bool {
 		do {
-			return try algorithm.verify(signature: signature, digest: data, key: key)
+			return try algorithm.verify(signature: signature, data: data, key: key)
 		} catch {
 			Log.error("Verification failed: \(error)")
 			return false
@@ -57,31 +57,31 @@ extension SwiftCryptoHMAC {
 }
 
 private extension SwiftCryptoHMAC.Algorithm {
-	func verify(signature: Data, digest: Data, key: Data) throws -> Bool {
+	func verify(signature: Data, data: Data, key: Data) throws -> Bool {
 		let key = SymmetricKey(data: key)
 
 		switch self {
 		case .hs256:
-			return HMAC<SHA256>.isValidAuthenticationCode(signature, authenticating: digest, using: key)
+			return HMAC<SHA256>.isValidAuthenticationCode(signature, authenticating: data, using: key)
 		case .hs384:
-			return HMAC<SHA384>.isValidAuthenticationCode(signature, authenticating: digest, using: key)
+			return HMAC<SHA384>.isValidAuthenticationCode(signature, authenticating: data, using: key)
 		case .hs512:
-			return HMAC<SHA512>.isValidAuthenticationCode(signature, authenticating: digest, using: key)
+			return HMAC<SHA512>.isValidAuthenticationCode(signature, authenticating: data, using: key)
 		}
 	}
 
-	func signature(for digest: Data, key: Data) throws -> Data {
+	func signature(for data: Data, key: Data) throws -> Data {
 		let key = SymmetricKey(data: key)
 
 		switch self {
 		case .hs256:
-			let mac = HMAC<SHA256>.authenticationCode(for: digest, using: key)
+			let mac = HMAC<SHA256>.authenticationCode(for: data, using: key)
 			return Data(mac)
 		case .hs384:
-			let mac = HMAC<SHA384>.authenticationCode(for: digest, using: key)
+			let mac = HMAC<SHA384>.authenticationCode(for: data, using: key)
 			return Data(mac)
 		case .hs512:
-			let mac = HMAC<SHA512>.authenticationCode(for: digest, using: key)
+			let mac = HMAC<SHA512>.authenticationCode(for: data, using: key)
 			return Data(mac)
 		}
 	}

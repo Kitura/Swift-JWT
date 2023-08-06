@@ -51,7 +51,7 @@ extension SwiftCryptoECDSA {
 		}
 
 		do {
-			return try algorithm.verify(signature: signature, digest: data, publicKey: publicKey)
+			return try algorithm.verify(signature: signature, data: data, publicKey: publicKey)
 		} catch {
 			Log.error("Verification failed: \(error)")
 			return false
@@ -69,36 +69,36 @@ extension SwiftCryptoECDSA {
 }
 
 private extension SwiftCryptoECDSA.Algorithm {
-	func verify(signature: Data, digest: Data, publicKey: String) throws -> Bool {
+	func verify(signature: Data, data: Data, publicKey: String) throws -> Bool {
 		switch self {
 		case .es256:
 			let signature = try P256.Signing.ECDSASignature(rawRepresentation: signature)
 			let publicKey = try P256.Signing.PublicKey(pemRepresentation: publicKey)
-			return publicKey.isValidSignature(signature, for: digest)
+			return publicKey.isValidSignature(signature, for: data)
 		case .es384:
 			let signature = try P384.Signing.ECDSASignature(rawRepresentation: signature)
 			let publicKey = try P384.Signing.PublicKey(pemRepresentation: publicKey)
-			return publicKey.isValidSignature(signature, for: digest)
+			return publicKey.isValidSignature(signature, for: data)
 		case .es512:
 			let signature = try P521.Signing.ECDSASignature(rawRepresentation: signature)
 			let publicKey = try P521.Signing.PublicKey(pemRepresentation: publicKey)
-			return publicKey.isValidSignature(signature, for: digest)
+			return publicKey.isValidSignature(signature, for: data)
 		}
 	}
 
-	func signature(for digest: Data, privateKey: String) throws -> Data {
+	func signature(for data: Data, privateKey: String) throws -> Data {
 		switch self {
 		case .es256:
 			let privateKey = try P256.Signing.PrivateKey(pemRepresentation: privateKey)
-			let signedData = try privateKey.signature(for: digest)
+			let signedData = try privateKey.signature(for: data)
 			return signedData.rawRepresentation
 		case .es384:
 			let privateKey = try P384.Signing.PrivateKey(pemRepresentation: privateKey)
-			let signedData = try privateKey.signature(for: digest)
+			let signedData = try privateKey.signature(for: data)
 			return signedData.rawRepresentation
 		case .es512:
 			let privateKey = try P521.Signing.PrivateKey(pemRepresentation: privateKey)
-			let signedData = try privateKey.signature(for: digest)
+			let signedData = try privateKey.signature(for: data)
 			return signedData.rawRepresentation
 		}
 	}
