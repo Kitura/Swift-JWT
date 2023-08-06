@@ -23,14 +23,14 @@ let rsaPrivateKey = read(fileName: "rsa_private_key")
 let rsaPublicKey = read(fileName: "rsa_public_key")
 let rsaDERPrivateKey = read(fileName: "privateRSA.der")
 let rsaDERPublicKey = read(fileName: "publicRSA.der")
-let ecdsaPrivateKey = read(fileName: "ecdsa_private_key")
-let ecdsaPublicKey = read(fileName: "ecdsa_public_key")
+let ec256PrivateKey = read(fileName: "ec256_private_key")
+let ec256PublicKey = read(fileName: "ec256_public_key")
 let ec384PrivateKey = read(fileName: "ec384_private_key")
 let ec384PublicKey = read(fileName: "ec384_public_key")
 let ec512PrivateKey = read(fileName: "ec512_private_key")
 let ec512PublicKey = read(fileName: "ec512_public_key")
-let ecdsaJWTEncoder = JWTEncoder(jwtSigner: .es512(privateKey: ec512PrivateKey))
-let ecdsaJWTDecoder = JWTDecoder(jwtVerifier: .es512(publicKey: ec512PublicKey))
+let ecdsaJWTEncoder = JWTEncoder(jwtSigner: .es256(privateKey: ec256PrivateKey))
+let ecdsaJWTDecoder = JWTDecoder(jwtVerifier: .es256(publicKey: ec256PublicKey))
 let certPrivateKey = read(fileName: "cert_private_key")
 let certificate = read(fileName: "certificate")
 let rsaEncodedTestClaimJWT = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.pOeiYYHuxBu27llpKrLfHX-tt0Cr41m3hn7d1_CPl7dRMksQRJC5U7AM2CkF8uyObwAKg88orK6eHlOQ0x2C4gDoG7WmgszpthOB6ZUTUPj_FNsn3z4fM8sFx3wON7jtRRSuULH13f-RjLoIFhY_VuqVhla3ybjnfbwjcsd8EqDumdFN6La5D0KugCgvuH51JaEjdHfwXkxkRsynmhv3jCpvRbUbforfEnDjyAImez2hd0Pnb3Vtqr-21z1vFWqqRiz_K-qSiO5NTaO1VbLg7SOYBB9hMAD-_6R2ZZh0JvFP7hycCftRIxTSDd5r0I9sQh9iqurVq03_h0ZjS9BwJQ"
@@ -38,7 +38,7 @@ let rsaPSSEncodedTestClaimJWT = "eyJhbGciOiJQUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOi
 let certificateEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.CpnzQLuWGfH5Kba36vg0ZZKBnzwlrIgapFVfBfk_nea-eej84ktHZANqIeolskZopRJ4DQ3oaLtHWEg16-ZsujxmkOdiAIbk0-C4QLOVFLZH78WLZAqkyNLS8rFuK9hloLNwz1j6VVUd1f0SOT-wIRzL0_0VRYqQd1bVcCj7wc7BmXENlOfHY7KGHS-6JX-EClT1DygDSoCmdvBExBf3vx0lwMIbP4ryKkyhOoU13ZfSUt1gpP9nZAfzqfRTPxZc_f7neiAlMlF6SzsedsskRCNegW8cg5e_NuVmZZkj0_bnswXFDMmIaxiPdtOEWkmyEOca-EHSwbO5PgCgXOIrgg"
 // A `TestClaims` encoded using HMAC with "Super Secret Key" from "www.jwt.io"
 let hmacEncodedTestClaimJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZSwic3ViIjoiMTIzNDU2Nzg5MCJ9.8kIE0ZCq1Vw7aW1kACpgJLcgY2DpTXgO6P5T3cdCuTs"
-// A `TestClaims` encoded using es256 with `ecdsaPrivateKey`
+// A `TestClaims` encoded using es256 with `ec256PrivateKey`
 let ecdsaEncodedTestClaimJWT = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.z1nUPt7mJk5EZBJKrRiCRLSum1B5E5ucaMeuMqxcvnw3a5FnKC-XsR6rvBVdUPRVzWF6L9CHQuSBlDy579SqQA"
 let jwtSigners: [String: JWTSigner] = ["0": .rs256(privateKey: rsaPrivateKey), "1": .rs256(privateKey: certPrivateKey)]
 let jwtVerifiers: [String: JWTVerifier] = ["0": .rs256(publicKey: rsaPublicKey), "1": .rs256(certificate: certificate)]
@@ -114,24 +114,25 @@ class TestJWT: XCTestCase {
 			//            ("testSignAndVerifyRSA", testSignAndVerifyRSA),
 			//            ("testSignAndVerifyRSAPSS", testSignAndVerifyRSAPSS),
 			//            ("testSignAndVerifyCert", testSignAndVerifyCert),
-			("testSignAndVerifyHMAC", testSignAndVerifyHMAC),
-			("testSignAndVerifyECDSA", testSignAndVerifyECDSA),
 			//            ("testSignAndVerifyRSA384", testSignAndVerifyRSA384),
 			//            ("testSignAndVerifyRSAPSS384", testSignAndVerifyRSAPSS384),
 			//            ("testSignAndVerifyCert384", testSignAndVerifyCert384),
+			("testSignAndVerifyHMAC", testSignAndVerifyHMAC),
 			("testSignAndVerifyHMAC384", testSignAndVerifyHMAC384),
+			("testSignAndVerifyHMAC512", testSignAndVerifyHMAC512),
+			("testSignAndVerifyECDSA", testSignAndVerifyECDSA),
+			("testSignAndVerifyECDSA256", testSignAndVerifyECDSA256),
 			("testSignAndVerifyECDSA384", testSignAndVerifyECDSA384),
+			("testSignAndVerifyECDSA512", testSignAndVerifyECDSA512),
 			//            ("testSignAndVerifyRSA512", testSignAndVerifyRSA512),
 			//            ("testSignAndVerifyRSAPSS512", testSignAndVerifyRSAPSS512),
 			//            ("testSignAndVerifyCert512", testSignAndVerifyCert512),
-			("testSignAndVerifyHMAC512", testSignAndVerifyHMAC512),
-			("testSignAndVerifyECDSA512", testSignAndVerifyECDSA512),
-			//            ("testJWTEncoder", testJWTEncoder),
-			//            ("testJWTDecoder", testJWTDecoder),
-			//            ("testJWTCoderCycle", testJWTCoderCycle),
-			//            ("testJWTEncoderKeyID", testJWTEncoderKeyID),
-			//            ("testJWTDecoderKeyID", testJWTDecoderKeyID),
-			//            ("testJWTCoderCycleKeyID", testJWTCoderCycleKeyID),
+			("testJWTEncoder", testJWTEncoder),
+			("testJWTDecoder", testJWTDecoder),
+			("testJWTCoderCycle", testJWTCoderCycle),
+//			            ("testJWTEncoderKeyID", testJWTEncoderKeyID),
+//			            ("testJWTDecoderKeyID", testJWTDecoderKeyID),
+//			            ("testJWTCoderCycleKeyID", testJWTCoderCycleKeyID),
 			//            ("testJWT", testJWT),
 			//            ("testJWTRSAPSS", testJWTRSAPSS),
 			("testJWTUsingHMAC", testJWTUsingHMAC),
@@ -198,7 +199,7 @@ class TestJWT: XCTestCase {
 	func testSignAndVerifyECDSA() {
 		if #available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *) {
 			do {
-				try signAndVerify(signer: .es256(privateKey: ecdsaPrivateKey), verifier: .es256(publicKey: ecdsaPublicKey))
+				try signAndVerify(signer: .es256(privateKey: ec256PrivateKey), verifier: .es256(publicKey: ec256PublicKey))
 			} catch {
 				XCTFail("testSignAndVerify failed: \(error)")
 			}
@@ -237,6 +238,12 @@ class TestJWT: XCTestCase {
 			try signAndVerify(signer: .hs384(key: hmacData), verifier: .hs384(key: hmacData))
 		} catch {
 			XCTFail("testSignAndVerify failed: \(error)")
+		}
+	}
+
+	func testSignAndVerifyECDSA256() {
+		if #available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *) {
+			XCTAssertNoThrow(try signAndVerify(signer: .es256(privateKey: ec256PrivateKey), verifier: .es256(publicKey: ec256PublicKey)))
 		}
 	}
 
@@ -374,84 +381,85 @@ class TestJWT: XCTestCase {
 	//        }
 	//    }
 
-	//    // This test uses the rsaJWTEncoder to encode a JWT<TestClaims> as a JWT String.
-	//    // It then decodes the resulting JWT String using the JWT init from String.
-	//    // The test checks that the decoded JWT is the same as the JWT you started as well as the decoded rsaEncodedTestClaimJWT.
-	//    func testJWTEncoder() {
-	//        var jwt = JWT(claims: TestClaims())
-	//        jwt.claims.sub = "1234567890"
-	//        jwt.claims.name = "John Doe"
-	//        jwt.claims.admin = true
-	//        jwt.claims.iat = Date(timeIntervalSince1970: 1_516_239_022)
-	//        do {
-	//            let jwtString = try ecdsaJWTEncoder.encodeToString(jwt)
-	//            let decodedJWTString = try JWT<TestClaims>(jwtString: jwtString)
-	//            let decodedTestClaimJWT = try JWT<TestClaims>(jwtString: ecdsaEncodedTestClaimJWT)
-	//            // Setting the alg field on the header since the decoded JWT will have had the alg header set in the signing process.
-	//            jwt.header.alg = "ES256"
-	//            XCTAssertEqual(jwt.claims, decodedJWTString.claims)
-	////            XCTAssertEqual(jwt.header, decodedJWTString.header)
-	//            XCTAssertEqual(jwt.claims, decodedTestClaimJWT.claims)
-	//            XCTAssertEqual(jwt.header, decodedTestClaimJWT.header)
-	//        } catch {
-	//            XCTFail("Failed to encode JTW: \(error)")
-	//        }
-	//    }
+	// This test uses the rsaJWTEncoder to encode a JWT<TestClaims> as a JWT String.
+	// It then decodes the resulting JWT String using the JWT init from String.
+	// The test checks that the decoded JWT is the same as the JWT you started as well as the decoded rsaEncodedTestClaimJWT.
+	func testJWTEncoder() {
+		var jwt = JWT(claims: TestClaims())
+		jwt.claims.sub = "1234567890"
+		jwt.claims.name = "John Doe"
+		jwt.claims.admin = true
+		jwt.claims.admin = true
+		jwt.claims.iat = Date(timeIntervalSince1970: 1_516_239_022)
+		do {
+			let jwtString = try ecdsaJWTEncoder.encodeToString(jwt)
+			let decodedJWTString = try JWT<TestClaims>(jwtString: jwtString)
+			let decodedTestClaimJWT = try JWT<TestClaims>(jwtString: ecdsaEncodedTestClaimJWT)
+			// Setting the alg field on the header since the decoded JWT will have had the alg header set in the signing process.
+			jwt.header.alg = "ES256"
+			XCTAssertEqual(jwt.claims, decodedJWTString.claims)
+			//            XCTAssertEqual(jwt.header, decodedJWTString.header)
+			XCTAssertEqual(jwt.claims, decodedTestClaimJWT.claims)
+			XCTAssertEqual(jwt.header, decodedTestClaimJWT.header)
+		} catch {
+			XCTFail("Failed to encode JTW: \(error)")
+		}
+	}
 
-	//    // This test uses the rsaJWTDecoder to decode the rsaEncodedTestClaimJWT as a JWT<TestClaims>.
-	//    // The test checks that the decoded JWT is the same as the JWT that was originally encoded.
-	//    func testJWTDecoder() {
-	//        var jwt = JWT(claims: TestClaims())
-	//        jwt.claims.sub = "1234567890"
-	//        jwt.claims.name = "John Doe"
-	//        jwt.claims.admin = true
-	//        jwt.claims.iat = Date(timeIntervalSince1970: 1_516_239_022)
-	//        do {
-	//            let decodedJWT = try ecdsaJWTDecoder.decode(JWT<TestClaims>.self, fromString: ecdsaEncodedTestClaimJWT)
-	//            jwt.header.alg = "ES256"
-	//            XCTAssertEqual(decodedJWT.claims, jwt.claims)
-	//            XCTAssertEqual(decodedJWT.header, jwt.header)
-	//        } catch {
-	//            XCTFail("Failed to encode JTW: \(error)")
-	//        }
-	//    }
+	// This test uses the rsaJWTDecoder to decode the rsaEncodedTestClaimJWT as a JWT<TestClaims>.
+	// The test checks that the decoded JWT is the same as the JWT that was originally encoded.
+	func testJWTDecoder() {
+		var jwt = JWT(claims: TestClaims())
+		jwt.claims.sub = "1234567890"
+		jwt.claims.name = "John Doe"
+		jwt.claims.admin = true
+		jwt.claims.iat = Date(timeIntervalSince1970: 1_516_239_022)
+		do {
+			let decodedJWT = try ecdsaJWTDecoder.decode(JWT<TestClaims>.self, fromString: ecdsaEncodedTestClaimJWT)
+			jwt.header.alg = "ES256"
+			XCTAssertEqual(decodedJWT.claims, jwt.claims)
+			XCTAssertEqual(decodedJWT.header, jwt.header)
+		} catch {
+			XCTFail("Failed to encode JTW: \(error)")
+		}
+	}
 
-	//    // This test encoded and then decoded a JWT<TestClaims> and checks you get the original JWT back with only the alg header changed.
-	//    func testJWTCoderCycle() {
-	//        var jwt = JWT(claims: TestClaims())
-	//        jwt.claims.sub = "1234567890"
-	//        jwt.claims.name = "John Doe"
-	//        jwt.claims.admin = true
-	//        do {
-	//            let jwtData = try rsaJWTEncoder.encode(jwt)
-	//            let decodedJWT = try rsaJWTDecoder.decode(JWT<TestClaims>.self, from: jwtData)
-	//            jwt.header.alg = "RS256"
-	//            XCTAssertEqual(decodedJWT.claims, jwt.claims)
-	//            XCTAssertEqual(decodedJWT.header, jwt.header)
-	//        } catch {
-	//            XCTFail("Failed to encode JTW: \(error)")
-	//        }
-	//    }
+	// This test encoded and then decoded a JWT<TestClaims> and checks you get the original JWT back with only the alg header changed.
+	func testJWTCoderCycle() {
+		var jwt = JWT(claims: TestClaims())
+		jwt.claims.sub = "1234567890"
+		jwt.claims.name = "John Doe"
+		jwt.claims.admin = true
+		do {
+			let jwtData = try ecdsaJWTEncoder.encode(jwt)
+			let decodedJWT = try ecdsaJWTDecoder.decode(JWT<TestClaims>.self, from: jwtData)
+			jwt.header.alg = "ES256"
+			XCTAssertEqual(decodedJWT.claims, jwt.claims)
+			XCTAssertEqual(decodedJWT.header, jwt.header)
+		} catch {
+			XCTFail("Failed to encode JTW: \(error)")
+		}
+	}
 
-	//    // This test uses the rsaJWTKidEncoder to encode a JWT<TestClaims> as a JWT String using the kid header to select the JWTSigner.
-	//    // It then decodes the resulting JWT String using the JWT init from String.
-	//    // The test checks that the decoded JWT is the same as the JWT you started as well as the decoded certificateEncodedTestClaimJWT.
-	//    func testJWTEncoderKeyID() {
-	//        var jwt = JWT(claims: TestClaims())
-	//        jwt.header.kid = "0"
-	//        jwt.claims.sub = "1234567890"
-	//        jwt.claims.name = "John Doe"
-	//        jwt.claims.admin = true
-	//        do {
-	//            let jwtString = try rsaJWTKidEncoder.encodeToString(jwt)
-	//            let decodedJWTString = try JWT<TestClaims>(jwtString: jwtString)
-	//            jwt.header.alg = "RS256"
-	//            XCTAssertEqual(jwt.claims, decodedJWTString.claims)
-	//            XCTAssertEqual(jwt.header, decodedJWTString.header)
-	//        } catch {
-	//            XCTFail("Failed to encode JTW: \(error)")
-	//        }
-	//    }
+//	    // This test uses the rsaJWTKidEncoder to encode a JWT<TestClaims> as a JWT String using the kid header to select the JWTSigner.
+//	    // It then decodes the resulting JWT String using the JWT init from String.
+//	    // The test checks that the decoded JWT is the same as the JWT you started as well as the decoded certificateEncodedTestClaimJWT.
+//	    func testJWTEncoderKeyID() {
+//	        var jwt = JWT(claims: TestClaims())
+//	        jwt.header.kid = "0"
+//	        jwt.claims.sub = "1234567890"
+//	        jwt.claims.name = "John Doe"
+//	        jwt.claims.admin = true
+//	        do {
+//	            let jwtString = try rsaJWTKidEncoder.encodeToString(jwt)
+//	            let decodedJWTString = try JWT<TestClaims>(jwtString: jwtString)
+//	            jwt.header.alg = "RS256"
+//	            XCTAssertEqual(jwt.claims, decodedJWTString.claims)
+//	            XCTAssertEqual(jwt.header, decodedJWTString.header)
+//	        } catch {
+//	            XCTFail("Failed to encode JTW: \(error)")
+//	        }
+//	    }
 
 	//    // This test uses the rsaJWTKidDecoder to decode the certificateEncodedTestClaimJWT as a JWT<TestClaims> using the kid header to select the JWTVerifier.
 	//    // The test checks that the decoded JWT is the same as the JWT that was originally encoded.
@@ -560,7 +568,7 @@ class TestJWT: XCTestCase {
 	// Test using a JWT generated from jwt.io using es256 with `ecdsaPrivateKey` for interoperability.
 	func testJWTUsingECDSA() {
 		if #available(OSX 10.13, iOS 11, tvOS 11.0, *) {
-			let ok = JWT<TestClaims>.verify(ecdsaEncodedTestClaimJWT, using: .es256(publicKey: ecdsaPublicKey))
+			let ok = JWT<TestClaims>.verify(ecdsaEncodedTestClaimJWT, using: .es256(publicKey: ec256PublicKey))
 			XCTAssertTrue(ok, "Verification failed")
 
 			if let decoded = try? JWT<TestClaims>(jwtString: ecdsaEncodedTestClaimJWT) {
