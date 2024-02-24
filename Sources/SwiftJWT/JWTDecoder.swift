@@ -40,6 +40,10 @@ public class JWTDecoder: BodyDecoder {
     
     let keyIDToVerifier: (String) -> JWTVerifier?
     let jwtVerifier: JWTVerifier?
+    public var claimsKeyDecodingStrategy : JSONDecoder.KeyDecodingStrategy = .useDefaultKeys
+    public var claimsDateDecodingStrategy : JSONDecoder.DateDecodingStrategy = .deferredToDate
+    public var claimsDataDecodingStrategy : JSONDecoder.DataDecodingStrategy = .base64
+    public var claimsNonConformingFloatDecodingStrategy : JSONDecoder.NonConformingFloatDecodingStrategy = .throw
     
     // MARK: Initializers
     
@@ -84,6 +88,10 @@ public class JWTDecoder: BodyDecoder {
         
         // Decode the JWT headers and claims data into a _JWTDecoder.
         let decoder = _JWTDecoder(header: headerData, claims: claimsData)
+        decoder.claimsKeyDecodingStrategy = self.claimsKeyDecodingStrategy
+        decoder.claimsDateDecodingStrategy = self.claimsDateDecodingStrategy
+        decoder.claimsDataDecodingStrategy = self.claimsDataDecodingStrategy
+        decoder.claimsNonConformingFloatDecodingStrategy = self.claimsNonConformingFloatDecodingStrategy
         let jwt = try decoder.decode(type)
         
         let _jwtVerifier: JWTVerifier
@@ -156,6 +164,14 @@ fileprivate class _JWTDecoder: Decoder {
     
     var userInfo: [CodingUserInfoKey : Any] = [:]
     
+    var claimsKeyDecodingStrategy : JSONDecoder.KeyDecodingStrategy = .useDefaultKeys
+    
+    var claimsDateDecodingStrategy : JSONDecoder.DateDecodingStrategy = .deferredToDate
+    
+    var claimsDataDecodingStrategy : JSONDecoder.DataDecodingStrategy = .base64
+    
+    var claimsNonConformingFloatDecodingStrategy : JSONDecoder.NonConformingFloatDecodingStrategy = .throw
+    
     // Call the Codable Types init from decoder function.
     public func decode<T: Decodable>(_ type: T.Type) throws -> T {
         return try type.init(from: self)
@@ -163,7 +179,11 @@ fileprivate class _JWTDecoder: Decoder {
     
     // JWT should only be a Keyed container
     func container<Key : CodingKey>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> {
-        let container = _JWTKeyedDecodingContainer<Key>(decoder: self, header: header, claims: claims)
+        var container = _JWTKeyedDecodingContainer<Key>(decoder: self, header: header, claims: claims)
+        container.claimsKeyDecodingStrategy = claimsKeyDecodingStrategy
+        container.claimsDateDecodingStrategy = claimsDateDecodingStrategy
+        container.claimsDataDecodingStrategy = claimsDataDecodingStrategy
+        container.claimsNonConformingFloatDecodingStrategy = claimsNonConformingFloatDecodingStrategy
         return KeyedDecodingContainer(container)
     }
     
@@ -189,6 +209,14 @@ private struct _JWTKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContaine
     
     var codingPath: [CodingKey]
     
+    var claimsKeyDecodingStrategy : JSONDecoder.KeyDecodingStrategy
+    
+    var claimsDateDecodingStrategy : JSONDecoder.DateDecodingStrategy
+    
+    var claimsDataDecodingStrategy : JSONDecoder.DataDecodingStrategy
+    
+    var claimsNonConformingFloatDecodingStrategy : JSONDecoder.NonConformingFloatDecodingStrategy
+    
     public var allKeys: [Key]
     {
         #if swift(>=4.1)
@@ -203,6 +231,10 @@ private struct _JWTKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContaine
         self.header = header
         self.claims = claims
         self.codingPath = decoder.codingPath
+        self.claimsKeyDecodingStrategy = .useDefaultKeys
+        self.claimsDateDecodingStrategy = .deferredToDate
+        self.claimsDataDecodingStrategy = .base64
+        self.claimsNonConformingFloatDecodingStrategy = .throw
     }
     
     public func contains(_ key: Key) -> Bool {
@@ -224,6 +256,10 @@ private struct _JWTKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContaine
             return decodedHeader
         } else
         if key.stringValue == "claims" {
+            jsonDecoder.keyDecodingStrategy = self.claimsKeyDecodingStrategy
+            jsonDecoder.dateDecodingStrategy = self.claimsDateDecodingStrategy
+            jsonDecoder.dataDecodingStrategy = self.claimsDataDecodingStrategy
+            jsonDecoder.nonConformingFloatDecodingStrategy = self.claimsNonConformingFloatDecodingStrategy
             return try jsonDecoder.decode(type, from: claims)
         } else {
             throw DecodingError.keyNotFound(key, DecodingError.Context(codingPath: codingPath, debugDescription: "value not found for provided key"))
