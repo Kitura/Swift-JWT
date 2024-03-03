@@ -50,98 +50,96 @@ import Foundation
  ```
  */
 public struct JWTSigner {
-    
-    /// The name of the algorithm that will be set in the "alg" header
-    let name: String
-    
-    let signerAlgorithm: SignerAlgorithm
+	/// The name of the algorithm that will be set in the "alg" header
+	let name: String
 
-    init(name: String, signerAlgorithm: SignerAlgorithm) {
-        self.name = name
-        self.signerAlgorithm = signerAlgorithm
-    }
-    
-    func sign(header: String, claims: String) throws -> String {
-        return try signerAlgorithm.sign(header: header, claims: claims)
-    }
-    
-    /// Initialize a JWTSigner using the RSA 256 bits algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-    public static func rs256(privateKey: Data) -> JWTSigner {
-        return JWTSigner(name: "RS256", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha256))
-    }
-    
-    /// Initialize a JWTSigner using the RSA 384 bits algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-    public static func rs384(privateKey: Data) -> JWTSigner {
-        return JWTSigner(name: "RS384", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha384))
-    }
-    
-    /// Initialize a JWTSigner using the RSA 512 bits algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-    public static func rs512(privateKey: Data) -> JWTSigner {
-        return JWTSigner(name: "RS512", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha512))
-    }
-    
-    /// Initialize a JWTSigner using the RSA-PSS 256 bits algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-    public static func ps256(privateKey: Data) -> JWTSigner {
-        return JWTSigner(name: "PS256", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha256, usePSS: true))
-    }
-    
-    /// Initialize a JWTSigner using the RSA-PSS 384 bits algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-    public static func ps384(privateKey: Data) -> JWTSigner {
-        return JWTSigner(name: "PS384", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha384, usePSS: true))
-    }
-    
-    /// Initialize a JWTSigner using the RSA-PSS 512 bits algorithm and the provided privateKey.
-    /// This signer requires at least a 2048 bit RSA key.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-    public static func ps512(privateKey: Data) -> JWTSigner {
-        return JWTSigner(name: "PS512", signerAlgorithm: BlueRSA(key: privateKey, keyType: .privateKey, algorithm: .sha512, usePSS: true))
-    }
-    
-    /// Initialize a JWTSigner using the HMAC 256 bits algorithm and the provided privateKey.
-    /// - Parameter key: The HMAC symmetric password data.
-    public static func hs256(key: Data) -> JWTSigner {
-        return JWTSigner(name: "HS256", signerAlgorithm: BlueHMAC(key: key, algorithm: .sha256))
-    }
-    
-    /// Initialize a JWTSigner using the HMAC 384 bits algorithm and the provided privateKey.
-    /// - Parameter key: The HMAC symmetric password data.
-    public static func hs384(key: Data) -> JWTSigner {
-        return JWTSigner(name: "HS384", signerAlgorithm: BlueHMAC(key: key, algorithm: .sha384))
-    }
-    
-    /// Initialize a JWTSigner using the HMAC 512 bits algorithm and the provided privateKey.
-    /// - Parameter key: The HMAC symmetric password data.
-    public static func hs512(key: Data) -> JWTSigner {
-        return JWTSigner(name: "HS512", signerAlgorithm: BlueHMAC(key: key, algorithm: .sha512))
-    }
-    
-    /// Initialize a JWTSigner using the ECDSA SHA256 algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key, with either a "BEGIN EC PRIVATE KEY" or "BEGIN PRIVATE KEY" header.
-    @available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *)
-    public static func es256(privateKey: Data) -> JWTSigner {
-        return JWTSigner(name: "ES256", signerAlgorithm: BlueECSigner(key: privateKey, curve: .prime256v1))
-    }
-    
-    /// Initialize a JWTSigner using the ECDSA SHA384 algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key, with either a "BEGIN EC PRIVATE KEY" or "BEGIN PRIVATE KEY" header.
-    @available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *)
-    public static func es384(privateKey: Data) -> JWTSigner {
-        return JWTSigner(name: "ES384", signerAlgorithm: BlueECSigner(key: privateKey, curve: .secp384r1))
-    }
-    
-    /// Initialize a JWTSigner using the ECDSA SHA512 algorithm and the provided privateKey.
-    /// - Parameter privateKey: The UTF8 encoded PEM private key, with either a "BEGIN EC PRIVATE KEY" or "BEGIN PRIVATE KEY" header.
-    @available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *)
-    public static func es512(privateKey: Data) -> JWTSigner {
-        return JWTSigner(name: "ES512", signerAlgorithm: BlueECSigner(key: privateKey, curve: .secp521r1))
-    }
-    
-    /// Initialize a JWTSigner that will not sign the JWT. This is equivelent to using the "none" alg header.
-    public static let none = JWTSigner(name: "none", signerAlgorithm: NoneAlgorithm())
+	let signerAlgorithm: SignerAlgorithm
+
+	init(name: String, signerAlgorithm: SignerAlgorithm) {
+		self.name = name
+		self.signerAlgorithm = signerAlgorithm
+	}
+
+	func sign(header: String, claims: String) throws -> String {
+		try signerAlgorithm.sign(header: header, claims: claims)
+	}
+
+	/// Initialize a JWTSigner using the RSA 256 bits algorithm and the provided privateKey.
+	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
+	public static func rs256(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "RS256", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .rs256))
+	}
+
+	/// Initialize a JWTSigner using the RSA 384 bits algorithm and the provided privateKey.
+	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
+	public static func rs384(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "RS384", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .rs384))
+	}
+
+	/// Initialize a JWTSigner using the RSA 512 bits algorithm and the provided privateKey.
+	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
+	public static func rs512(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "RS512", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .rs512))
+	}
+
+	/// Initialize a JWTSigner using the RSA-PSS 256 bits algorithm and the provided privateKey.
+	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
+	public static func ps256(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "PS256", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .ps256))
+	}
+
+	/// Initialize a JWTSigner using the RSA-PSS 384 bits algorithm and the provided privateKey.
+	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
+	public static func ps384(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "PS384", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .ps384))
+	}
+
+	/// Initialize a JWTSigner using the RSA-PSS 512 bits algorithm and the provided privateKey.
+	/// This signer requires at least a 2048 bit RSA key.
+	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
+	public static func ps512(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "PS512", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .ps512))
+	}
+
+	/// Initialize a JWTSigner using the HMAC 256 bits algorithm and the provided privateKey.
+	/// - Parameter key: The HMAC symmetric password data.
+	public static func hs256(key: Data) -> JWTSigner {
+		JWTSigner(name: "HS256", signerAlgorithm: SwiftCryptoHMAC(key: key, algorithm: .hs256))
+	}
+
+	/// Initialize a JWTSigner using the HMAC 384 bits algorithm and the provided privateKey.
+	/// - Parameter key: The HMAC symmetric password data.
+	public static func hs384(key: Data) -> JWTSigner {
+		JWTSigner(name: "HS384", signerAlgorithm: SwiftCryptoHMAC(key: key, algorithm: .hs384))
+	}
+
+	/// Initialize a JWTSigner using the HMAC 512 bits algorithm and the provided privateKey.
+	/// - Parameter key: The HMAC symmetric password data.
+	public static func hs512(key: Data) -> JWTSigner {
+		JWTSigner(name: "HS512", signerAlgorithm: SwiftCryptoHMAC(key: key, algorithm: .hs512))
+	}
+
+	/// Initialize a JWTSigner using the ECDSA SHA256 algorithm and the provided privateKey.
+	/// - Parameter privateKey: The UTF8 encoded PEM private key, with either a "BEGIN EC PRIVATE KEY" or "BEGIN PRIVATE KEY" header.
+	@available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *)
+	public static func es256(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "ES256", signerAlgorithm: SwiftCryptoECDSA(key: privateKey, algorithm: .es256))
+	}
+
+	/// Initialize a JWTSigner using the ECDSA SHA384 algorithm and the provided privateKey.
+	/// - Parameter privateKey: The UTF8 encoded PEM private key, with either a "BEGIN EC PRIVATE KEY" or "BEGIN PRIVATE KEY" header.
+	@available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *)
+	public static func es384(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "ES384", signerAlgorithm: SwiftCryptoECDSA(key: privateKey, algorithm: .es384))
+	}
+
+	/// Initialize a JWTSigner using the ECDSA SHA512 algorithm and the provided privateKey.
+	/// - Parameter privateKey: The UTF8 encoded PEM private key, with either a "BEGIN EC PRIVATE KEY" or "BEGIN PRIVATE KEY" header.
+	@available(OSX 10.13, iOS 11, tvOS 11.0, watchOS 4.0, *)
+	public static func es512(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "ES512", signerAlgorithm: SwiftCryptoECDSA(key: privateKey, algorithm: .es512))
+	}
+
+	/// Initialize a JWTSigner that will not sign the JWT. This is equivelent to using the "none" alg header.
+	public static let none = JWTSigner(name: "none", signerAlgorithm: NoneAlgorithm())
 }
-

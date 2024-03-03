@@ -20,33 +20,32 @@
 /// In case of successful validation, .success is returned, all other cases list various
 /// problems that may occur during claims validation and indicate that the validation failed.
 public struct ValidateClaimsResult: CustomStringConvertible, Equatable {
-    
-    /// The human readable description of the ValidateClaimsResult
-    public let description: String
-    
-    /// Successful validation.
-    public static let success = ValidateClaimsResult(description: "Success")
+	/// The human readable description of the ValidateClaimsResult
+	public let description: String
 
-    /// Invalid Expiration claim.
-    public static let invalidExpiration = ValidateClaimsResult(description: "Invalid Expiration claim")
-    
-    /// Expired token: expiration time claim is in the past.
-    public static let expired = ValidateClaimsResult(description: "Expired token")
-    
-    /// Invalid Not Before claim.
-    public static let invalidNotBefore = ValidateClaimsResult(description: "Invalid Not Before claim")
-    
-    /// Not Before claim is in the future.
-    public static let notBefore = ValidateClaimsResult(description: "Token is not valid yet, Not Before claim is greater than the current time")
-    
-    /// Invalid Issued At claim.
-    public static let invalidIssuedAt = ValidateClaimsResult(description: "Invalid Issued At claim")
-    
-    /// Issued At claim is in the future.
-    public static let issuedAt = ValidateClaimsResult(description: "Issued At claim is greater than the current time")
- 
-    /// Check if two ValidateClaimsResults are equal. Required for the Equatable protocol
-    public static func == (lhs: ValidateClaimsResult, rhs: ValidateClaimsResult) -> Bool {
-        return lhs.description == rhs.description
-    }
+	/// Successful validation.
+	public static let success = ValidateClaimsResult(description: "Success")
+
+	/// Invalid Expiration claim.
+	public static let invalidExpiration = ValidateClaimsResult(description: "Invalid Expiration claim")
+
+	/// Expired token: expiration time claim is in the past.
+	public static let expired = ValidateClaimsResult(description: "Expired token")
+
+	/// Invalid Not Before claim.
+	public static let invalidNotBefore = ValidateClaimsResult(description: "Invalid Not Before claim")
+
+	/// Not Before claim is in the future.
+	public static let notBefore = ValidateClaimsResult(description: "Token is not valid yet, Not Before claim is greater than the current time")
+
+	/// Invalid Issued At claim.
+	public static let invalidIssuedAt = ValidateClaimsResult(description: "Invalid Issued At claim")
+
+	/// Issued At claim is in the future.
+	public static let issuedAt = ValidateClaimsResult(description: "Issued At claim is greater than the current time")
+
+	/// Check if two ValidateClaimsResults are equal. Required for the Equatable protocol
+	public static func == (lhs: ValidateClaimsResult, rhs: ValidateClaimsResult) -> Bool {
+		lhs.description == rhs.description
+	}
 }

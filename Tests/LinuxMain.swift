@@ -18,7 +18,6 @@ import XCTest
 
 @testable import SwiftJWTTests
 
-
 XCTMain([
-            testCase(TestJWT.allTests),
-    ])
+	testCase(TestJWT.allTests)
+])
