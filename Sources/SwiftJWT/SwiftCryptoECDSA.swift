@@ -2,24 +2,24 @@ import Crypto
 import Foundation
 import LoggerAPI
 
-internal struct SwiftCryptoECDSA: VerifierAlgorithm, SignerAlgorithm {
+struct SwiftCryptoECDSA: VerifierAlgorithm, SignerAlgorithm {
 	private let key: Data
 	private let algorithm: Algorithm
 
-	internal enum Algorithm {
+	enum Algorithm {
 		case es256, es384, es512
 	}
 
-	internal init(key: Data, algorithm: Algorithm) {
+	init(key: Data, algorithm: Algorithm) {
 		self.key = key
 		self.algorithm = algorithm
 	}
 
-	internal func verify(jwt: String) -> Bool {
+	func verify(jwt: String) -> Bool {
 		verify(jwt)
 	}
 
-	internal func sign(header: String, claims: String) throws -> String {
+	func sign(header: String, claims: String) throws -> String {
 		let unsignedJWT = header + "." + claims
 		let signature = try sign(data: Data(unsignedJWT.utf8))
 		return header + "." + claims + "." + signature

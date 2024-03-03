@@ -2,24 +2,24 @@ import Crypto
 import Foundation
 import LoggerAPI
 
-internal struct SwiftCryptoHMAC: VerifierAlgorithm, SignerAlgorithm {
+struct SwiftCryptoHMAC: VerifierAlgorithm, SignerAlgorithm {
 	private let key: Data
 	private let algorithm: Algorithm
 
-	internal enum Algorithm {
+	enum Algorithm {
 		case hs256, hs384, hs512
 	}
 
-	internal init(key: Data, algorithm: Algorithm) {
+	init(key: Data, algorithm: Algorithm) {
 		self.key = key
 		self.algorithm = algorithm
 	}
 
-	internal func verify(jwt: String) -> Bool {
+	func verify(jwt: String) -> Bool {
 		verify(jwt)
 	}
 
-	internal func sign(header: String, claims: String) throws -> String {
+	func sign(header: String, claims: String) throws -> String {
 		let unsignedJWT = header + "." + claims
 		let signature = try sign(data: Data(unsignedJWT.utf8))
 		return header + "." + claims + "." + signature

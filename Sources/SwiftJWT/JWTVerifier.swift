@@ -45,11 +45,11 @@ import Foundation
 public struct JWTVerifier {
 	private let verifierAlgorithm: VerifierAlgorithm
 
-	internal init(verifierAlgorithm: VerifierAlgorithm) {
+	init(verifierAlgorithm: VerifierAlgorithm) {
 		self.verifierAlgorithm = verifierAlgorithm
 	}
 
-	internal func verify(jwt: String) -> Bool {
+	func verify(jwt: String) -> Bool {
 		verifierAlgorithm.verify(jwt: jwt)
 	}
 
