@@ -55,20 +55,20 @@ public struct JWTVerifier {
 
 	/// Initialize a JWTVerifier using the RSA 256 bits algorithm and the provided publicKey.
 	/// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
-	public static func rs256(publicKey _: Data) -> JWTVerifier {
-		preconditionFailure("not implemented")
+	public static func rs256(publicKey: Data) -> JWTVerifier {
+		JWTVerifier(verifierAlgorithm: SwiftCryptoRSA(publicKey: publicKey, algorithm: .rs256))
 	}
 
 	/// Initialize a JWTVerifier using the RSA 384 bits algorithm and the provided publicKey.
 	/// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
-	public static func rs384(publicKey _: Data) -> JWTVerifier {
-		preconditionFailure("not implemented")
+	public static func rs384(publicKey: Data) -> JWTVerifier {
+		JWTVerifier(verifierAlgorithm: SwiftCryptoRSA(publicKey: publicKey, algorithm: .rs384))
 	}
 
 	/// Initialize a JWTVerifier using the RSA 512 bits algorithm and the provided publicKey.
 	/// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
-	public static func rs512(publicKey _: Data) -> JWTVerifier {
-		preconditionFailure("not implemented")
+	public static func rs512(publicKey: Data) -> JWTVerifier {
+		JWTVerifier(verifierAlgorithm: SwiftCryptoRSA(publicKey: publicKey, algorithm: .rs512))
 	}
 
 	/// Initialize a JWTVerifier using the RSA 256 bits algorithm and the provided certificate.
@@ -91,21 +91,21 @@ public struct JWTVerifier {
 
 	/// Initialize a JWTVerifier using the RSA-PSS 256 bits algorithm and the provided publicKey.
 	/// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
-	public static func ps256(publicKey _: Data) -> JWTVerifier {
-		preconditionFailure("not implemented")
+	public static func ps256(publicKey: Data) -> JWTVerifier {
+		JWTVerifier(verifierAlgorithm: SwiftCryptoRSA(publicKey: publicKey, algorithm: .ps256))
 	}
 
 	/// Initialize a JWTVerifier using the RSA-PSS 384 bits algorithm and the provided publicKey.
 	/// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
-	public static func ps384(publicKey _: Data) -> JWTVerifier {
-		preconditionFailure("not implemented")
+	public static func ps384(publicKey: Data) -> JWTVerifier {
+		JWTVerifier(verifierAlgorithm: SwiftCryptoRSA(publicKey: publicKey, algorithm: .ps384))
 	}
 
 	/// Initialize a JWTVerifier using the RSA-PSS 512 bits algorithm and the provided publicKey.
 	/// This verifier requires at least a 2048 bit RSA key.
 	/// - Parameter publicKey: The UTF8 encoded PEM public key, with a "BEGIN PUBLIC KEY" header.
-	public static func ps512(publicKey _: Data) -> JWTVerifier {
-		preconditionFailure("not implemented")
+	public static func ps512(publicKey: Data) -> JWTVerifier {
+		JWTVerifier(verifierAlgorithm: SwiftCryptoRSA(publicKey: publicKey, algorithm: .ps512))
 	}
 
 	/// Initialize a JWTSigner using the HMAC 256 bits algorithm and the provided privateKey.

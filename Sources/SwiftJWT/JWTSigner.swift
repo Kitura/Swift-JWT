@@ -66,39 +66,39 @@ public struct JWTSigner {
 
 	/// Initialize a JWTSigner using the RSA 256 bits algorithm and the provided privateKey.
 	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-	public static func rs256(privateKey _: Data) -> JWTSigner {
-		preconditionFailure("not implemented")
+	public static func rs256(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "RS256", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .rs256))
 	}
 
 	/// Initialize a JWTSigner using the RSA 384 bits algorithm and the provided privateKey.
 	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-	public static func rs384(privateKey _: Data) -> JWTSigner {
-		preconditionFailure("not implemented")
+	public static func rs384(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "RS384", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .rs384))
 	}
 
 	/// Initialize a JWTSigner using the RSA 512 bits algorithm and the provided privateKey.
 	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-	public static func rs512(privateKey _: Data) -> JWTSigner {
-		preconditionFailure("not implemented")
+	public static func rs512(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "RS512", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .rs512))
 	}
 
 	/// Initialize a JWTSigner using the RSA-PSS 256 bits algorithm and the provided privateKey.
 	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-	public static func ps256(privateKey _: Data) -> JWTSigner {
-		preconditionFailure("not implemented")
+	public static func ps256(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "PS256", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .ps256))
 	}
 
 	/// Initialize a JWTSigner using the RSA-PSS 384 bits algorithm and the provided privateKey.
 	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-	public static func ps384(privateKey _: Data) -> JWTSigner {
-		preconditionFailure("not implemented")
+	public static func ps384(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "PS384", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .ps384))
 	}
 
 	/// Initialize a JWTSigner using the RSA-PSS 512 bits algorithm and the provided privateKey.
 	/// This signer requires at least a 2048 bit RSA key.
 	/// - Parameter privateKey: The UTF8 encoded PEM private key, with a "BEGIN RSA PRIVATE KEY" header.
-	public static func ps512(privateKey _: Data) -> JWTSigner {
-		preconditionFailure("not implemented")
+	public static func ps512(privateKey: Data) -> JWTSigner {
+		JWTSigner(name: "PS512", signerAlgorithm: SwiftCryptoRSA(privateKey: privateKey, algorithm: .ps512))
 	}
 
 	/// Initialize a JWTSigner using the HMAC 256 bits algorithm and the provided privateKey.

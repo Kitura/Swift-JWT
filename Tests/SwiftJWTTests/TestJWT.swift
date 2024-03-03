@@ -111,12 +111,12 @@ class TestJWT: XCTestCase {
 	static var allTests: [(String, (TestJWT) -> () throws -> Void)] {
 		[
 			("testSignAndVerify", testSignAndVerify),
-			//            ("testSignAndVerifyRSA", testSignAndVerifyRSA),
-			//            ("testSignAndVerifyRSAPSS", testSignAndVerifyRSAPSS),
-			//            ("testSignAndVerifyCert", testSignAndVerifyCert),
-			//            ("testSignAndVerifyRSA384", testSignAndVerifyRSA384),
-			//            ("testSignAndVerifyRSAPSS384", testSignAndVerifyRSAPSS384),
-			//            ("testSignAndVerifyCert384", testSignAndVerifyCert384),
+			("testSignAndVerifyRSA", testSignAndVerifyRSA),
+			("testSignAndVerifyRSAPSS", testSignAndVerifyRSAPSS),
+//			("testSignAndVerifyCert", testSignAndVerifyCert),
+			("testSignAndVerifyRSA384", testSignAndVerifyRSA384),
+			("testSignAndVerifyRSAPSS384", testSignAndVerifyRSAPSS384),
+//			("testSignAndVerifyCert384", testSignAndVerifyCert384),
 			("testSignAndVerifyHMAC", testSignAndVerifyHMAC),
 			("testSignAndVerifyHMAC384", testSignAndVerifyHMAC384),
 			("testSignAndVerifyHMAC512", testSignAndVerifyHMAC512),
@@ -124,23 +124,23 @@ class TestJWT: XCTestCase {
 			("testSignAndVerifyECDSA256", testSignAndVerifyECDSA256),
 			("testSignAndVerifyECDSA384", testSignAndVerifyECDSA384),
 			("testSignAndVerifyECDSA512", testSignAndVerifyECDSA512),
-			//            ("testSignAndVerifyRSA512", testSignAndVerifyRSA512),
-			//            ("testSignAndVerifyRSAPSS512", testSignAndVerifyRSAPSS512),
-			//            ("testSignAndVerifyCert512", testSignAndVerifyCert512),
+			("testSignAndVerifyRSA512", testSignAndVerifyRSA512),
+			("testSignAndVerifyRSAPSS512", testSignAndVerifyRSAPSS512),
+//			("testSignAndVerifyCert512", testSignAndVerifyCert512),
 			("testJWTEncoder", testJWTEncoder),
 			("testJWTDecoder", testJWTDecoder),
 			("testJWTCoderCycle", testJWTCoderCycle),
-//			            ("testJWTEncoderKeyID", testJWTEncoderKeyID),
-//			            ("testJWTDecoderKeyID", testJWTDecoderKeyID),
-//			            ("testJWTCoderCycleKeyID", testJWTCoderCycleKeyID),
-			//            ("testJWT", testJWT),
-			//            ("testJWTRSAPSS", testJWTRSAPSS),
+			("testJWTEncoderKeyID", testJWTEncoderKeyID),
+//			("testJWTDecoderKeyID", testJWTDecoderKeyID),
+//			("testJWTCoderCycleKeyID", testJWTCoderCycleKeyID),
+			("testJWT", testJWT),
+			("testJWTRSAPSS", testJWTRSAPSS),
 			("testJWTUsingHMAC", testJWTUsingHMAC),
 			("testJWTUsingECDSA", testJWTUsingECDSA),
-			//            ("testMicroProfile", testMicroProfile),
+//			("testMicroProfile", testMicroProfile),
 			("testValidateClaims", testValidateClaims),
 			("testValidateClaimsLeeway", testValidateClaimsLeeway),
-			//            ("testErrorPattenMatching", testErrorPattenMatching),
+			("testErrorPattenMatching", testErrorPattenMatching),
 			("testTypeErasedErrorLocalizedDescription", testTypeErasedErrorLocalizedDescription)
 		]
 	}
@@ -153,39 +153,39 @@ class TestJWT: XCTestCase {
 		}
 	}
 
-	//    func testSignAndVerifyRSA() {
-	//        do {
-	//            try signAndVerify(signer: .rs256(privateKey: rsaPrivateKey), verifier: .rs256(publicKey: rsaPublicKey))
-	//        } catch {
-	//            XCTFail("testSignAndVerify failed: \(error)")
-	//        }
-	//    }
+	func testSignAndVerifyRSA() {
+		do {
+			try signAndVerify(signer: .rs256(privateKey: rsaPrivateKey), verifier: .rs256(publicKey: rsaPublicKey))
+		} catch {
+			XCTFail("testSignAndVerify failed: \(error)")
+		}
+	}
 
-	//    func testSignAndVerifyRSADERKey() {
-	//        do {
-	//            try signAndVerify(signer: .rs256(privateKey: rsaDERPrivateKey), verifier: .rs256(publicKey: rsaDERPublicKey))
-	//        } catch {
-	//            XCTFail("testSignAndVerify failed: \(error)")
-	//        }
-	//    }
+	func testSignAndVerifyRSADERKey() {
+		do {
+			try signAndVerify(signer: .rs256(privateKey: rsaDERPrivateKey), verifier: .rs256(publicKey: rsaDERPublicKey))
+		} catch {
+			XCTFail("testSignAndVerify failed: \(error)")
+		}
+	}
 
-	//    func testSignAndVerifyRSAPSS() {
-	//        if #available(OSX 10.13, *) {
-	//            do {
-	//                try signAndVerify(signer: .ps256(privateKey: rsaPrivateKey), verifier: .ps256(publicKey: rsaPublicKey))
-	//            } catch {
-	//                XCTFail("testSignAndVerify failed: \(error)")
-	//            }
-	//        }
-	//    }
+	func testSignAndVerifyRSAPSS() {
+		if #available(OSX 10.13, *) {
+			do {
+				try signAndVerify(signer: .ps256(privateKey: rsaPrivateKey), verifier: .ps256(publicKey: rsaPublicKey))
+			} catch {
+				XCTFail("testSignAndVerify failed: \(error)")
+			}
+		}
+	}
 
-	//    func testSignAndVerifyCert() {
-	//        do {
-	//            try signAndVerify(signer: .rs256(privateKey: certPrivateKey), verifier: .rs256(certificate: certificate))
-	//        } catch {
-	//            XCTFail("testSignAndVerify failed: \(error)")
-	//        }
-	//    }
+//	func testSignAndVerifyCert() {
+//		do {
+//			try signAndVerify(signer: .rs256(privateKey: certPrivateKey), verifier: .rs256(certificate: certificate))
+//		} catch {
+//			XCTFail("testSignAndVerify failed: \(error)")
+//		}
+//	}
 
 	func testSignAndVerifyHMAC() {
 		do {
@@ -206,31 +206,31 @@ class TestJWT: XCTestCase {
 		}
 	}
 
-	//    func testSignAndVerifyRSA384() {
-	//        do {
-	//            try signAndVerify(signer: .rs384(privateKey: rsaPrivateKey), verifier: .rs384(publicKey: rsaPublicKey))
-	//        } catch {
-	//            XCTFail("testSignAndVerify failed: \(error)")
-	//        }
-	//    }
-//
-	//    func testSignAndVerifyRSAPSS384() {
-	//        if #available(OSX 10.13, *) {
-	//            do {
-	//                try signAndVerify(signer: .ps384(privateKey: rsaPrivateKey), verifier: .ps384(publicKey: rsaPublicKey))
-	//            } catch {
-	//                XCTFail("testSignAndVerify failed: \(error)")
-	//            }
-	//        }
-	//    }
+	func testSignAndVerifyRSA384() {
+		do {
+			try signAndVerify(signer: .rs384(privateKey: rsaPrivateKey), verifier: .rs384(publicKey: rsaPublicKey))
+		} catch {
+			XCTFail("testSignAndVerify failed: \(error)")
+		}
+	}
 
-	//    func testSignAndVerifyCert384() {
-	//        do {
-	//            try signAndVerify(signer: .rs384(privateKey: certPrivateKey), verifier: .rs384(certificate: certificate))
-	//        } catch {
-	//            XCTFail("testSignAndVerify failed: \(error)")
-	//        }
-	//    }
+	func testSignAndVerifyRSAPSS384() {
+		if #available(OSX 10.13, *) {
+			do {
+				try signAndVerify(signer: .ps384(privateKey: rsaPrivateKey), verifier: .ps384(publicKey: rsaPublicKey))
+			} catch {
+				XCTFail("testSignAndVerify failed: \(error)")
+			}
+		}
+	}
+
+//	func testSignAndVerifyCert384() {
+//		do {
+//			try signAndVerify(signer: .rs384(privateKey: certPrivateKey), verifier: .rs384(certificate: certificate))
+//		} catch {
+//			XCTFail("testSignAndVerify failed: \(error)")
+//		}
+//	}
 
 	func testSignAndVerifyHMAC384() {
 		do {
@@ -257,31 +257,31 @@ class TestJWT: XCTestCase {
 		}
 	}
 
-	//    func testSignAndVerifyRSA512() {
-	//        do {
-	//            try signAndVerify(signer: .rs512(privateKey: rsaPrivateKey), verifier: .rs512(publicKey: rsaPublicKey))
-	//        } catch {
-	//            XCTFail("testSignAndVerify failed: \(error)")
-	//        }
-	//    }
+	func testSignAndVerifyRSA512() {
+		do {
+			try signAndVerify(signer: .rs512(privateKey: rsaPrivateKey), verifier: .rs512(publicKey: rsaPublicKey))
+		} catch {
+			XCTFail("testSignAndVerify failed: \(error)")
+		}
+	}
 
-	//    func testSignAndVerifyRSAPSS512() {
-	//        if #available(OSX 10.13, iOS 11, *) {
-	//            do {
-	//                try signAndVerify(signer: .ps512(privateKey: rsaPrivateKey), verifier: .ps512(publicKey: rsaPublicKey))
-	//            } catch {
-	//                XCTFail("testSignAndVerify failed: \(error)")
-	//            }
-	//        }
-	//    }
+	func testSignAndVerifyRSAPSS512() {
+		if #available(OSX 10.13, iOS 11, *) {
+			do {
+				try signAndVerify(signer: .ps512(privateKey: rsaPrivateKey), verifier: .ps512(publicKey: rsaPublicKey))
+			} catch {
+				XCTFail("testSignAndVerify failed: \(error)")
+			}
+		}
+	}
 
-	//    func testSignAndVerifyCert512() {
-	//        do {
-	//            try signAndVerify(signer: .rs512(privateKey: certPrivateKey), verifier: .rs512(certificate: certificate))
-	//        } catch {
-	//            XCTFail("testSignAndVerify failed: \(error)")
-	//        }
-	//    }
+//	func testSignAndVerifyCert512() {
+//		do {
+//			try signAndVerify(signer: .rs512(privateKey: certPrivateKey), verifier: .rs512(certificate: certificate))
+//		} catch {
+//			XCTFail("testSignAndVerify failed: \(error)")
+//		}
+//	}
 
 	func testSignAndVerifyHMAC512() {
 		do {
@@ -335,51 +335,48 @@ class TestJWT: XCTestCase {
 		XCTAssertEqual(jwt.claims.groups ?? [""], ["red-group", "green-group", "admin-group", "admin"], "Wrong .groups in decoded")
 	}
 
-	//    func testMicroProfile() {
-	//        var jwt = JWT(claims: MicroProfile(name: "MP-JWT"))
-	//        jwt.header.kid = "abc-1234567890"
-	//        jwt.header.typ = "JWT"
-	//        XCTAssertEqual(jwt.claims.name, "MP-JWT")
-	//        jwt.claims.iss = "https://server.example.com"
-	//        jwt.claims.aud = ["clientID"]
-	//        jwt.claims.iat = Date(timeIntervalSince1970: 1485949565.58463)
-	//        jwt.claims.exp = Date(timeIntervalSince1970: 2485949565.58463)
-	//        jwt.claims.upn = "jdoe@server.example.com"
-	//        jwt.claims.groups = ["red-group", "green-group", "admin-group", "admin"]
+//	func testMicroProfile() {
+//		var jwt = JWT(claims: MicroProfile(name: "MP-JWT"))
+//		jwt.header.kid = "abc-1234567890"
+//		jwt.header.typ = "JWT"
+//		XCTAssertEqual(jwt.claims.name, "MP-JWT")
+//		jwt.claims.iss = "https://server.example.com"
+//		jwt.claims.aud = ["clientID"]
+//		jwt.claims.iat = Date(timeIntervalSince1970: 1_485_949_565.58463)
+//		jwt.claims.exp = Date(timeIntervalSince1970: 2_485_949_565.58463)
+//		jwt.claims.upn = "jdoe@server.example.com"
+//		jwt.claims.groups = ["red-group", "green-group", "admin-group", "admin"]
 //
-	//        // public key (MP-JWT needs to be signed)
-	//        if let signed = try? jwt.sign(using: .rs256(privateKey: rsaPrivateKey)) {
-	//            let ok = JWT<MicroProfile>.verify(signed, using: .rs256(publicKey: rsaPublicKey))
-	//            XCTAssertTrue(ok, "Verification failed")
+//		// public key (MP-JWT needs to be signed)
+//		if let signed = try? jwt.sign(using: .rs256(privateKey: rsaPrivateKey)) {
+//			let ok = JWT<MicroProfile>.verify(signed, using: .rs256(publicKey: rsaPublicKey))
+//			XCTAssertTrue(ok, "Verification failed")
 //
-	//            if let decoded = try? JWT<MicroProfile>(jwtString: signed) {
-	//                checkMicroProfile(jwt: decoded, algorithm: "RS256")
+//			if let decoded = try? JWT<MicroProfile>(jwtString: signed) {
+//				checkMicroProfile(jwt: decoded, algorithm: "RS256")
 //
-	//                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-	//            }
-	//            else {
-	//                XCTFail("Failed to decode")
-	//            }
-	//        }
-	//        else {
-	//            XCTFail("Failed to sign")
-	//        }
+//				XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+//			} else {
+//				XCTFail("Failed to decode")
+//			}
+//		} else {
+//			XCTFail("Failed to sign")
+//		}
 //
-	//        // certificate
-	//        if let signed = try? jwt.sign(using: .rs256(privateKey: certPrivateKey)) {
-	//            let ok = JWT<MicroProfile>.verify(signed, using: .rs256(certificate: certificate))
-	//            XCTAssertTrue(ok, "Verification failed")
+//		// certificate
+//		if let signed = try? jwt.sign(using: .rs256(privateKey: certPrivateKey)) {
+//			let ok = JWT<MicroProfile>.verify(signed, using: .rs256(certificate: certificate))
+//			XCTAssertTrue(ok, "Verification failed")
 //
-	//            if let decoded = try? JWT<MicroProfile>(jwtString: signed) {
-	//                checkMicroProfile(jwt: decoded, algorithm: "RS256")
+//			if let decoded = try? JWT<MicroProfile>(jwtString: signed) {
+//				checkMicroProfile(jwt: decoded, algorithm: "RS256")
 //
-	//                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-	//            }
-	//            else {
-	//                XCTFail("Failed to decode")
-	//            }
-	//        }
-	//    }
+//				XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+//			} else {
+//				XCTFail("Failed to decode")
+//			}
+//		}
+//	}
 
 	// This test uses the rsaJWTEncoder to encode a JWT<TestClaims> as a JWT String.
 	// It then decodes the resulting JWT String using the JWT init from String.
@@ -441,108 +438,104 @@ class TestJWT: XCTestCase {
 		}
 	}
 
-//	    // This test uses the rsaJWTKidEncoder to encode a JWT<TestClaims> as a JWT String using the kid header to select the JWTSigner.
-//	    // It then decodes the resulting JWT String using the JWT init from String.
-//	    // The test checks that the decoded JWT is the same as the JWT you started as well as the decoded certificateEncodedTestClaimJWT.
-//	    func testJWTEncoderKeyID() {
-//	        var jwt = JWT(claims: TestClaims())
-//	        jwt.header.kid = "0"
-//	        jwt.claims.sub = "1234567890"
-//	        jwt.claims.name = "John Doe"
-//	        jwt.claims.admin = true
-//	        do {
-//	            let jwtString = try rsaJWTKidEncoder.encodeToString(jwt)
-//	            let decodedJWTString = try JWT<TestClaims>(jwtString: jwtString)
-//	            jwt.header.alg = "RS256"
-//	            XCTAssertEqual(jwt.claims, decodedJWTString.claims)
-//	            XCTAssertEqual(jwt.header, decodedJWTString.header)
-//	        } catch {
-//	            XCTFail("Failed to encode JTW: \(error)")
-//	        }
-//	    }
+	// This test uses the rsaJWTKidEncoder to encode a JWT<TestClaims> as a JWT String using the kid header to select the JWTSigner.
+	// It then decodes the resulting JWT String using the JWT init from String.
+	// The test checks that the decoded JWT is the same as the JWT you started as well as the decoded certificateEncodedTestClaimJWT.
+	func testJWTEncoderKeyID() {
+		var jwt = JWT(claims: TestClaims())
+		jwt.header.kid = "0"
+		jwt.claims.sub = "1234567890"
+		jwt.claims.name = "John Doe"
+		jwt.claims.admin = true
+		do {
+			let jwtString = try rsaJWTKidEncoder.encodeToString(jwt)
+			let decodedJWTString = try JWT<TestClaims>(jwtString: jwtString)
+			jwt.header.alg = "RS256"
+			XCTAssertEqual(jwt.claims, decodedJWTString.claims)
+			XCTAssertEqual(jwt.header, decodedJWTString.header)
+		} catch {
+			XCTFail("Failed to encode JTW: \(error)")
+		}
+	}
 
-	//    // This test uses the rsaJWTKidDecoder to decode the certificateEncodedTestClaimJWT as a JWT<TestClaims> using the kid header to select the JWTVerifier.
-	//    // The test checks that the decoded JWT is the same as the JWT that was originally encoded.
-	//    func testJWTDecoderKeyID() {
-	//        var jwt = JWT(claims: TestClaims())
-	//        jwt.header.kid = "1"
-	//        jwt.claims.sub = "1234567890"
-	//        jwt.claims.name = "John Doe"
-	//        jwt.claims.admin = true
-	//        do {
-	//            let decodedJWT = try rsaJWTKidDecoder.decode(JWT<TestClaims>.self, fromString: certificateEncodedTestClaimJWT)
-	//            jwt.header.alg = "RS256"
-	//            XCTAssertEqual(decodedJWT.claims, jwt.claims)
-	//            XCTAssertEqual(decodedJWT.header, jwt.header)
-	//        } catch {
-	//            XCTFail("Failed to encode JTW: \(error)")
-	//        }
-	//    }
+//	// This test uses the rsaJWTKidDecoder to decode the certificateEncodedTestClaimJWT as a JWT<TestClaims> using the kid header to select the JWTVerifier.
+//	// The test checks that the decoded JWT is the same as the JWT that was originally encoded.
+//	func testJWTDecoderKeyID() {
+//		var jwt = JWT(claims: TestClaims())
+//		jwt.header.kid = "1"
+//		jwt.claims.sub = "1234567890"
+//		jwt.claims.name = "John Doe"
+//		jwt.claims.admin = true
+//		do {
+//			let decodedJWT = try rsaJWTKidDecoder.decode(JWT<TestClaims>.self, fromString: certificateEncodedTestClaimJWT)
+//			jwt.header.alg = "RS256"
+//			XCTAssertEqual(decodedJWT.claims, jwt.claims)
+//			XCTAssertEqual(decodedJWT.header, jwt.header)
+//		} catch {
+//			XCTFail("Failed to encode JTW: \(error)")
+//		}
+//	}
 
-	//    // This test encoded and then decoded a JWT<TestClaims> and checks you get the original JWT back with only the alg header changed.
-	//    // The kid header is used to select the rsa private and public keys for encoding/decoding.
-	//    func testJWTCoderCycleKeyID() {
-	//        var jwt = JWT(claims: TestClaims())
-	//        jwt.header.kid = "1"
-	//        jwt.claims.sub = "1234567890"
-	//        jwt.claims.name = "John Doe"
-	//        jwt.claims.admin = true
-	//        do {
-	//            let jwtData = try rsaJWTKidEncoder.encode(jwt)
-	//            let decodedJWT = try rsaJWTKidDecoder.decode(JWT<TestClaims>.self, from: jwtData)
-	//            jwt.header.alg = "RS256"
-	//            XCTAssertEqual(decodedJWT.claims, jwt.claims)
-	//            XCTAssertEqual(decodedJWT.header, jwt.header)
-	//        } catch {
-	//            XCTFail("Failed to encode JTW: \(error)")
-	//        }
-	//    }
+//	// This test encoded and then decoded a JWT<TestClaims> and checks you get the original JWT back with only the alg header changed.
+//	// The kid header is used to select the rsa private and public keys for encoding/decoding.
+//	func testJWTCoderCycleKeyID() {
+//		var jwt = JWT(claims: TestClaims())
+//		jwt.header.kid = "1"
+//		jwt.claims.sub = "1234567890"
+//		jwt.claims.name = "John Doe"
+//		jwt.claims.admin = true
+//		do {
+//			let jwtData = try rsaJWTKidEncoder.encode(jwt)
+//			let decodedJWT = try rsaJWTKidDecoder.decode(JWT<TestClaims>.self, from: jwtData)
+//			jwt.header.alg = "RS256"
+//			XCTAssertEqual(decodedJWT.claims, jwt.claims)
+//			XCTAssertEqual(decodedJWT.header, jwt.header)
+//		} catch {
+//			XCTFail("Failed to encode JTW: \(error)")
+//		}
+//	}
 
-	//    // From jwt.io
-	//    func testJWT() {
-	//        let ok = JWT<TestClaims>.verify(rsaEncodedTestClaimJWT, using: .rs256(publicKey: rsaPublicKey))
-	//        XCTAssertTrue(ok, "Verification failed")
-//
-	//        if let decoded = try? JWT<TestClaims>(jwtString: rsaEncodedTestClaimJWT) {
-	//            XCTAssertEqual(decoded.header.alg, "RS256", "Wrong .alg in decoded")
-	//            XCTAssertEqual(decoded.header.typ, "JWT", "Wrong .typ in decoded")
-//
-	//            XCTAssertEqual(decoded.claims.sub, "1234567890", "Wrong .sub in decoded")
-	//            XCTAssertEqual(decoded.claims.name, "John Doe", "Wrong .name in decoded")
-	//            XCTAssertEqual(decoded.claims.admin, true, "Wrong .admin in decoded")
-	//            XCTAssertEqual(decoded.claims.iat, Date(timeIntervalSince1970: 1516239022), "Wrong .iat in decoded")
-//
-//
-	//            XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-	//        }
-	//        else {
-	//            XCTFail("Failed to decode")
-	//        }
-	//    }
+	// From jwt.io
+	func testJWT() {
+		let ok = JWT<TestClaims>.verify(rsaEncodedTestClaimJWT, using: .rs256(publicKey: rsaPublicKey))
+		XCTAssertTrue(ok, "Verification failed")
 
-	//    // From jwt.io
-	//    func testJWTRSAPSS() {
-	//        if #available(OSX 10.13, *) {
-	//            let ok = JWT<TestClaims>.verify(rsaPSSEncodedTestClaimJWT, using: .ps256(publicKey: rsaPublicKey))
-	//            XCTAssertTrue(ok, "Verification failed")
-//
-	//            if let decoded = try? JWT<TestClaims>(jwtString: rsaPSSEncodedTestClaimJWT) {
-	//                XCTAssertEqual(decoded.header.alg, "PS256", "Wrong .alg in decoded")
-	//                XCTAssertEqual(decoded.header.typ, "JWT", "Wrong .typ in decoded")
-//
-	//                XCTAssertEqual(decoded.claims.sub, "1234567890", "Wrong .sub in decoded")
-	//                XCTAssertEqual(decoded.claims.name, "John Doe", "Wrong .name in decoded")
-	//                XCTAssertEqual(decoded.claims.admin, true, "Wrong .admin in decoded")
-	//                XCTAssertEqual(decoded.claims.iat, Date(timeIntervalSince1970: 1516239022), "Wrong .iat in decoded")
-//
-//
-	//                XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
-	//            }
-	//            else {
-	//                XCTFail("Failed to decode")
-	//            }
-	//        }
-	//    }
+		if let decoded = try? JWT<TestClaims>(jwtString: rsaEncodedTestClaimJWT) {
+			XCTAssertEqual(decoded.header.alg, "RS256", "Wrong .alg in decoded")
+			XCTAssertEqual(decoded.header.typ, "JWT", "Wrong .typ in decoded")
+
+			XCTAssertEqual(decoded.claims.sub, "1234567890", "Wrong .sub in decoded")
+			XCTAssertEqual(decoded.claims.name, "John Doe", "Wrong .name in decoded")
+			XCTAssertEqual(decoded.claims.admin, true, "Wrong .admin in decoded")
+			XCTAssertEqual(decoded.claims.iat, Date(timeIntervalSince1970: 1_516_239_022), "Wrong .iat in decoded")
+
+			XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+		} else {
+			XCTFail("Failed to decode")
+		}
+	}
+
+	// From jwt.io
+	func testJWTRSAPSS() {
+		if #available(OSX 10.13, *) {
+			let ok = JWT<TestClaims>.verify(rsaPSSEncodedTestClaimJWT, using: .ps256(publicKey: rsaPublicKey))
+			XCTAssertTrue(ok, "Verification failed")
+
+			if let decoded = try? JWT<TestClaims>(jwtString: rsaPSSEncodedTestClaimJWT) {
+				XCTAssertEqual(decoded.header.alg, "PS256", "Wrong .alg in decoded")
+				XCTAssertEqual(decoded.header.typ, "JWT", "Wrong .typ in decoded")
+
+				XCTAssertEqual(decoded.claims.sub, "1234567890", "Wrong .sub in decoded")
+				XCTAssertEqual(decoded.claims.name, "John Doe", "Wrong .name in decoded")
+				XCTAssertEqual(decoded.claims.admin, true, "Wrong .admin in decoded")
+				XCTAssertEqual(decoded.claims.iat, Date(timeIntervalSince1970: 1_516_239_022), "Wrong .iat in decoded")
+
+				XCTAssertEqual(decoded.validateClaims(), .success, "Validation failed")
+			} else {
+				XCTFail("Failed to decode")
+			}
+		}
+	}
 
 	func testJWTUsingHMAC() {
 		guard let hmacData = "Super Secret Key".data(using: .utf8) else {
@@ -611,15 +604,15 @@ class TestJWT: XCTestCase {
 		XCTAssertEqual(jwt.validateClaims(leeway: 20), .success, "Validation failed")
 	}
 
-	//    func testErrorPattenMatching() {
-	//        do {
-	//            let _ = try JWT<TestClaims>(jwtString: "InvalidString",  verifier: .rs256(publicKey: rsaPublicKey))
-	//        } catch JWTError.invalidJWTString {
-	//            // Caught correct error
-	//        } catch {
-	//            XCTFail("Incorrect error thrown: \(error)")
-	//        }
-	//    }
+	func testErrorPattenMatching() {
+		do {
+			let _ = try JWT<TestClaims>(jwtString: "InvalidString", verifier: .rs256(publicKey: rsaPublicKey))
+		} catch JWTError.invalidJWTString {
+			// Caught correct error
+		} catch {
+			XCTFail("Incorrect error thrown: \(error)")
+		}
+	}
 
 	func testTypeErasedErrorLocalizedDescription() {
 		let error = JWTError.invalidJWTString

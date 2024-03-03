@@ -18,36 +18,32 @@
 
 import PackageDescription
 
-
-let targetDependencies: [Target.Dependency]
-
 let package = Package(
-    name: "SwiftJWT",
-    platforms: [
-        .iOS("14.0"),
-        .macOS("11.0"),
-    ],
-    products: [
-        // Products define the executables and libraries produced by a package, and make them visible to other packages.
-        .library(
-            name: "SwiftJWT",
-            targets: ["SwiftJWT"]
-        )
-    ],
-    dependencies: [
-        .package(url: "https://github.com/apple/swift-crypto.git", .upToNextMajor(from: "2.0.0")),
-        .package(url: "https://github.com/Kitura/LoggerAPI.git", from: "2.0.0"),
-        .package(url: "https://github.com/Kitura/KituraContracts.git", from: "2.0.1"),
-        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.50.4"),
-    ],
-    targets: [
-        .target(name: "SwiftJWT", dependencies: [
-            "LoggerAPI",
-            "KituraContracts",
-            .product(name: "Crypto", package: "swift-crypto")
-        ]),
-        .testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
+	name: "SwiftJWT",
+	platforms: [
+		.iOS("14.0"),
+		.macOS("11.0")
+	],
+	products: [
+		// Products define the executables and libraries produced by a package, and make them visible to other packages.
+		.library(
+			name: "SwiftJWT",
+			targets: ["SwiftJWT"]
+		)
+	],
+	dependencies: [
+		.package(url: "https://github.com/apple/swift-crypto.git", from: "2.6.0"),
+		.package(url: "https://github.com/Kitura/LoggerAPI.git", from: "2.0.0"),
+		.package(url: "https://github.com/Kitura/KituraContracts.git", from: "2.0.1"),
+		.package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.50.4")
+	],
+	targets: [
+		.target(name: "SwiftJWT", dependencies: [
+			"LoggerAPI",
+			"KituraContracts",
+			.product(name: "Crypto", package: "swift-crypto"),
+			.product(name: "_CryptoExtras", package: "swift-crypto")
+		]),
+		.testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
 	]
 )
-
-
