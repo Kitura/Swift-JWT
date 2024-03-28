@@ -1,4 +1,4 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.3
 
 /**
  * Copyright IBM Corporation and the Kitura project authors 2018-2020
@@ -38,15 +38,18 @@ let package = Package(
         .package(url: "https://github.com/Kitura/KituraContracts.git", from: "2.0.1")
     ],
     targets: [
-        .target(name: "SwiftJWT", dependencies: [
-            "LoggerAPI",
-            "KituraContracts",
-            "CryptorRSA",
-            "Cryptor",
-            "CryptorECC",
-        ]),
+        .target(name: "SwiftJWT",
+                dependencies: [
+                    "LoggerAPI",
+                    "KituraContracts",
+                    "CryptorRSA",
+                    "Cryptor",
+                    "CryptorECC"
+                ],
+                path: "Sources",
+                exclude: [],
+                resources:[.copy("PrivacyInfo.xcprivacy")]
+               ),
         .testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
 	]
 )
-
-

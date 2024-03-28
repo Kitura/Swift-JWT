@@ -18,4 +18,5 @@ Pod::Spec.new do |s|
   s.dependency 'BlueECC', '~> 1.2.200'
   s.dependency 'LoggerAPI', '~> 2.0.0'
   s.dependency 'KituraContracts', '~> 2.0.1'
+  s.resource_bundles = {'SwiftJWT' => ['Source/PrivacyInfo.xcprivacy']}
 end
