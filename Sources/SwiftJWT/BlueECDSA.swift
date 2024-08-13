@@ -15,7 +15,7 @@
  **/
 
 import CryptorECC
-import LoggerAPI
+private import LoggerAPI
 import Foundation
 
 // Class for ECDSA signing using BlueECC

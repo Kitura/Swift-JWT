@@ -1,4 +1,4 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.9
 
 /**
  * Copyright IBM Corporation and the Kitura project authors 2018-2020
@@ -44,7 +44,7 @@ let package = Package(
             "CryptorRSA",
             "Cryptor",
             "CryptorECC",
-        ]),
+        ], swiftSettings: [.enableExperimentalFeature("AccessLevelOnImport")]),
         .testTarget(name: "SwiftJWTTests", dependencies: ["SwiftJWT"])
 	]
 )

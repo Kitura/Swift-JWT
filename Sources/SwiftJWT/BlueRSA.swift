@@ -15,7 +15,7 @@
  **/
 
 import CryptorRSA
-import LoggerAPI
+private import LoggerAPI
 
 import Foundation
 

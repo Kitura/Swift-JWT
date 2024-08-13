@@ -15,7 +15,7 @@
  **/
 
 import Cryptor
-import LoggerAPI
+private import LoggerAPI
 import Foundation
 
 class BlueHMAC: SignerAlgorithm, VerifierAlgorithm {
