@@ -1,0 +1,6 @@
+version: 1
+builder:
+  configs:
+    - documentation_targets: [SwiftJWT]
+      scheme: SwiftJWT
+
