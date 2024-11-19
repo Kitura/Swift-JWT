@@ -4,21 +4,9 @@
 </a>
 </p>
 
-
-<p align="center">
-<a href="https://kitura.github.io/Swift-JWT/index.html">
-<img src="https://img.shields.io/badge/apidoc-SwiftJWT-1FBCE4.svg?style=flat" alt="APIDoc">
-</a>
-<a href="https://travis-ci.org/Kitura/Swift-JWT">
-<img src="https://travis-ci.org/Kitura/Swift-JWT.svg?branch=master" alt="Build Status - Master">
-</a>
-<img src="https://img.shields.io/badge/os-macOS-green.svg?style=flat" alt="macOS">
-<img src="https://img.shields.io/badge/os-linux-green.svg?style=flat" alt="Linux">
-<img src="https://img.shields.io/badge/license-Apache2-blue.svg?style=flat" alt="Apache 2">
-<a href="http://swift-at-ibm-slack.mybluemix.net/">
-<img src="http://swift-at-ibm-slack.mybluemix.net/badge.svg" alt="Slack Status">
-</a>
-</p>
+[![](https://img.shields.io/badge/apidoc-SwiftJWT-1FBCE4.svg?style=flat)](https://kitura.github.io/Swift-JWT/index.html)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FKitura%2FSwift-JWT%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/Kitura/Swift-JWT)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FKitura%2FSwift-JWT%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/Kitura/Swift-JWT)
 
 
 # SwiftJWT
