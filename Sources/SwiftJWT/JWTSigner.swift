@@ -61,7 +61,7 @@ public struct JWTSigner {
         self.signerAlgorithm = signerAlgorithm
     }
     
-    func sign(header: String, claims: String) throws -> String {
+    public func sign(header: String, claims: String) throws -> String {
         return try signerAlgorithm.sign(header: header, claims: claims)
     }
     
